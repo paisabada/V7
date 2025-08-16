@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Paisabada | Mutual Fund SIP Journey</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f4fdfd; margin: 0; padding: 20px; color: #333; }
+    .container { max-width: 500px; margin: auto; background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
+    h2 { color: #00b4b0; margin-bottom: 10px; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    button { background-color: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 5px; margin-top: 20px; cursor: pointer; width: 100%; font-size: 16px; }
+    .comparison, .thankyou { display: none; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; font-size: 14px; }
+    th { background: #00b4b0; color: white; }
+    .note { background: #e6f9f6; padding: 10px; border-left: 5px solid #28a745; margin-top: 10px; }
+    .cta-buttons a { display: inline-block; margin: 10px 5px 0; padding: 10px 15px; background: #28a745; color: white; border-radius: 5px; text-decoration: none; font-size: 14px; }
+    img { max-width: 100%; margin-top: 20px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Start Your Mutual Fund SIP Journey</h2>
+    <div class="form-section">
+      <label>Full Name</label>
+      <input type="text" id="name" placeholder="Your Name" required>
+      <label>Mobile Number</label>
+      <input type="tel" id="mobile" placeholder="10-digit Mobile" required>
+      <label>City</label>
+      <input type="text" id="city" placeholder="Your City" required>
+      <label>Monthly SIP Budget</label>
+      <select id="sip">
+        <option value="1000">₹1,000</option>
+        <option value="3000">₹3,000</option>
+        <option value="5000">₹5,000</option>
+        <option value="10000">₹10,000+</option>
+      </select>
+      <label>Investment Goal</label>
+      <select id="goal">
+        <option>Wealth Creation</option>
+        <option>Child Education</option>
+        <option>Retirement Planning</option>
+        <option>Tax Saving</option>
+      </select>
+      <button onclick="submitMFForm()">Compare Plans</button>
+    </div>
+
+    <div class="comparison">
+      <div class="note">💡 Returns shown are for ₹5,000/month SIP over 10 years. These are historical and not guaranteed.</div>
+      <table>
+        <tr><th>Fund Name</th><th>Returns*</th><th>Risk</th><th>Rating</th></tr>
+        <tr><td>Axis Bluechip Fund</td><td>₹12.1 Lakhs</td><td>Moderate</td><td>⭐ 4.5</td></tr>
+        <tr><td>Mirae Asset Large Cap</td><td>₹12.3 Lakhs</td><td>Moderate</td><td>⭐ 4.6</td></tr>
+        <tr><td>SBI Small Cap Fund</td><td>₹14.5 Lakhs</td><td>High</td><td>⭐ 4.3</td></tr>
+        <tr><td>Parag Parikh Flexi Cap</td><td>₹13.2 Lakhs</td><td>Moderate</td><td>⭐ 4.7</td></tr>
+        <tr><td>UTI Nifty Index Fund</td><td>₹11.8 Lakhs</td><td>Low</td><td>⭐ 4.2</td></tr>
+      </table>
+    </div>
+
+    <div class="thankyou">
+      <img src="https://paisabada.in/assets/mutual-fund-thankyou.jpg" alt="Thank You from Paisabada">
+      <p>Thank you! Our investment expert will reach out to help you select the right SIP plan.</p>
+      <div class="cta-buttons">
+        <a href="https://paisabada.in/sip-score.html">Check SIP Score</a>
+        <a href="https://wa.me/917620444000?text=Hi%20Paisabada%2C%20please%20help%20me%20with%20mutual%20fund%20plans.">Talk to Team Paisabada</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function submitMFForm() {
+      document.querySelector('.form-section').style.display = 'none';
+      document.querySelector('.comparison').style.display = 'block';
+      setTimeout(() => {
+        document.querySelector('.thankyou').style.display = 'block';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

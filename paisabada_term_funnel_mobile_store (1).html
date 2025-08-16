@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Paisabada | Term Plan Comparison</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #ffffff;
+      color: #222;
+    }
+    h1, h2 {
+      color: #004d40;
+    }
+    form input, form select {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .comparison {
+      display: none;
+      margin-top: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table, th, td {
+      border: 1px solid #c0c0c0;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    .summary {
+      background: #e6f4ea;
+      padding: 10px;
+      border-left: 5px solid #28a745;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .thank-you {
+      display: none;
+      text-align: center;
+    }
+    .thank-you img {
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+    }
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .cta-buttons a {
+      background: #00796b;
+      color: white;
+      padding: 10px;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Check Your Term Plan</h1>
+  <p>Compare top insurers & find your best match</p>
+  <form id="termForm">
+    <input type="text" placeholder="Your Full Name" required />
+    <input type="tel" placeholder="Mobile Number" required />
+    <input type="email" placeholder="Email ID" required />
+    <input type="text" placeholder="City" required />
+    <select required>
+      <option value="">Select Occupation</option>
+      <option value="Salaried">Salaried</option>
+      <option value="Self-Employed">Self-Employed</option>
+      <option value="Business Owner">Business Owner</option>
+    </select>
+    <button type="submit">Get My Quote</button>
+  </form>
+
+  <div class="comparison" id="comparisonSection">
+    <div class="summary">💡 Premiums shown are for a 30-year-old non-smoker male, ₹1 Cr sum assured, 30-year term.</div>
+    <h2>Top 5 Term Plans for ₹1 Cr Cover</h2>
+    <table>
+      <tr>
+        <th>Insurer</th>
+        <th>Premium (Yearly)</th>
+        <th>Claim Ratio</th>
+        <th>Term</th>
+      </tr>
+      <tr>
+        <td>HDFC Life</td>
+        <td>₹9,800</td>
+        <td>99.4%</td>
+        <td>30 Years</td>
+      </tr>
+      <tr>
+        <td>Max Life</td>
+        <td>₹9,250</td>
+        <td>99.5%</td>
+        <td>30 Years</td>
+      </tr>
+      <tr>
+        <td>ICICI Prudential</td>
+        <td>₹10,150</td>
+        <td>98.6%</td>
+        <td>30 Years</td>
+      </tr>
+      <tr>
+        <td>Tata AIA</td>
+        <td>₹9,600</td>
+        <td>99.1%</td>
+        <td>30 Years</td>
+      </tr>
+      <tr>
+        <td>PNB MetLife</td>
+        <td>₹9,450</td>
+        <td>98.8%</td>
+        <td>30 Years</td>
+      </tr>
+    </table>
+    <button onclick="showThankYou()">Continue</button>
+  </div>
+
+  <div class="thank-you" id="thankYouSection">
+    <img src="thankyou_final_paisabada.jpg" alt="Thank You" />
+    <h2>Thank you!</h2>
+    <p>Our Paisa Expert will connect with you shortly.</p>
+    <div class="cta-buttons">
+      <a href="https://www.paisabada.in" target="_blank">Explore More Plans</a>
+      <a href="#">Check SIP Score</a>
+      <a href="#">Track Paisa Personality</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("termForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      document.getElementById("termForm").style.display = "none";
+      document.getElementById("comparisonSection").style.display = "block";
+    });
+
+    function showThankYou() {
+      document.getElementById("comparisonSection").style.display = "none";
+      document.getElementById("thankYouSection").style.display = "block";
+    }
+  </script>
+</body>
+</html>

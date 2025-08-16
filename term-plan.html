@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Term Plan Needs Checker - Paisabada</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; background: #f7fdf9; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    input, select { width: 100%; padding: 10px; margin-bottom: 14px; border: 1px solid #ccc; border-radius: 6px; }
+    .btn { background: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+    .btn:hover { background: #218838; }
+    .result { text-align: center; padding: 20px; display: none; }
+    .result h2 { color: #0d6efd; }
+  </style>
+</head>
+<body>
+  <div class="container" id="form-section">
+    <h2>Check Your Ideal Term Plan Cover</h2>
+    <input type="number" id="age" placeholder="👤 Your Age" required />
+    <input type="number" id="income" placeholder="💼 Annual Income (₹)" required />
+    <input type="number" id="dependents" placeholder="👨‍👩‍👧‍👦 No. of Dependents" required />
+    <input type="number" id="existing" placeholder="🛡️ Existing Cover (₹, if any)" value="" required />
+    <select id="earner" required>
+      <option value="" disabled selected>🧍 Are you the only earning member?</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+    <select id="loans" required>
+      <option value="" disabled selected>🏠 Do you have any active loans?</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+    <input type="number" id="budget" placeholder="💰 Monthly Premium Budget (₹)" required />
+    <input type="text" id="name" placeholder="👤 Full Name" required />
+    <input type="text" id="mobile" placeholder="📱 Mobile Number" required />
+    <input type="email" id="email" placeholder="✉️ Email Address" required />
+    <input type="text" id="city" placeholder="📍 City" required />
+    <input type="text" id="occupation" placeholder="💼 Occupation" required />
+    <button class="btn" onclick="calculatePlan()">Get My Report</button>
+  </div>
+
+  <div class="container result" id="result-section">
+    <h2>✅ Your Ideal Term Cover is: <span id="cover-amount"></span></h2>
+    <p>Download your personalized PDF guide below:</p>
+    <a href="Paisabada_Wealth_Plan_Final_v1.pdf" class="btn" download>📄 Download PDF Report</a><br><br>
+    <a href="https://wa.me/?text=I%20just%20checked%20my%20ideal%20term%20plan%20on%20Paisabada!%20Check%20yours%20now%20at%20paisabada.in" class="btn" style="background:#25D366;" target="_blank">📱 Share on WhatsApp</a>
+  </div>
+
+  <script>
+    function calculatePlan() {
+      const age = parseInt(document.getElementById('age').value);
+      const income = parseInt(document.getElementById('income').value);
+      const dependents = parseInt(document.getElementById('dependents').value);
+      const existing = parseInt(document.getElementById('existing').value);
+      const budget = parseInt(document.getElementById('budget').value);
+      const earner = document.getElementById('earner').value;
+      const loans = document.getElementById('loans').value;
+      const name = document.getElementById('name').value.trim();
+      const mobile = document.getElementById('mobile').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const occupation = document.getElementById('occupation').value.trim();
+
+      if (
+        isNaN(age) || isNaN(income) || isNaN(dependents) || isNaN(existing) ||
+        !name || !mobile || !email || !city || !occupation || !earner || !loans || isNaN(budget)
+      ) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      const hlv = (income * 15 * (dependents || 1)) - existing;
+      const recommended = Math.ceil(hlv / 1000000) * 1000000;
+
+      document.getElementById('cover-amount').innerText = `₹${recommended.toLocaleString()}`;
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('result-section').style.display = 'block';
+
+      console.log(`Email sent to ${email} with recommendation: ₹${recommended}`);
+    }
+  </script>
+</body>
+</html>

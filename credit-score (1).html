@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check Your Credit Score - Paisabada</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; background: #f7fdf9; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    input, select { width: 100%; padding: 10px; margin-bottom: 14px; border: 1px solid #ccc; border-radius: 6px; }
+    .btn { background: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+    .btn:hover { background: #218838; }
+    .result { text-align: center; padding: 20px; display: none; }
+    .score-badge { font-size: 28px; font-weight: 700; color: #0d6efd; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📈 Check Your Credit Score Instantly</h2>
+    <input type="text" id="name" placeholder="👤 Full Name" required>
+    <input type="text" id="pan" placeholder="🪪 PAN Number (optional)">
+    <input type="number" id="age" placeholder="🎂 Age" required>
+    <input type="number" id="income" placeholder="💰 Monthly Income (₹)" required>
+    <select id="loan">
+      <option value="" disabled selected>🏠 Do you have any existing loan?</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+    <input type="text" id="mobile" placeholder="📱 Mobile Number" required>
+    <input type="email" id="email" placeholder="✉️ Email Address" required>
+    <input type="text" id="city" placeholder="📍 City" required>
+    <input type="text" id="occupation" placeholder="💼 Occupation" required>
+    <button class="btn" onclick="checkScore()">Check My Score</button>
+
+    <div class="result" id="resultBox">
+      <h2>✅ Your Estimated Credit Score Range:</h2>
+      <div class="score-badge" id="scoreSummary">Loading...</div>
+      <p>Your report has been emailed to you. You can also:</p>
+      <a class="btn" href="Paisabada_Credit_Report_Combo_Final.pdf" download>📄 Download Credit Report</a><br><br>
+      <a class="btn" href="https://wa.me/?text=I%20just%20checked%20my%20credit%20score%20with%20Paisabada!%20Check%20yours%20at%20paisabada.in/credit-score.html" target="_blank" style="background:#25D366;">📱 Share on WhatsApp</a>
+    </div>
+  </div>
+
+  <script>
+    function checkScore() {
+      const name = document.getElementById('name').value.trim();
+      const age = parseInt(document.getElementById('age').value);
+      const income = parseInt(document.getElementById('income').value);
+      const loan = document.getElementById('loan').value;
+      const email = document.getElementById('email').value.trim();
+      const pan = document.getElementById('pan').value.trim();
+
+      if (!name || isNaN(age) || isNaN(income) || !loan || !email) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      let score = 600;
+      if (income > 50000) score += 50;
+      if (loan === 'No') score += 100;
+      if (age >= 25 && age <= 40) score += 50;
+      if (score > 850) score = 850;
+
+      let range = "Fair (650–700)";
+      if (score >= 750) range = "Good (750–800)";
+      if (score >= 800) range = "Excellent (800–850)";
+      if (score < 650) range = "Needs Improvement (Below 650)";
+
+      document.getElementById('scoreSummary').innerText = range;
+      document.getElementById('resultBox').style.display = 'block';
+      console.log(`Credit score for ${name}: ${range} | PAN: ${pan} | Email sent to: ${email}`);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loan Comparison Funnel - Paisabada</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2fcf5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007d6e;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .thank-you {
+      text-align: center;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .action-buttons button {
+      background-color: #28a745;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #d9f7e9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="form-section">
+    <h2>Get Best Loan Offers</h2>
+    <label for="name">Full Name</label>
+    <input type="text" id="name" placeholder="Enter your name" required />
+
+    <label for="mobile">Mobile Number</label>
+    <input type="tel" id="mobile" placeholder="Enter your number" required />
+
+    <label for="email">Email ID</label>
+    <input type="email" id="email" placeholder="Enter your email" required />
+
+    <label for="loanType">Loan Type</label>
+    <select id="loanType">
+      <option value="Personal Loan">Personal Loan</option>
+      <option value="Home Loan">Home Loan</option>
+      <option value="Business Loan">Business Loan</option>
+      <option value="Education Loan">Education Loan</option>
+      <option value="Gold Loan">Gold Loan</option>
+    </select>
+
+    <label for="amount">Loan Amount (₹)</label>
+    <input type="number" id="amount" placeholder="e.g. 500000" required />
+
+    <button onclick="showComparison()">Compare Loan Offers</button>
+  </div>
+
+  <div class="container" id="comparison-section" style="display: none;">
+    <h2>Top 5 Loan Offers</h2>
+    <p>💡 Estimated offers based on your loan type and amount.</p>
+    <table>
+      <tr>
+        <th>Bank</th>
+        <th>Interest Rate</th>
+        <th>Processing Fee</th>
+        <th>Max Tenure</th>
+        <th>Approval</th>
+      </tr>
+      <tr>
+        <td>HDFC Bank</td>
+        <td>10.5%</td>
+        <td>₹2,000</td>
+        <td>60 months</td>
+        <td>✅ Instant</td>
+      </tr>
+      <tr>
+        <td>ICICI Bank</td>
+        <td>10.75%</td>
+        <td>₹1,999</td>
+        <td>72 months</td>
+        <td>✅ Instant</td>
+      </tr>
+      <tr>
+        <td>Bajaj Finserv</td>
+        <td>11.2%</td>
+        <td>₹1,500</td>
+        <td>84 months</td>
+        <td>✅ Same Day</td>
+      </tr>
+      <tr>
+        <td>Axis Bank</td>
+        <td>10.9%</td>
+        <td>₹2,500</td>
+        <td>60 months</td>
+        <td>✅ Instant</td>
+      </tr>
+      <tr>
+        <td>IndusInd Bank</td>
+        <td>11.5%</td>
+        <td>₹1,750</td>
+        <td>48 months</td>
+        <td>✅ Same Day</td>
+      </tr>
+    </table>
+
+    <div class="thank-you">
+      ✅ <strong>Thank you!</strong> Our loan specialist will reach out shortly.
+    </div>
+
+    <div class="action-buttons">
+      <button id="whatsappBtn">Send on WhatsApp</button>
+      <button onclick="window.location.href='https://paisabada.in/sip-score.html'">Check SIP Score</button>
+      <button onclick="window.location.href='https://paisabada.in/credit-score.html'">Check Credit Score</button>
+    </div>
+  </div>
+
+  <script>
+    function showComparison() {
+      const name = document.getElementById("name").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const type = document.getElementById("loanType").value;
+      const amount = document.getElementById("amount").value.trim();
+
+      if (!name || !mobile || !email || !amount) {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      document.getElementById("form-section").style.display = "none";
+      document.getElementById("comparison-section").style.display = "block";
+
+      const whatsappMessage = `Hi Paisabada, I'm ${name}, interested in a ${type} of ₹${amount}. My email is ${email} and mobile is ${mobile}. Please send me the comparison offers.`;
+      document.getElementById("whatsappBtn").onclick = function() {
+        window.open(`https://wa.me/917620444000?text=${encodeURIComponent(whatsappMessage)}`, "_blank");
+      };
+    }
+  </script>
+</body>
+</html>

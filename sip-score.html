@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIP Eligibility Score - Paisabada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f2fbf7; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h2 { color: #0d6efd; }
+    input, select { width: 100%; padding: 12px; margin-bottom: 14px; border: 1px solid #ccc; border-radius: 6px; }
+    .btn { background: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+    .btn:hover { background: #218838; }
+    .result-box { text-align: center; display: none; padding-top: 20px; }
+    .score { font-size: 28px; color: #0d6efd; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📊 Check Your SIP Eligibility Score</h2>
+    <input type="text" id="name" placeholder="👤 Full Name" required>
+    <input type="text" id="mobile" placeholder="📱 Mobile Number" required>
+    <input type="text" id="email" placeholder="✉️ Email Address" required>
+    <input type="text" id="city" placeholder="📍 City" required>
+    <input type="text" id="occupation" placeholder="💼 Occupation" required>
+    <input type="number" id="income" placeholder="💰 Monthly Income (₹)" required>
+    <button class="btn" onclick="calculateSIP()">Get My SIP Score</button>
+
+    <div class="result-box" id="resultBox">
+      <h3>✅ Your SIP Eligibility Score:</h3>
+      <div class="score" id="sipScore">Loading...</div>
+      <p>We’ve sent your personalized SIP report to your email.</p>
+      <a href="https://wa.me/?text=Check%20your%20SIP%20Score%20for%20free%20on%20Paisabada!%20https://paisabada.in/sip-score.html" target="_blank" class="btn" style="background:#25D366;">Share on WhatsApp</a><br><br>
+      <a href="Paisabada_SIP_Combo_Final.pdf" class="btn" download>📄 Download My SIP Report</a>
+    </div>
+  </div>
+
+  <script>
+    function calculateSIP() {
+      const name = document.getElementById('name').value.trim();
+      const income = parseInt(document.getElementById('income').value);
+      if (!name || isNaN(income)) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      let score = 0;
+      if (income < 15000) score = 40;
+      else if (income <= 30000) score = 60;
+      else if (income <= 50000) score = 80;
+      else score = 90;
+
+      const box = document.getElementById('resultBox');
+      document.getElementById('sipScore').innerText = score + " / 100";
+      box.style.display = 'block';
+      console.log("SIP Score sent to email");
+    }
+  </script>
+</body>
+</html>
