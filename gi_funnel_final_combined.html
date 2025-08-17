@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GI Funnel - Paisabada (Final Version)</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    .hidden { display: none; }
+    label { display: block; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    button { margin-top: 15px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: #009688; color: white; }
+    .thank-you { text-align: center; padding: 30px; }
+    .thank-you img { max-width: 100px; margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <div class="container" id="form-section">
+    <h2>Paisabada - General Insurance Inquiry</h2>
+    <form id="giForm">
+      <label>Name: <input type="text" id="name" required /></label>
+      <label>Email ID: <input type="email" id="email" required /></label>
+      <label>Mobile Number: <input type="tel" id="mobile" required /></label>
+      <label>City: <input type="text" id="city" required /></label>
+      <label>Renewal Due Date: <input type="date" id="renewal" required /></label>
+      <label>Insurance Type:
+        <select id="insuranceType" required>
+          <option value="">--Select--</option>
+          <option value="Car">Car Insurance</option>
+          <option value="Bike">Two Wheeler Insurance</option>
+          <option value="CV">Commercial Vehicle</option>
+        </select>
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <div class="container hidden" id="comparison-section">
+    <h3>Top 5 Insurance Options</h3>
+    <div id="car-table" class="hidden">
+      <h4>Car Insurance Plans</h4>
+      <table>
+        <tr><th>Company</th><th>IDV (₹)</th><th>Premium</th><th>Claim Ratio</th><th>Features</th></tr>
+        <tr><td>HDFC Ergo</td><td>4.5L</td><td>₹4,210</td><td>98%</td><td>Cashless Garage</td></tr>
+        <tr><td>ICICI Lombard</td><td>4.6L</td><td>₹4,390</td><td>96%</td><td>1-Day Settlement</td></tr>
+        <tr><td>Tata AIG</td><td>4.4L</td><td>₹4,150</td><td>97%</td><td>Zero Dep Addon</td></tr>
+        <tr><td>Bajaj Allianz</td><td>4.5L</td><td>₹4,180</td><td>98%</td><td>Fast Renewal</td></tr>
+        <tr><td>Reliance GI</td><td>4.3L</td><td>₹4,050</td><td>95%</td><td>24x7 Assist</td></tr>
+      </table>
+    </div>
+    <div id="bike-table" class="hidden">
+      <h4>Two Wheeler Insurance Plans</h4>
+      <table>
+        <tr><th>Company</th><th>IDV (₹)</th><th>Premium</th><th>Claim Ratio</th><th>Features</th></tr>
+        <tr><td>ICICI Lombard</td><td>75K</td><td>₹1,200</td><td>95%</td><td>Free Helmet Cover</td></tr>
+        <tr><td>Bajaj Allianz</td><td>80K</td><td>₹1,180</td><td>94%</td><td>24x7 Roadside Assist</td></tr>
+        <tr><td>Reliance GI</td><td>78K</td><td>₹1,150</td><td>93%</td><td>Low Dep Premium</td></tr>
+        <tr><td>SBI General</td><td>76K</td><td>₹1,100</td><td>92%</td><td>Cashless Network</td></tr>
+        <tr><td>Tata AIG</td><td>74K</td><td>₹1,250</td><td>94%</td><td>Extra NCB Benefit</td></tr>
+      </table>
+    </div>
+    <div id="cv-table" class="hidden">
+      <h4>Commercial Vehicle Insurance Plans</h4>
+      <table>
+        <tr><th>Company</th><th>IDV (₹)</th><th>Premium</th><th>Claim Ratio</th><th>Features</th></tr>
+        <tr><td>HDFC Ergo</td><td>7L</td><td>₹8,500</td><td>91%</td><td>Heavy Load Coverage</td></tr>
+        <tr><td>ICICI Lombard</td><td>6.8L</td><td>₹8,250</td><td>89%</td><td>24x7 Fleet Support</td></tr>
+        <tr><td>Universal Sompo</td><td>6.9L</td><td>₹8,100</td><td>90%</td><td>Fast Claim Processing</td></tr>
+        <tr><td>Reliance GI</td><td>6.5L</td><td>₹7,950</td><td>88%</td><td>Low Downtime Addon</td></tr>
+        <tr><td>Bajaj Allianz</td><td>7.1L</td><td>₹8,600</td><td>92%</td><td>Road Risk Add-on</td></tr>
+      </table>
+    </div>
+    <button onclick="showThankYou()">Proceed</button>
+  </div>
+
+  <div class="container hidden" id="thankyou-section">
+    <div class="thank-you">
+      <h3>Thank you for your inquiry!</h3>
+      <p>We've sent a summary to your email and WhatsApp. Team Paisabada will contact you shortly.</p>
+      <img src="https://cdn-icons-png.flaticon.com/512/1087/1087920.png" alt="Thank You" />
+    </div>
+  </div>
+
+  <div id="pdf-content" class="hidden">
+    <h1>Paisabada - Insurance Summary</h1>
+    <p><strong>Name:</strong> <span id="pdfName"></span></p>
+    <p><strong>Mobile:</strong> <span id="pdfMobile"></span></p>
+    <p><strong>City:</strong> <span id="pdfCity"></span></p>
+    <p><strong>Insurance Type:</strong> <span id="pdfType"></span></p>
+    <p><strong>Renewal Date:</strong> <span id="pdfRenewal"></span></p>
+    <p>Visit <strong>www.paisabada.in</strong> or WhatsApp us for more assistance.</p>
+  </div>
+
+  <script>
+    emailjs.init("YOUR_PUBLIC_KEY");
+
+    const form = document.getElementById('giForm');
+    const insuranceType = document.getElementById('insuranceType');
+    const vehicleField = document.getElementById('vehicleField');
+    const formSection = document.getElementById('form-section');
+    const comparisonSection = document.getElementById('comparison-section');
+    const thankyouSection = document.getElementById('thankyou-section');
+    const carTable = document.getElementById('car-table');
+    const bikeTable = document.getElementById('bike-table');
+    const cvTable = document.getElementById('cv-table');
+
+    insuranceType.addEventListener('change', function () {
+      vehicleField.classList.toggle('hidden', !(this.value === 'Car' || this.value === 'Bike' || this.value === 'CV'));
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const mobile = document.getElementById("mobile").value;
+      const city = document.getElementById("city").value;
+      const renewal = document.getElementById("renewal").value;
+      const type = insuranceType.value;
+
+      formSection.classList.add('hidden');
+      carTable.classList.add('hidden');
+      bikeTable.classList.add('hidden');
+      cvTable.classList.add('hidden');
+
+      comparisonSection.classList.remove('hidden');
+
+      if (type === 'Car') {
+        carTable.classList.remove('hidden');
+      } else if (type === 'Bike') {
+        bikeTable.classList.remove('hidden');
+      } else if (type === 'CV') {
+        cvTable.classList.remove('hidden');
+      } else {
+        comparisonSection.classList.add('hidden');
+        thankyouSection.classList.remove('hidden');
+      }
+
+      document.getElementById("pdfName").innerText = name;
+      document.getElementById("pdfMobile").innerText = mobile;
+      document.getElementById("pdfCity").innerText = city;
+      document.getElementById("pdfType").innerText = type;
+      document.getElementById("pdfRenewal").innerText = renewal;
+
+      const pdfElement = document.getElementById("pdf-content");
+      html2pdf().from(pdfElement).outputPdf("blob").then(function (pdfBlob) {
+        emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+          name: name,
+          email: email,
+          mobile: mobile,
+          city: city,
+          insurance_type: type,
+          renewal: renewal
+        }, "YOUR_PUBLIC_KEY");
+
+        const message = `Hi Team Paisabada, I just submitted a ${type} insurance inquiry from ${city}. Please assist. My contact is ${mobile}`;
+        const whatsappURL = `https://wa.me/917620444000?text=${encodeURIComponent(message)}`;
+        setTimeout(() => {
+          window.open(whatsappURL, "_blank");
+        }, 2000);
+      });
+    });
+
+    function showThankYou() {
+      comparisonSection.classList.add('hidden');
+      thankyouSection.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
