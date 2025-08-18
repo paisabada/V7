@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Block internal or build artifacts if any (edit as needed)
+Disallow: /*.map$
+Disallow: /assets/*.psd$
+Disallow: /assets/*.ai$
+
+Sitemap: https://www.paisabada.in/sitemap.xml
+Sitemap: https://www.paisabada.in/sitemap_priority.xml
