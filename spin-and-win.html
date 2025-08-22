@@ -410,6 +410,69 @@ document.getElementById('submitBtn').addEventListener('click',()=>{
     openShare(genericMsg,ref2);
     closePopup();
     document.getElementById('thankyou').style.display='flex';
+    // Trigger auto email after thank you popup
+const user = {
+  name: document.querySelector('#name')?.value || '',
+  email: document.querySelector('#email')?.value || '',
+  phone: document.querySelector('#phone')?.value || ''
+};
+
+sendUserWinEmail(user);   // Mail to user
+notifyTeam(user, '₹500 SIP');  // Mail to Paisabada team
+...
+notifyTeam(user, "500 SIP"); // last line call
+
+};   // end of onclick
+</script>
+
+<!-- 👇 yaha se paste kar functions -->
+<script>
+  const MAILER_URL = "https://pb-mailer-six.vercel.app/api/send-mails";
+
+  async function sendUserWinEmail(user) {
+    if (!user?.email) return;
+    const html = `
+      <h2>🎉 Thank you ${user.name || ""}!</h2>
+      <p>Your ₹500 SIP win is confirmed. Team Paisabada will connect soon.</p>
+      <p style="font-size:12px;color:#475569">No cash rewards. SIP credit only. T&amp;C apply.</p>
+    `;
+    await postMail({
+      to: user.email,
+      subject: "🎉 Your ₹500 SIP win is confirmed!",
+      html
+    });
+  }
+
+  async function notifyTeam(user, prizeText) {
+    const html = `
+      <h3>New Spin & Win lead</h3>
+      <p><b>Prize:</b> ${prizeText}</p>
+      <p><b>Name:</b> ${user?.name || "N/A"}</p>
+      <p><b>Email:</b> ${user?.email || "N/A"}</p>
+      <p><b>Phone:</b> ${user?.phone || "N/A"}</p>
+    `;
+    await postMail({
+      to: "contact@paisabada.in",
+      subject: `Spin & Win lead: ${prizeText}`,
+      html
+    });
+  }
+
+  async function postMail(payload) {
+    try {
+      const res = await fetch(MAILER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      console.log("Mail sent ✅", payload.subject);
+    } catch (err) {
+      console.error("Mail error ❌", err);
+    }
+  }
+</script>
+<!-- 👆 bas itna add karna hai -->
+
   };
 });
 </script>
@@ -951,7 +1014,98 @@ if (!window.saveLead) {
     document.addEventListener('click', function(e){ if(e.target && e.target.id==='pb-tnc-close'){ modal.style.display='none'; }});
   }
 })();
+  <script>
+async function sendUserWinEmail(user) {
+  // change to your deployed URL
+  const ENDPOINT = 'https://pb-mailer-xxxxxxxx.vercel.app/api/send-mail';
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        to: user.email,
+        subject: '🎉 Your ₹500 SIP win is confirmed!',
+        html: `
+          <div style="font-family:Inter,Arial,sans-serif;color:#0f172a">
+            <img alt="PaisaBada" src="https://paisabada.in/spin/assets/pb-logo.png" height="36" style="margin-bottom:12px"/>
+            <h2>Thank you, ${user.name || 'there'}!</h2>
+            <p>Your ₹500 SIP win is confirmed. Team PaisaBada will connect you soon.</p>
+            <p style="font-size:12px;color:#475569;margin-top:16px">
+              No cash rewards. SIP investment credit only. T&amp;C apply.
+            </p>
+          </div>
+        `
+      })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Mail failed');
+    console.log('User auto-reply sent ✅');
+  } catch (err) {
+    console.error('User mail error →', err);
+  }
+}
 </script>
-
+<script>
+async function sendUserWinEmail(user) {
+  // change to your deployed URL
+  const ENDPOINT = 'https://pb-mailer-xxxxxxxx.vercel.app/api/send-mail';
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        to: user.email,
+        subject: '🎉 Your ₹500 SIP win is confirmed!',
+        html: `
+          <div style="font-family:Inter,Arial,sans-serif;color:#0f172a">
+            <img alt="PaisaBada" src="https://paisabada.in/spin/assets/pb-logo.png" height="36" style="margin-bottom:12px"/>
+            <h2>Thank you, ${user.name || 'there'}!</h2>
+            <p>Your ₹500 SIP win is confirmed. Team PaisaBada will connect you soon.</p>
+            <p style="font-size:12px;color:#475569;margin-top:16px">
+              No cash rewards. SIP investment credit only. T&amp;C apply.
+            </p>
+          </div>
+        `
+      })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Mail failed');
+    console.log('User auto-reply sent ✅');
+  } catch (err) {
+    console.error('User mail error →', err);
+  }
+}
+</script>
+<script>
+async function sendUserWinEmail(user) {
+  // change to your deployed URL
+  const ENDPOINT = 'https://pb-mailer-xxxxxxxx.vercel.app/api/send-mail';
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        to: user.email,
+        subject: '🎉 Your ₹500 SIP win is confirmed!',
+        html: `
+          <div style="font-family:Inter,Arial,sans-serif;color:#0f172a">
+            <img alt="PaisaBada" src="https://paisabada.in/spin/assets/pb-logo.png" height="36" style="margin-bottom:12px"/>
+            <h2>Thank you, ${user.name || 'there'}!</h2>
+            <p>Your ₹500 SIP win is confirmed. Team PaisaBada will connect you soon.</p>
+            <p style="font-size:12px;color:#475569;margin-top:16px">
+              No cash rewards. SIP investment credit only. T&amp;C apply.
+            </p>
+          </div>
+        `
+      })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Mail failed');
+    console.log('User auto-reply sent ✅');
+  } catch (err) {
+    console.error('User mail error →', err);
+  }
+}
+</script>
 </body>
 </html>
