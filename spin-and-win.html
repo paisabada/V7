@@ -187,7 +187,7 @@ async function postJSON(url, data) {
   <!-- ===== Open Graph / WhatsApp preview ===== -->
 <meta property="og:title" content="🎉 I WON ₹500 SIP on PaisaBada!">
 <meta property="og:description" content="You can too! Try now & start your Paisa journey. No cash rewards. T&C apply.">
-<meta property="og:image" content="https://paisabada.in/assets/win-card-500sip.jpg">
+<meta property="og:image" content="https://paisabada.in/assets/win-card.jpg">
 <meta property="og:url" content="https://paisabada.in/spin-and-win">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -414,7 +414,7 @@ function closePopup(){document.getElementById('popupForm').style.display='none';
 function isTenDigits(s){return /^\d{10}$/.test((s||'').trim());}
 function openShare(text,mobile=null){
   const base=mobile?`https://wa.me/91${mobile}?text=`:`https://wa.me/?text=`;
-  window.open(base+encodeURIComponent(text),'_blank');
+  window.open(base+encodeURIComponent(genericMsg),'_blank');
 }
 
 const spinLink="https://paisabada.in/spin-and-win";
