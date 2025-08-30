@@ -142,24 +142,48 @@
   #tncBody{ font-size: 14px; }
 }
 </style>
-<!-- === PB integrations: mailer + sheets (do not change) === -->
+<!-- === PB integrations: mailer +  (do not change) === -->
 <script>
   /* URLs & settings */
   const MAILER_URL = "https://pb-mailer-six.vercel.app";   // Vercel mailer
   const TEAM_EMAIL = "contact@paisabada.in";               // team notification inbox
-  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbw3SzzA1DvfapNFHTKS0-TlFrrgzBS9JASVYFiz9R-3dKeoUbCtONlbJDhHR2MinU7O/exec";
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbxVTWYekeCConqCkGNim7dRqec-NgB4Dqj4l9usfR7wXvXsHn3yqCJT6FlF1Po2LmXt/exec";
   const OG_IMG     = "https://paisa-bada.github.io/assets/win-card-500.jpg"; /* win card image URL */
-
-  /* tiny helpers */
-  const $ = (q, root=document)=>root.querySelector(q);
-  const pbNowISO = ()=> new Date().toISOString();
-  const escapeHtml = s => (s??"").toString().replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
-  async function postJSON(url, data){
-    const res = await fetch(url, {method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-    try { return await res.json(); } catch { return {ok:res.ok}; }
-  }
 </script>
-<!-- === /PB integrations === -->
+  
+  <script>
+/* tiny helpers */
+const $ = (q, root = document) => root.querySelector(q);
+const pbNowISO = () => new Date().toISOString();
+
+function escapeHtml(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+async function postJSON(url, data) {
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      // preflight bachane ke liye text/plain
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data)
+    });
+
+    let json = {};
+    try { json = await res.json(); } catch (_) {}
+
+    return { ok: res.ok, ...json };
+  } catch (e) {
+    console.error("postJSON error:", e);
+    return { ok: false, error: String(e) };
+  }
+}
+</script>
   <!-- ===== Open Graph / WhatsApp preview ===== -->
 <meta property="og:title" content="🎉 I WON ₹500 SIP on PaisaBada!">
 <meta property="og:description" content="You can too! Try now & start your Paisa journey. No cash rewards. T&C apply.">
@@ -388,8 +412,8 @@ function showRetryToast(){
 function openPopup(){document.getElementById('popupForm').style.display='flex';}
 function closePopup(){document.getElementById('popupForm').style.display='none';}
 function isTenDigits(s){return /^\d{10}$/.test((s||'').trim());}
-function openShare(text,phone=null){
-  const base=phone?`https://wa.me/91${phone}?text=`:`https://wa.me/?text=`;
+function openShare(text,mobile=null){
+  const base=mobile?`https://wa.me/91${mobile}?text=`:`https://wa.me/?text=`;
   window.open(base+encodeURIComponent(text),'_blank');
 }
 
@@ -440,7 +464,7 @@ document.getElementById('submitBtn').addEventListener('click',()=>{
   const user = {
     name: document.querySelector('#name')?.value?.trim() || '',
     email: document.querySelector('#email')?.value?.trim() || '',
-    phone: document.querySelector('#phone')?.value?.trim() || ''
+    mobile: document.querySelector('#mobile')?.value?.trim() || ''
   };
   const prizeText = window.currentPrizeText || '₹500 SIP';
   pbOnThankYou(user, prizeText);
@@ -450,42 +474,50 @@ document.getElementById('submitBtn').addEventListener('click',()=>{
 });
 </script>
 <script>
-  // ---- Google Sheet logging ----
-  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbw3SzzA1DvfapNFHTKS0-TlFrrgzBS9JASVYFiz9R-3dKeoUbCtONlbJDhHR2MinU7O/exec";
+  // —— Google Sheet logging ——
+async function saveToSheet(user, prizeText){
+  if (!SHEETS_URL) return;
 
-  async function saveToSheet(user, prizeText){
-    if (!SHEETS_URL) return;
+  const payload = {
+    time:  pbNowISO(),
+    name:  user?.name  || '',
+    email: user?.email || '',
+    mobile: user?.mobile || '',
+    ref1:  (document.querySelector('#shareRef1')?.value || '').trim(),
+    ref2:  (document.querySelector('#shareRef2')?.value || '').trim(),
+    prize: prizeText,
+    page:  location.href,
+    ua:    navigator.userAgent,
+    consent: consent ? "YES" : "NO",
+    consentTime: consent ? new
+    Date().toISOString() : "",
+  };
 
-    const payload = {
-      time: pbNowISO(),                         // already defined earlier
-      name:  user?.name  || '',
-      email: user?.email || '',
-      phone: user?.phone || '',
-      ref1:  document.querySelector('#shareRef1')?.value || '',
-      ref2:  document.querySelector('#shareRef2')?.value || '',
-      prize: prizeText || '',
-      page:  location.href,
-      ua:    navigator.userAgent
-    };
+  // IMPORTANT: text/plain to avoid CORS preflight
+  await fetch(SHEETS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  });
 
-    await pbPostJSON(SHEETS_URL, payload);
-    console.log('Sheet log sent ✓');
-  }
-
+  console.log('Sheet log sent ✓');
+}
+</script>
+<script>
   // small POST helper (independent of other helpers)
-  async function pbPostJSON(url, data){
-    try{
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      return await res.json().catch(() => ({}));
-    }catch(e){
-      console.error('Sheet POST failed', e);
-      return { ok:false, error:String(e) };
-    }
+async function pbPostJSON(url, data){
+  try{
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json().catch(()=> ({}));
+  }catch(e){
+    console.error('Sheet POST failed', e);
+    return { ok:false, error:String(e) };
   }
+}
 </script>
 <!-- WebAudio tick-tick that follows spin speed (no logic changes) -->
 <script>
@@ -912,6 +944,23 @@ document.addEventListener('DOMContentLoaded', function(){
 <li>WhatsApp: +91 7620444000</li>
 </ul>
 </div></div></div>
+  
+  <script>
+  window.saveLead = function(payload){
+    const endpoint = SHEETS_URL;   // paste the NEW /exec URL into SHEETS_URL
+    if (!endpoint) return;
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // simple => no preflight
+      body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(r => console.log('Lead saved ✓', r))
+    .catch(err => console.error('Lead save failed', err));
+  };
+</script>
+
 <script>
 (function(){
   const open = document.getElementById('openTnC');
@@ -963,19 +1012,6 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 <script>
 // === Lead logging with T&C acceptance (replace endpoint with your Google Apps Script Web App URL) ===
-if (!window.saveLead) {
-  window.saveLead = function(payload){
-    const endpoint = "https://script.google.com/macros/s/PAISABADA_SPIN_LEADS/exec"; // <-- REPLACE with your Web App URL
-    try {
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).catch(()=>{});
-    } catch(e) {}
-  };
-}
-
 (function(){
   const btn = document.getElementById('submitBtn');
   if(!btn) return;
@@ -1029,10 +1065,6 @@ if (!window.saveLead) {
 <script>
 /* ==== PB helpers: mail + small utils ==== */
 
-/* 1) constants  */
-const MAILER_URL = "https://pb-mailer-six.vercel.app";   // tumhara Vercel mailer
-const TEAM_EMAIL = "contact@paisabada.in";               // team ko lead mail
-
 /* 2) public hook (isko hi Block‑2 se call kar rahe hain) */
 async function pbOnThankYou(user, prizeText){
   try{
@@ -1069,36 +1101,13 @@ async function notifyTeam(user, prizeText){
     <p><b>Prize:</b> ${escapeHtml(prizeText)}</p>
     <p><b>Name:</b> ${escapeHtml(user?.name || 'N/A')}</p>
     <p><b>Email:</b> ${escapeHtml(user?.email || 'N/A')}</p>
-    <p><b>Phone:</b> ${escapeHtml(user?.phone || 'N/A')}</p>
+    <p><b>mobile:</b> ${escapeHtml(user?.mobile || 'N/A')}</p>
     <p><b>Time:</b> ${pbNowISO()}</p>
     <p><b>Page:</b> ${escapeHtml(location.href)}</p>
     <p><b>UA:</b> ${escapeHtml(navigator.userAgent)}</p>`;
   await postJSON(`${MAILER_URL}/api/send-mails`, {
     to: TEAM_EMAIL, subject: "New Spin & Win lead", html
   });
-}
-
-/* 5) tiny helpers */
-function pbNowISO(){ return new Date().toISOString(); }
-function escapeHtml(s){
-  return String(s ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-async function postJSON(url, payload){
-  try{
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    let data = {};
-    try { data = await res.json(); } catch(_){}
-    return { ok: res.ok, data };
-  }catch(e){
-    console.error('postJSON error:', e);
-    return { ok:false, error:String(e) };
-  }
 }
 </script>
 </body>
