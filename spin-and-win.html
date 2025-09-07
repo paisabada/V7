@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Paisabada • Spin &amp; Win</title>
 <style>
@@ -147,7 +148,7 @@
   /* URLs & settings */
   const MAILER_URL = "https://pb-mailer-six.vercel.app";   // Vercel mailer
   const TEAM_EMAIL = "contact@paisabada.in";               // team notification inbox
-  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbxVTWYekeCConqCkGNim7dRqec-NgB4Dqj4l9usfR7wXvXsHn3yqCJT6FlF1Po2LmXt/exec";
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbyJy0w9GbwsguHL0N42j-Vnvyo6VpO4KD4hlJhOOzfTaq7v2NOHOVZxyH0i8p6YHw4/exec";
   const OG_IMG     = "https://paisa-bada.github.io/assets/win-card-500.jpg"; /* win card image URL */
 </script>
   
@@ -155,35 +156,107 @@
 /* tiny helpers */
 const $ = (q, root = document) => root.querySelector(q);
 const pbNowISO = () => new Date().toISOString();
-
+</script>
+<script>
+// ---------------- helpers ----------------
 function escapeHtml(s) {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
-async function postJSON(url, data) {
+// ---------------- send branded win email ----------------
+async function sendWinMail(user, prizeText) {
+  const subject = `🎉 बधाई हो! आपने ${prizeText} जीता! अभी Claim करें`;
+
+  const html = `
+  <div style="font-family: Inter, Arial, sans-serif; max-width:600px; margin:0 auto; padding:20px; border:1px solid #eee; border-radius:12px;">
+    <h2 style="color:#28a745; margin:0 0 12px;">Congrats ${escapeHtml(user.name)}! 🎉</h2>
+    <p style="font-size:16px; margin:0 0 12px;">You won <b>${escapeHtml(prizeText)}</b> Credit.</p>
+
+    <img alt="Badhai Ho Card" 
+         src="https://raw.githubusercontent.com/paisabada/V7/main/assets/Badhai%20Ho%20Card.jpeg" 
+         style="max-width:100%; display:block; margin:12px auto; border-radius:12px;" />
+
+    <a href="https://partner-link-or-sip-registration.com" 
+       style="display:inline-block; padding:12px 20px; margin:20px 0; background:#28a745; color:#fff; 
+              text-decoration:none; border-radius:8px; font-weight:600; font-size:16px;">
+      👉 Claim Your SIP Now
+    </a>
+
+    <p style="font-size:12px; color:#555; margin-top:20px;">
+      No cash rewards. SIP investment credit only. T&C apply.
+    </p>
+  </div>
+  `;
+
   try {
-    const res = await fetch(url, {
+    await fetch(`${MAILER_URL}/api/send-mail`, {
       method: "POST",
-      // preflight bachane ke liye text/plain
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(data)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ to: user.email, subject, html })
     });
-
-    let json = {};
-    try { json = await res.json(); } catch (_) {}
-
-    return { ok: res.ok, ...json };
   } catch (e) {
-    console.error("postJSON error:", e);
-    return { ok: false, error: String(e) };
+    console.error("sendWinMail error:", e);
   }
 }
 </script>
+<script>
+  async function pbOnThankYou(user, prizeText){
+    try{
+      // fire-and-forget (no await), so UI doesn’t block
+      sendWinMail(user, prizeText);
+      notifyTeam(user, prizeText);
+      saveToSheet(user, prizeText);
+    }catch(e){ console.error("pbOnThankYou error:", e); }
+  }
+</script>
+<script>
+async function notifyTeam(user, prizeText){
+  const html = `
+    <h3>New Spin &amp; Win lead</h3>
+    <p><b>Prize:</b> ${escapeHtml(prizeText)}</p>
+    <p><b>Name:</b> ${escapeHtml(user?.name || 'N/A')}</p>
+    <p><b>Email:</b> ${escapeHtml(user?.email || 'N/A')}</p>
+    <p><b>Mobile:</b> ${escapeHtml(user?.mobile || 'N/A')}</p>
+    <p><b>DOB:</b> ${escapeHtml(user?.dob || 'N/A')}</p>
+    <p><b>Time:</b> ${pbNowISO()}</p>
+    <p><b>Page:</b> ${escapeHtml(location.href)}</p>
+    <p><b>UA:</b> ${escapeHtml(navigator.userAgent)}</p>
+  `;
+
+  try {
+    await fetch(`${MAILER_URL}/api/send-mail`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ to: TEAM_EMAIL, subject: "New Spin & Win lead", html })
+    });
+  } catch (e) { console.error("notifyTeam error:", e); }
+}
+</script>
+  <script>
+    async function saveToSheet(user, prizeText){
+  const payload = {
+    time: pbNowISO(),
+    name: user.name, email: user.email, mobile: user.mobile, dob: user.dob,
+    prize: prizeText, page: location.href, ua: navigator.userAgent
+  };
+
+  try {
+    // text/plain + no-cors => CORS preflight nahi hoga (aap pehle aisa hi kar rahe the)
+    await fetch(SHEETS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      mode: "no-cors",
+      body: JSON.stringify(payload)
+    });
+  } catch(e){ console.error("saveToSheet error:", e); }
+}
+
+  </script>
   <!-- ===== Open Graph / WhatsApp preview ===== -->
 <meta property="og:title" content="🎉 I WON ₹500 SIP on PaisaBada!">
 <meta property="og:description" content="You can too! Try now & start your Paisa journey. No cash rewards. T&C apply.">
@@ -431,16 +504,32 @@ document.getElementById('submitBtn').addEventListener('click',()=>{
   const name=document.getElementById('name').value.trim(),
         mobile=document.getElementById('mobile').value.trim(),
         email=document.getElementById('email').value.trim(),
-        dob=document.getElementById('dob').value,
+        dob=document.getElementById('dob').value.trim(),
         ref1=document.getElementById('ref1mobile').value.trim(),
         ref2=document.getElementById('ref2mobile').value.trim(),
         consent=document.getElementById('consent').checked;
 
-  if(!name||!mobile||!email||!dob||!ref1||!ref2){alert('Please fill all required fields.');return;}
+  if(!name||!mobile||!email||!dob||!ref1||!ref2){alert('Please fill all required fields.');return;}               
   if(!consent){alert('Please agree to the consent.');return;}
   if(!isTenDigits(mobile)||!isTenDigits(ref1)||!isTenDigits(ref2)){alert('Please enter valid 10-digit mobile numbers.');return;}
   if(mobile===ref1||mobile===ref2){alert('Your mobile number cannot be used as a reference.');return;}
   if(ref1===ref2){alert('Reference numbers must be different from each other.');return;}
+  // Build user object for mail + sheets
+  const user = {
+    name,
+    email,
+    mobile,
+    dob
+  };
+
+  // Use global prize variable or default
+  const prizeText = window.lastPrize || "₹500 SIP";
+
+  // Send confirmation mail to user
+  sendWinMail(user, prizeText).catch(e => console.error("sendWinMail error:", e));
+  sendWinMail(user, prizeText);
+notifyTeam(user, prizeText);
+saveToSheet(user, prizeText);
 
   openShare(genericMsg);
   stepMessage.textContent="✅ Shared to Group 1! Next → Share with Group 2.";
@@ -483,6 +572,7 @@ async function saveToSheet(user, prizeText){
     name:  user?.name  || '',
     email: user?.email || '',
     mobile: user?.mobile || '',
+    dob: user?.dob || '',
     ref1:  (document.querySelector('#shareRef1')?.value || '').trim(),
     ref2:  (document.querySelector('#shareRef2')?.value || '').trim(),
     prize: prizeText,
@@ -1061,54 +1151,6 @@ document.addEventListener('DOMContentLoaded', function(){
     document.addEventListener('click', function(e){ if(e.target && e.target.id==='pb-tnc-close'){ modal.style.display='none'; }});
   }
 })();
-</script>
-<script>
-/* ==== PB helpers: mail + small utils ==== */
-
-/* 2) public hook (isko hi Block‑2 se call kar rahe hain) */
-async function pbOnThankYou(user, prizeText){
-  try{
-    // fire‑and‑forget (await nahi, UI block na ho)
-    sendUserWinMail(user, prizeText);
-    notifyTeam(user, prizeText);
-    saveToSheet(user, prizeText);   // <-- yeh tumne upar define kiya hai; duplicate na banana
-  }catch(e){
-    console.error('pbOnThankYou error:', e);
-  }
-}
-
-/* 3) user ko branded win mail */
-async function sendUserWinMail(user, prizeText){
-  if(!user?.email) return;
-  const subject = "🎉 Your ₹500 SIP win is confirmed!";
-  const html = `
-    <div style="font-family:Inter,Arial,sans-serif;color:#1f2937">
-      <img alt="WIN_CARD" src="https://paisa-bada-cdn.s3.ap-south-1.amazonaws.com/pb/win-card-500.jpg"
-           style="width:100%;max-width:600px;display:block;margin:16px auto;border-radius:12px"/>
-      <h2 style="text-align:center;margin:12px 0 4px">Thank you${user.name ? ", " + escapeHtml(user.name) : ""}!</h2>
-      <p style="text-align:center;margin:0 0 12px"><b>${escapeHtml(prizeText)}</b> SIP win is confirmed.</p>
-      <p style="font-size:12px;color:#475569;margin-top:12px">
-        No cash rewards. SIP investment credit only. T&amp;C apply.
-      </p>
-    </div>`;
-  await postJSON(`${MAILER_URL}/api/send-mails`, { to: user.email, subject, html });
-}
-
-/* 4) team ko lead mail */
-async function notifyTeam(user, prizeText){
-  const html = `
-    <h3>New Spin &amp; Win lead</h3>
-    <p><b>Prize:</b> ${escapeHtml(prizeText)}</p>
-    <p><b>Name:</b> ${escapeHtml(user?.name || 'N/A')}</p>
-    <p><b>Email:</b> ${escapeHtml(user?.email || 'N/A')}</p>
-    <p><b>mobile:</b> ${escapeHtml(user?.mobile || 'N/A')}</p>
-    <p><b>Time:</b> ${pbNowISO()}</p>
-    <p><b>Page:</b> ${escapeHtml(location.href)}</p>
-    <p><b>UA:</b> ${escapeHtml(navigator.userAgent)}</p>`;
-  await postJSON(`${MAILER_URL}/api/send-mails`, {
-    to: TEAM_EMAIL, subject: "New Spin & Win lead", html
-  });
-}
 </script>
 </body>
 </html>
