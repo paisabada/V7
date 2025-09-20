@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -899,9 +900,8 @@ const IMAGES_WEIGHTED = [
   "https://upload.wikimedia.org/wikipedia/commons/1/1b/Rupees_10_Grain_Series_coin_Obverse.png",
   "https://upload.wikimedia.org/wikipedia/commons/1/1b/Rupees_10_Grain_Series_coin_Obverse.png",
   "https://upload.wikimedia.org/wikipedia/commons/1/1b/Rupees_10_Grain_Series_coin_Obverse.png",
-  "https://upload.wikimedia.org/wikipedia/commons/e/e1/Indian_Rs_5_coin_2009version_obverse.png",
-  "https://upload.wikimedia.org/wikipedia/commons/e/e1/Indian_Rs_5_coin_2009version_obverse.png",
-  "https://upload.wikimedia.org/wikipedia/commons/e/e1/Indian_Rs_5_coin_2009version_obverse.png"
+ 
+  
 ];
   function currencyRain(durationMs=4200, count=56){
     const layer = document.getElementById('currencyRain');
@@ -1152,5 +1152,150 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 })();
 </script>
+  
+<script>
+// -----------------------------
+// WhatsApp send helper (paste/replace this block)
+// -----------------------------
+
+/**
+ * Clean phone input:
+ * - strip spaces and non-digits (except +)
+ * - if exactly 10 digits -> prepend +91
+ * - remove leading zeros
+ */
+function cleanPhoneRaw(input) {
+  if (!input) return "";
+  let s = String(input).trim();
+  // remove all whitespace
+  s = s.replace(/\s+/g, "");
+  // remove any characters that are not digits or plus
+  s = s.replace(/[^+\d]/g, "");
+  // if starts with 0 remove leading zeros
+  if (s.startsWith("0")) s = s.replace(/^0+/, "");
+  // extract digits only for length checks
+  const digits = s.replace(/\D/g, "");
+  // if user typed 10 digits, assume India and prepend +91
+  if (digits.length === 10) return "+91" + digits;
+  // if user typed digits and didn't include +, but length > 0 and not 10 (leave as-is)
+  if (!s.startsWith("+") && digits.length > 0) return "+" + digits;
+  return s;
+}
+
+/**
+ * Basic validator for Indian E.164 format
+ * Accepts +91XXXXXXXXXX (10 digits after 91). Returns true/false
+ */
+function isValidIndianE164(phone) {
+  if (!phone) return false;
+  return /^\+91[6-9]\d{9}$/.test(phone);
+}
+
+/**
+ * Send to your Vercel backend endpoint.
+ * If your backend is on different domain (e.g. spin-whatsapp-backend.vercel.app),
+ * replace API_ENDPOINT accordingly below.
+ */
+const API_ENDPOINT = "https://spin-whatsapp-backend.vercel.app/api/send-whatsapp"; // OR "https://spin-whatsapp-backend.vercel.app/api/send-whatsapp"
+
+async function sendWhatsAppMessage(user) {
+  try {
+    console.log("sendWhatsAppMessage payload:", user);
+
+    const resp = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user),
+      // credentials: 'include' // only if you need cookies/auth; remove otherwise
+    });
+
+    // if not ok, attempt to read text (helps debug HTML error pages)
+    if (!resp.ok) {
+      const txt = await resp.text().catch(() => "<no-body>");
+      console.error("WhatsApp API returned non-OK:", resp.status, resp.statusText, txt);
+      return { ok: false, status: resp.status, statusText: resp.statusText, raw: txt };
+    }
+
+    // try to parse JSON safely
+    const contentType = resp.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      // server returned something else — log it
+      const txt = await resp.text().catch(() => "<no-body>");
+      console.warn("WhatsApp API returned non-JSON but 200:", txt);
+      return { ok: true, raw: txt };
+    }
+
+    const data = await resp.json();
+    console.log("WhatsApp API response:", data);
+    return data;
+
+  } catch (err) {
+    console.error("WhatsApp send error:", err);
+    return { ok: false, error: String(err) };
+  }
+}
+
+// -----------------------------
+// Hook form submit (replace your existing hook - ensure element IDs match your DOM)
+// -----------------------------
+document.addEventListener("DOMContentLoaded", function () {
+  const submitBtn = document.querySelector("#submitBtn"); // same id you have in DOM
+  if (!submitBtn) {
+    console.warn("submitBtn not found - check element id");
+    return;
+  }
+
+  submitBtn.addEventListener("click", async function (ev) {
+    ev.preventDefault();
+
+    // read fields (update selectors to match your form)
+    const name = (document.querySelector("#name") || {}).value || "";
+    const dob = (document.querySelector("#dob") || {}).value || "";
+    const mobileRaw = (document.querySelector("#mobile") || {}).value || "";
+    const email = (document.querySelector("#email") || {}).value || "";
+    const ref1 = (document.querySelector("#ref1") || {}).value || "";
+    const ref2 = (document.querySelector("#ref2") || {}).value || "";
+
+    // clean + validate phone
+    const phone = cleanPhoneRaw(mobileRaw);
+    if (!isValidIndianE164(phone)) {
+      alert("Please enter a valid 10-digit Indian mobile number.");
+      return;
+    }
+
+    // build user payload expected by backend
+    const userPayload = {
+      name: name.trim(),
+      dob: dob.trim(),
+      email: email.trim(),
+      phone: phone,    // already E.164 like +91XXXXXXXXXX
+      ref1: ref1.trim(),
+      ref2: ref2.trim(),
+      source: "spin_widget" // optional source label
+    };
+
+    // UI feedback - disable button while sending (optional)
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Sending...";
+
+    const result = await sendWhatsAppMessage(userPayload);
+
+    // re-enable button and show result
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Submit & Start Sharing";
+
+    // inspect result
+    if (result && (result.ok || result.status == 0 || result.status == "0")) {
+  console.log("✅ WhatsApp message successfully queued/sent:", result);
+  // yaha se directly WhatsApp share flow continue ho jayega
+} else {
+  console.error("❌ WhatsApp send failed:", result);
+}
+  });
+});
+</script>
+
 </body>
 </html>
