@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Signup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+ --teal:#00b4b0;
+ --navy:#002b5b;
+ --bg1:#e3fffb;
+ --bg2:#f5fffe;
+ --radius:18px;
+}
+
+body{
+ font-family:Poppins,Arial,sans-serif;
+ background:linear-gradient(135deg,var(--bg1),var(--bg2));
+ min-height:100vh;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ margin:0;padding:16px;
+}
+
+/* Card */
+.card{
+ width:95%;max-width:420px;
+ background:#fff;
+ padding:40px 28px;
+ border-radius:var(--radius);
+ text-align:center;
+ box-shadow:0 12px 32px rgba(0,0,0,.14);
+ animation:fadeUp .45s ease-out;
+}
+@keyframes fadeUp{
+ from{opacity:0;transform:translateY(40px)}
+ to{opacity:1;transform:translateY(0)}
+}
+
+h2{
+ font-size:28px;
+ font-weight:800;
+ color:var(--navy);
+ margin-bottom:5px;
+}
+
+/* Input Boxes */
+.input-box{position:relative;margin:16px 0}
+.input-box input{
+ width:75%;
+ padding:14px 48px;
+ border-radius:14px;
+ border:1px solid #cbd5e1;
+ font-size:16px;
+ outline:none;
+ transition:.25s;
+}
+.input-box input:focus{
+ border-color:var(--teal);
+ box-shadow:0 0 8px rgba(0,180,176,.3);
+}
+.input-box i{
+ position:absolute;
+ top:50%;left:14px;
+ transform:translateY(-50%);
+ font-size:18px;
+ color:var(--teal);
+}
+.toggle-pass{
+ position:absolute;
+ right:12px;
+ top:50%;
+ transform:translateY(-50%);
+ font-size:18px;
+ cursor:pointer;
+ color:#6b7280;
+}
+
+/* Button */
+button{
+ width:100%;
+ padding:15px;
+ background:var(--teal);
+ color:#fff;
+ border:none;
+ border-radius:14px;
+ font-size:18px;
+ font-weight:700;
+ margin-top:12px;
+ cursor:pointer;
+ transition:.3s;
+}
+button:hover{
+ background:#009d99;
+ transform:translateY(-2px);
+ box-shadow:0 6px 18px rgba(0,0,0,.18);
+}
+
+/* Messages */
+.error,.success{
+ display:none;
+ font-weight:700;
+ margin-top:10px;
+ font-size:14px;
+}
+.error{color:#d9534f}
+.success{color:#1da756}
+
+/* Shake Animation */
+@keyframes shake {
+ 0%,100%{transform:translateX(0)}
+ 25%{transform:translateX(-6px)}
+ 50%{transform:translateX(6px)}
+ 75%{transform:translateX(-6px)}
+}
+
+@media(min-width:600px){
+ .card{padding:50px 40px}
+ h2{font-size:30px}
+}
+</style>
+</head>
+<body>
+
+<div class="card" id="signupCard">
+  <h2>Create Account ✨</h2>
+  <p style="color:#67747e">Let's start your Paisa journey 🎯</p>
+
+  <div class="input-box">
+    <i>👤</i>
+    <input id="signupName" placeholder="Full Name" required>
+  </div>
+
+  <div class="input-box">
+    <i>📧</i>
+    <input id="signupEmail" placeholder="Email address" required>
+  </div>
+
+  <div class="input-box">
+    <i>📱</i>
+    <input id="signupPhone" placeholder="Mobile Number" required maxlength="10">
+  </div>
+
+  <div class="input-box">
+    <i>🔒</i>
+    <input id="signupPassword" type="password" placeholder="Create Password" required minlength="6">
+    <span class="toggle-pass" onclick="togglePassword()">👁</span>
+  </div>
+
+  <div class="error" id="errorMsg"></div>
+  <div class="success" id="successMsg">🎉 Account created successfully!</div>
+
+  <button onclick="signup()">Sign Up</button>
+</div>
+
+<script>
+function togglePassword(){
+ const p=document.getElementById("signupPassword");
+ p.type = p.type==="password" ? "text" : "password";
+}
+
+function validateEmail(e){
+ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+}
+function validatePhone(p){
+ return /^[6-9]\d{9}$/.test(p);
+}
+
+function signup(){
+ const card=document.getElementById("signupCard");
+ const name=signupName.value.trim();
+ const email=signupEmail.value.trim();
+ const phone=signupPhone.value.trim();
+ const password=signupPassword.value.trim();
+ const err=document.getElementById("errorMsg");
+ const success=document.getElementById("successMsg");
+
+ err.style.display="none";
+ success.style.display="none";
+
+ if(!name || !email || !phone || !password){
+  err.innerText="All fields are required.";
+  err.style.display="block";
+  shake(); return;
+ }
+ if(!validateEmail(email)){
+  err.innerText="Enter a valid email address.";
+  err.style.display="block";
+  shake(); return;
+ }
+ if(!validatePhone(phone)){
+  err.innerText="Enter a valid 10-digit mobile no.";
+  err.style.display="block";
+  shake(); return;
+ }
+ if(password.length < 6){
+  err.innerText="Password must be at least 6 characters.";
+  err.style.display="block";
+  shake(); return;
+ }
+
+ const user={name,email,phone,password,coins:200,xp:0,spinReward:0};
+ localStorage.setItem("pbUser",JSON.stringify(user));
+
+ success.style.display="block";
+ setTimeout(()=>window.location.href="login.html",900);
+}
+
+function shake(){
+ signupCard.style.animation="shake .3s";
+ setTimeout(()=>signupCard.style.animation="",300);
+}
+</script>
+
+</body>
+</html>

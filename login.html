@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+ --teal:#00b4b0;
+ --navy:#002b5b;
+ --bg1:#e3fffb;
+ --bg2:#f5fffe;
+ --radius:18px;
+}
+
+body{
+ font-family:Poppins,Arial,sans-serif;
+ background:linear-gradient(135deg, var(--bg1), var(--bg2));
+ min-height:100vh;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ margin:0;
+ padding:16px;
+}
+
+.card{
+ width:95%; max-width:420px;
+ background:#fff;
+ padding:40px 28px;
+ border-radius:var(--radius);
+ box-shadow:0 12px 32px rgba(0,0,0,.14);
+ animation:fadeUp .45s ease-out;
+ text-align:center;
+}
+@keyframes fadeUp {
+ from{opacity:0; transform:translateY(40px)}
+ to{opacity:1; transform:translateY(0)}
+}
+
+h2{
+ color:var(--navy);
+ margin-bottom:8px;
+ font-weight:800;
+}
+
+.input-box{
+ position:relative;
+ margin:18px 0;
+}
+.input-box input{
+ width:80%;
+ padding:14px 46px;
+ border-radius:14px;
+ border:1px solid #cbd5e1;
+ font-size:16px;
+ outline:none;
+ transition:.25s;
+}
+.input-box input:focus{
+ border-color:var(--teal);
+ box-shadow:0 0 8px rgba(0,180,176,.3);
+}
+
+.input-box i{
+ position:absolute;
+ top:50%; left:14px;
+ transform:translateY(-50%);
+ color:var(--teal);
+ font-size:18px;
+}
+
+.toggle-pass{
+ position:absolute;
+ right:12px;
+ top:50%;
+ transform:translateY(-50%);
+ font-size:18px;
+ cursor:pointer;
+ color:#6b7280;
+}
+
+button{
+ width:100%;
+ background:var(--teal);
+ border:none;
+ color:#fff;
+ padding:15px;
+ border-radius:14px;
+ font-size:18px;
+ font-weight:700;
+ cursor:pointer;
+ transition:.25s;
+ margin-top:12px;
+}
+button:hover{
+ background:#009d99;
+ transform:translateY(-2px);
+ box-shadow:0 6px 18px rgba(0,0,0,.18);
+}
+
+.error,.success{
+ display:none;
+ font-size:14px;
+ font-weight:700;
+ margin-top:12px;
+}
+.error{color:#d9534f}
+.success{color:#1da756}
+
+.signup-link{
+ margin-top:16px;
+ display:inline-block;
+ font-size:15px;
+ font-weight:700;
+ color:var(--teal);
+ text-decoration:none!important;
+}
+
+/* Error Shake */
+@keyframes shake {
+ 0%,100%{transform:translateX(0)}
+ 25%{transform:translateX(-6px)}
+ 50%{transform:translateX(6px)}
+ 75%{transform:translateX(-6px)}
+}
+
+@media(min-width:600px){
+ .card{padding:50px 40px}
+ h2{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<div class="card" id="loginCard">
+  <h2>Welcome Back 👋</h2>
+  <p style="color:#67747e">Login to access your Wallet</p>
+
+  <div class="input-box">
+    <i>📧</i>
+    <input id="loginEmail" placeholder="Email" required>
+  </div>
+
+  <div class="input-box">
+    <i>🔒</i>
+    <input id="loginPassword" type="password" placeholder="Password" required>
+    <span class="toggle-pass" onclick="togglePassword()">👁</span>
+  </div>
+
+  <button onclick="login()">Login</button>
+
+  <div id="userError" class="error">Account not found. Create account first.</div>
+  <div id="passError" class="error">Wrong password. Try again.</div>
+  <div id="loginSuccess" class="success">🎉 Logging you in…</div>
+
+  <a href="signup.html" class="signup-link">Create New Account</a>
+</div>
+
+<script>
+function togglePassword(){
+ const p = document.getElementById("loginPassword");
+ p.type = (p.type === "password") ? "text" : "password";
+}
+
+function login(){
+ const card = document.getElementById("loginCard");
+ const email = loginEmail.value.trim();
+ const password = loginPassword.value.trim();
+ const user = JSON.parse(localStorage.getItem("pbUser"));
+
+ document.querySelectorAll('.error,.success').forEach(e=>e.style.display="none");
+
+ if(!email || !password){
+   userError.innerText = "Please fill all fields.";
+   userError.style.display="block";
+   shake(); return;
+ }
+
+ if(!user || user.email !== email){
+   userError.style.display="block";
+   shake(); return;
+ }
+
+ if(user.password !== password){
+   passError.style.display="block";
+   shake(); return;
+ }
+
+ loginSuccess.style.display="block";
+ localStorage.setItem("pbLoggedIn","true");
+ setTimeout(()=>window.location.href="wallet.html",900);
+}
+
+function shake(){
+ const card = document.getElementById("loginCard");
+ card.style.animation="shake .3s";
+ setTimeout(()=>card.style.animation="",300);
+}
+</script>
+
+</body>
+</html>

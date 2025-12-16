@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paisa Personality Quiz - Paisabada</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<meta property="og:title" content="💰 Take the Paisa Personality Quiz – Find Your Money Style!" />
+<meta property="og:description" content="Are you a Risky Rockstar, Balance Boss, or Investor Panda? Take the fun quiz now and discover your financial personality!" />
+<meta property="og:image" content="https://paisabada.in/path/to/attractive-quiz-image.jpg" />
+<meta property="og:url" content="https://paisabada.in/personality.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Paisabada Quiz" />
+<meta property="og:locale" content="en_US" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<style>
+body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #c3f0e8, #f4f8f7); margin: 0; padding: 0; }
+.quiz-container { max-width: 650px; margin: 50px auto; background: #fff; border-radius: 16px; padding: 30px 35px; box-shadow: 0 10px 20px rgba(0,0,0,0.12); transition: transform 0.3s ease; }
+.quiz-container:hover { transform: translateY(-5px); }
+.progress-bar { height: 6px; background: #e0e0e0; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+.progress { height: 100%; background: linear-gradient(90deg, #28a745, #8de6b5); width: 0%; transition: width 0.4s ease; }
+.question { font-size: 22px; font-weight: 600; margin-bottom: 20px; color: #333; }
+.options { display: flex; flex-direction: column; gap: 14px; }
+.option { background: #e0f7f1; padding: 14px; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-weight: 500; box-shadow: 0 3px 6px rgba(0,0,0,0.08); opacity: 0; transform: translateX(-20px); }
+.option.show { opacity: 1; transform: translateX(0); transition: all 0.4s ease; }
+.option:hover { background: #28a745; color: #fff; transform: scale(1.05); box-shadow: 0 5px 12px rgba(0,0,0,0.15); }
+.form-container input { display: block; width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; transition: border 0.3s; }
+.form-container input:focus { border-color: #28a745; outline: none; box-shadow: 0 0 5px rgba(40,167,69,0.3); }
+.submit-btn { background: linear-gradient(90deg, #28a745, #8de6b5); color: white; border: none; padding: 14px 28px; font-size: 16px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; box-shadow: 0 4px 8px rgba(0,0,0,0.12); }
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.15); }
+.submit-btn:active { transform: scale(0.97); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.result-popup { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); text-align: center; }
+.result-popup h2 { margin-bottom: 18px; color: #333; }
+.result-popup p { color: #555; margin-bottom: 20px; }
+</style>
+
+</head>
+<body>
+<div class="quiz-container" id="quiz">
+  <div class="progress-bar"><div class="progress" id="progress"></div></div>
+  <div id="question-step"></div>
+</div>
+
+<audio id="click-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+<audio id="btn-sound" src="https://www.soundjay.com/button/sounds/button-3.mp3" preload="auto"></audio>
+
+<script>
+const questions = [
+  { q: "How do you usually decide your monthly savings?", a: ["I save what's left.", "I plan and allocate in advance.", "Depends on the month."] },
+  { q: "What's your first reaction when you get a bonus?", a: ["Shopping spree!", "Invest it smartly.", "Treat myself a bit, save the rest."] },
+  { q: "What does 'budget' mean to you?", a: ["Too restrictive.", "My best friend.", "Something I try to follow."] },
+  { q: "Your biggest money goal is:", a: ["Live comfortably now.", "Build long-term wealth.", "Balance today and tomorrow."] }
+];
+
+let currentQ = 0, answers = [], result = "", userData = {};
+const clickSound = document.getElementById('click-sound');
+const btnSound = document.getElementById('btn-sound');
+
+function updateProgress() {
+  document.getElementById('progress').style.width = ((currentQ / questions.length) * 100) + '%';
+}
+
+function renderQuestion() {
+  const container = document.getElementById('question-step');
+  container.innerHTML = '';
+  if (currentQ >= questions.length) { renderForm(); return; }
+
+  const q = questions[currentQ];
+  const questionEl = document.createElement('div'); 
+  questionEl.className = 'question'; 
+  questionEl.textContent = q.q;
+  container.appendChild(questionEl);
+
+  const optionsEl = document.createElement('div'); 
+  optionsEl.className = 'options';
+  q.a.forEach((opt, idx) => {
+    const div = document.createElement('div'); 
+    div.className = 'option'; 
+    div.textContent = opt;
+    div.onclick = () => selectAnswer(idx, div);
+    optionsEl.appendChild(div);
+    setTimeout(() => div.classList.add('show'), idx * 150);
+  });
+  container.appendChild(optionsEl);
+  updateProgress();
+}
+
+function selectAnswer(idx, div) {
+  clickSound.play();
+  div.style.background = '#218838'; div.style.color = '#fff';
+  setTimeout(() => { answers.push(idx); currentQ++; renderQuestion(); }, 300);
+}
+
+function renderForm() {
+  document.getElementById('quiz').innerHTML = `
+    <div class='form-container'>
+      <h2>Almost Done! Tell us about you:</h2>
+      <input type='text' id='name' placeholder='Name' required />
+      <input type='text' id='mobile' placeholder='Mobile Number' required />
+      <input type='email' id='email' placeholder='Email Address' required />
+      <button class='submit-btn' onclick='submitForm()'>Get My Paisa Personality</button>
+    </div>
+  `;
+}
+
+function submitForm() {
+  btnSound.play();
+  const name = document.getElementById('name').value.trim(),
+        email = document.getElementById('email').value.trim(),
+        mobile = document.getElementById('mobile').value.trim();
+  
+  if (!name || !mobile || !email) { 
+    alert("Please fill all required fields."); 
+    return; 
+  }
+
+  userData = { name, email, mobile };
+
+  const total = answers.reduce((a,b)=>a+b,0);
+  result = (total<=3) ? "Risky Rockstar" : (total<=6) ? "Balance Boss" : "Investor Panda";
+  showSharePrompt();
+}
+
+function showSharePrompt() {
+  document.getElementById('quiz').innerHTML = `
+    <div class='result-popup'>
+      <h2>You are a <span style='color:#28a745;'>${result}</span>!</h2>
+      <p>Share your Paisa Personality Report:</p>
+      <button id="fbShareBtn" class='submit-btn' style='background:#1877F2;'>Share on Facebook</button>
+      <!-- WhatsApp Button Removed -->
+      <button id="downloadBtn" class='submit-btn' style='background:#28a745;' disabled>Download Report</button>
+      <p id="shareMessage" style="margin-top:10px;color:#555;"></p>
+    </div>
+  `;
+
+  const fbShareBtn = document.getElementById('fbShareBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const shareMessage = document.getElementById('shareMessage');
+
+  fbShareBtn.onclick = () => {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, "_blank", "width=600,height=400");
+    downloadBtn.disabled = false;
+    shareMessage.textContent = "You can now download your report!";
+  };
+
+  downloadBtn.onclick = () => { generatePDF(); };
+}
+
+async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const { name, email, mobile } = userData;
+
+  doc.setFontSize(22);
+  doc.setFont("helvetica","bold");
+  doc.text("💰 Paisa Personality Report",105,20,null,null,"center");
+
+  doc.setFontSize(14);
+  doc.setFont("helvetica","normal");
+
+  let y = 35;
+  doc.text("📌 Personal Details",20,y); y+=7;
+  doc.line(20,y,190,y); y+=5;
+
+  const details = [
+    ["Name",name],
+    ["Email",email],
+    ["Mobile",mobile]
+  ];
+  details.forEach(([k,v])=>{ doc.text(`${k}: ${v}`,25,y); y+=7; });
+
+  y+=5;
+  doc.text("🌟 Personality Type",20,y); y+=7;
+  doc.setFont("helvetica","bold");
+  doc.text(result,25,y); y+=12;
+
+  doc.setFont("helvetica","normal");
+  y+=5; 
+  doc.text("📝 Quiz Answers",20,y); y+=7; 
+  doc.line(20,y,190,y); y+=5;
+
+  questions.forEach((q,idx)=>{
+    doc.setFont("helvetica","bold");
+    doc.text(`${idx+1}. ${q.q}`,25,y); y+=6;
+    doc.setFont("helvetica","normal");
+    doc.text(`Answer: ${q.a[answers[idx]]}`,30,y); y+=8;
+  });
+
+  doc.save(`paisa_personality_${name.replace(/\s+/g,'_')}.pdf`);
+  confetti({ particleCount: 200, spread: 80, origin: { y:0.6 }, ticks: 150 });
+}
+
+renderQuestion();
+</script>
+
+</body>
+</html>

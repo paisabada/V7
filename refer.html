@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Refer & Earn</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;
+  --navy:#002b5b;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:32px 16px;
+  box-sizing:border-box;
+}
+.shell{
+  width:100%;
+  max-width:900px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+  animation:fadeUp .45s ease-out;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Header */
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:18px 24px 18px;
+  color:#fff;
+}
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+}
+.header-left{
+  display:flex;gap:12px;align-items:center;
+}
+#avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:conic-gradient(from 180deg,var(--teal),#9af7ec,var(--navy));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:20px;
+}
+.hl-title{font-size:18px;font-weight:600;}
+.hl-sub{font-size:12px;opacity:.9;margin-top:2px;}
+.header-right{text-align:right;font-size:11px;}
+.tag{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+}
+
+/* Content */
+.content{
+  padding:18px 20px 22px;
+}
+.section-title{
+  font-size:15px;
+  font-weight:600;
+  color:#253257;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+.section-title small{
+  font-size:11px;
+  color:#6b7280;
+}
+
+/* Code box */
+.code-card{
+  margin-top:10px;
+  background:#ffffff;
+  border-radius:16px;
+  padding:10px 12px;
+  box-shadow:0 6px 18px rgba(15,23,42,.12);
+  border:1px solid #e5e7eb;
+  font-size:11px;
+  color:#374151;
+}
+.code-label{
+  font-size:11px;
+  color:#6b7280;
+}
+.code-value{
+  margin-top:4px;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:0.08em;
+}
+.code-actions{
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.btn{
+  border-radius:999px;
+  border:none;
+  padding:6px 12px;
+  font-size:11px;
+  cursor:pointer;
+  background:var(--teal);
+  color:#fff;
+}
+.btn.secondary{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+/* Stats */
+.stats-row{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px;
+}
+.stat-card{
+  background:#ffffff;
+  border-radius:14px;
+  padding:9px 11px;
+  box-shadow:0 4px 14px rgba(15,23,42,.1);
+  border:1px solid #e5e7eb;
+  font-size:11px;
+}
+.stat-label{color:#6b7280;}
+.stat-value{
+  margin-top:4px;
+  font-size:18px;
+  font-weight:700;
+}
+
+/* Steps */
+.steps-card{
+  margin-top:18px;
+  background:#ffffff;
+  border-radius:16px;
+  padding:10px 12px;
+  box-shadow:0 6px 16px rgba(15,23,42,.12);
+  border:1px solid #e5e7eb;
+  font-size:11px;
+}
+.steps-card h3{
+  margin:0 0 4px;
+  font-size:13px;
+  font-weight:600;
+}
+.steps-card ol{
+  margin:0;
+  padding-left:18px;
+}
+.steps-card li{
+  margin-bottom:3px;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:#111827;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  z-index:999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media (max-width:768px){
+  .shell{border-radius:18px;}
+  .header{padding:14px 16px 16px;}
+  .content{padding:14px 14px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-left">
+        <div id="avatar"></div>
+        <div>
+          <div class="hl-title" id="greetTitle"></div>
+          <div class="hl-sub">Invite friends & earn extra coins.</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="tag">Refer & Earn</div>
+        <div style="margin-top:4px;">Grow your wallet faster without extra spending.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">
+      <span>Your referral code & link</span>
+      <small>Share with family, colleagues or friends.</small>
+    </div>
+
+    <div class="code-card">
+      <div class="code-label">Your referral code</div>
+      <div class="code-value" id="refCode">PB-XXXX</div>
+      <div class="code-label" style="margin-top:6px;">Referral link</div>
+      <div style="font-size:11px;" id="refLink"></div>
+      <div class="code-actions">
+        <button class="btn" id="btnCopyCode">Copy code</button>
+        <button class="btn secondary" id="btnCopyLink">Copy link</button>
+        <!-- 🟢 NEW: WhatsApp share button -->
+        <button class="btn secondary" id="btnShareWhatsApp">Share on WhatsApp</button>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total referrals</div>
+        <div class="stat-value" id="statRefCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Coins earned via referrals</div>
+        <div class="stat-value" id="statRefCoins">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active campaigns</div>
+        <div class="stat-value" id="statCampaign">1</div>
+      </div>
+    </div>
+
+    <div class="steps-card">
+      <h3>How Refer & Earn works</h3>
+      <ol>
+        <li>Share your referral link or code with your friend.</li>
+        <li>Your friend signs up on Paisabada and buys/renews a policy.</li>
+        <li>Both of you earn bonus Paisabada Coins as per active campaign.</li>
+      </ol>
+      <p style="margin-top:6px;">
+        Example: For some campaigns, you may get 250 coins and your friend may get 150 coins
+        on their first eligible policy. Terms can change, so always check active offers on PB.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auth
+if(localStorage.getItem("pbLoggedIn")!=="true"){
+  window.location.href="login.html";
+}
+let raw = localStorage.getItem("pbUser");
+let user = null;
+try{
+  if(raw) user = JSON.parse(raw);
+}catch(e){
+  console.error("Invalid pbUser", e);
+  localStorage.removeItem("pbUser");
+}
+if(!user){
+  window.location.href="login.html";
+}
+
+function saveUser(){
+  localStorage.setItem("pbUser", JSON.stringify(user));
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 1200);
+}
+
+// Header & basic stats
+(function(){
+  const name = user.name || "User";
+  const firstName = name.split(" ")[0];
+  const initials = name.trim().split(" ").filter(Boolean).map(w=>w[0].toUpperCase()).slice(0,2).join("");
+  document.getElementById("avatar").textContent = initials || "P";
+  document.getElementById("greetTitle").textContent =
+    `Hi ${firstName}, share Paisabada & earn`;
+})();
+
+// referral info
+if(!user.refCode){
+  const base = (user.name || "PBUSER").split(" ")[0].toUpperCase().slice(0,6);
+  const tail = String(new Date().getTime()).slice(-4);
+  user.refCode = "PB-" + base + "-" + tail;
+  saveUser();
+}
+
+user.refCount = user.refCount || 0;
+user.refCoinsEarned = user.refCoinsEarned || 0;
+
+const refCodeEl = document.getElementById("refCode");
+const refLinkEl = document.getElementById("refLink");
+
+refCodeEl.textContent = user.refCode;
+const referralLink = "https://paisabada.com/ref?code=" + encodeURIComponent(user.refCode);
+refLinkEl.textContent = referralLink;
+
+// stats
+document.getElementById("statRefCount").textContent = user.refCount;
+document.getElementById("statRefCoins").textContent = user.refCoinsEarned;
+document.getElementById("statCampaign").textContent = 1;
+
+// copy buttons
+document.getElementById("btnCopyCode").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText(user.refCode);
+    showToast("Referral code copied");
+  }catch(e){
+    showToast("Unable to copy, long-press to copy");
+  }
+});
+
+document.getElementById("btnCopyLink").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText(referralLink);
+    showToast("Referral link copied");
+  }catch(e){
+    showToast("Unable to copy, long-press to copy");
+  }
+});
+
+// 🟢 NEW: Share on WhatsApp
+document.getElementById("btnShareWhatsApp").addEventListener("click", ()=>{
+  const msg =
+    "Hi! I'm using Paisabada to manage insurance and earn coins on policies. " +
+    "Use my link to join and get rewards too: " +
+    referralLink;
+
+  const waUrl = "https://wa.me/?text=" + encodeURIComponent(msg);
+
+  window.open(
+    waUrl,
+    "_blank",
+    "width=600,height=600,scrollbars=yes"
+  );
+  showToast("Opening WhatsApp…");
+});
+</script>
+</body>
+</html>

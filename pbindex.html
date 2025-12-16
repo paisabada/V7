@@ -156,7 +156,7 @@ body{
   color:#6b7280;
 }
 
-/* WHAT YOU CAN DO HERE CARD (3 bullets) */
+/* WHAT YOU CAN DO HERE CARD */
 .do-card{
   margin-top:10px;
   background:#ffffff;
@@ -576,7 +576,6 @@ function showToast(msg){
   const name = user.name || "User";
   const firstName = name.split(" ")[0];
 
-  // avatar initials
   const initials = name.trim().split(" ")
     .filter(Boolean)
     .map(w=>w[0].toUpperCase())
@@ -584,7 +583,6 @@ function showToast(msg){
     .join("");
   document.getElementById("avatar").textContent = initials || "P";
 
-  // greeting
   const hour = new Date().getHours();
   let greetTime = "Welcome back";
   if(hour < 12) greetTime = "Good morning";
@@ -596,7 +594,6 @@ function showToast(msg){
   document.getElementById("greetSub").textContent =
     "View your money snapshot, tools and live offers in one place.";
 
-  // Last login text
   if(!user.lastLogin){
     user.lastLogin = new Date().toISOString();
     saveUser();
@@ -627,7 +624,6 @@ function fillStatsAndSnapshot(){
   const level = getLevel(xp);
   const nextGoal = getNextXPGoal(xp);
 
-  // header stats
   document.getElementById("statCoins").textContent = coins;
   document.getElementById("statLevel").textContent = level;
   document.getElementById("statPolicies").textContent = policies;
@@ -651,7 +647,6 @@ function fillStatsAndSnapshot(){
     : "Visit often to build a habit of checking your money.";
   document.getElementById("statStreakFoot").textContent = streakFoot;
 
-  // snapshot block
   document.getElementById("snapCoins").textContent = coins;
   document.getElementById("snapXP").textContent = xp;
   document.getElementById("snapLevel").textContent = level;
@@ -679,7 +674,6 @@ function fillStatsAndSnapshot(){
 // ---- Next action suggestion ----
 function fillNextAction(){
   const coins = user.coins || 0;
-  const xp = user.xp || 0;
   const policies = user.policiesCount || 0;
 
   let mainText = "";
@@ -705,70 +699,30 @@ function fillNextAction(){
 
 // ---- Tools / Offers / Vault config ----
 const tools = [
-  {
-    id:"wallet",
-    title:"Wallet",
-    icon:"👛",
+  { id:"wallet", title:"Wallet", icon:"👛",
     sub:"See coins, XP and wallet rules.",
-    tag:"Use coins smartly",
-    url:"wallet.html"
-  },
-  {
-    id:"portfolio",
-    title:"My Portfolio",
-    icon:"📊",
+    tag:"Use coins smartly", url:"wallet.html" },
+  { id:"portfolio", title:"My Portfolio", icon:"📊",
     sub:"View and manage all policies.",
-    tag:"All covers in one place",
-    url:"portfolio.html"
-  },
-  {
-    id:"vault",
-    title:"Policy Vault",
-    icon:"🗄️",
+    tag:"All covers in one place", url:"portfolio.html" },
+  { id:"vault", title:"Policy Vault", icon:"🗄️",
     sub:"Store and access policy documents.",
-    tag:"Digital locker",
-    url:"vault.html"
-  },
-  {
-    id:"healthCheck",
-    title:"Financial Health Check",
-    icon:"🩺",
+    tag:"Digital locker", url:"vault.html" },
+  { id:"healthCheck", title:"Financial Health Check", icon:"🩺",
     sub:"Run a quick check on your money health.",
-    tag:"3–5 minute check",
-    url:"financial-health-check.html"
-  },
-  {
-    id:"paisaPersonality",
-    title:"Paisa Personality",
-    icon:"🧠",
+    tag:"3–5 minute check", url:"financial-health-check.html" },
+  { id:"paisaPersonality", title:"Paisa Personality", icon:"🧠",
     sub:"Understand your behaviour with money.",
-    tag:"Fun quiz + insight",
-    url:"paisa-personality.html"
-  },
-  {
-    id:"elearn",
-    title:"E-Learn",
-    icon:"📚",
+    tag:"Fun quiz + insight", url:"paisa-personality.html" },
+  { id:"elearn", title:"E-Learn", icon:"📚",
     sub:"Short lessons on health, term, SIPs & more.",
-    tag:"Learn before you buy",
-    url:"elearn.html"
-  },
-  {
-    id:"transactions",
-    title:"Transactions / History",
-    icon:"📜",
+    tag:"Learn before you buy", url:"elearn.html" },
+  { id:"transactions", title:"Transactions / History", icon:"📜",
     sub:"Track payments and coin usage.",
-    tag:"For proofs & tracking",
-    url:"transactions.html"
-  },
-  {
-    id:"refer",
-    title:"Refer & Earn",
-    icon:"🎁",
+    tag:"For proofs & tracking", url:"transactions.html" },
+  { id:"refer", title:"Refer & Earn", icon:"🎁",
     sub:"Invite friends and earn coins.",
-    tag:"Grow rewards faster",
-    url:"refer.html"
-  }
+    tag:"Grow rewards faster", url:"refer.html" }
 ];
 
 function openTool(item){

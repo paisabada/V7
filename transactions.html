@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Transactions / History | Paisabada</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;
+  --navy:#002b5b;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:32px 16px;
+  box-sizing:border-box;
+}
+.shell{
+  width:100%;
+  max-width:960px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:16px 20px 14px;
+  color:#fff;
+}
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+}
+.header-left{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+#avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:conic-gradient(from 180deg,var(--teal),#9af7ec,var(--navy));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:18px;
+}
+.h-title{font-size:17px;font-weight:600;}
+.h-sub{font-size:12px;opacity:.9;margin-top:2px;}
+.badge{
+  font-size:11px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.35);
+}
+.content{
+  padding:18px 18px 20px;
+}
+.section-title{
+  font-size:15px;
+  font-weight:600;
+  color:#111827;
+}
+.section-sub{
+  font-size:11px;
+  color:#6b7280;
+  margin-top:2px;
+}
+
+/* Filter row */
+.filter-row{
+  margin-top:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.filter-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.chip{
+  font-size:11px;
+  padding:4px 9px;
+  border-radius:999px;
+  border:1px solid #d1d5db;
+  background:#fff;
+  cursor:pointer;
+}
+.chip.active{
+  background:var(--teal);
+  color:#fff;
+  border-color:var(--teal);
+}
+.date-range{
+  font-size:11px;
+}
+.date-range select{
+  font-size:11px;
+  border-radius:999px;
+  border:1px solid #d1d5db;
+  padding:4px 8px;
+}
+
+/* table */
+.table-wrap{
+  margin-top:14px;
+  overflow-x:auto;
+}
+.tx-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:11px;
+}
+.tx-table thead{
+  background:#e5e7eb;
+}
+.tx-table th,
+.tx-table td{
+  padding:7px 6px;
+  text-align:left;
+  white-space:nowrap;
+}
+.tx-table tbody tr:nth-child(even){
+  background:#f9fafb;
+}
+.amount-pos{color:#15803d;font-weight:600;}
+.amount-neg{color:#b91c1c;font-weight:600;}
+.coins-pill{
+  padding:2px 7px;
+  border-radius:999px;
+  background:#ecfdf5;
+  color:#166534;
+  font-size:10px;
+}
+.status-pill{
+  padding:2px 8px;
+  border-radius:999px;
+  font-size:10px;
+}
+.status-success{background:#dcfce7;color:#166534;}
+.status-pending{background:#fef9c3;color:#854d0e;}
+.status-failed{background:#fee2e2;color:#b91c1c;}
+
+/* empty */
+.empty{
+  margin-top:16px;
+  font-size:12px;
+  color:#4b5563;
+  background:#f9fafb;
+  border-radius:14px;
+  padding:10px 10px;
+  border:1px dashed #d1d5db;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:#111827;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  z-index:999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+@media(max-width:768px){
+  .shell{border-radius:18px;}
+  .header{padding:14px 14px;}
+  .content{padding:14px 14px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-left">
+        <div id="avatar"></div>
+        <div>
+          <div class="h-title" id="hTitle"></div>
+          <div class="h-sub">Track payments, coin usage and refunds in one place.</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="badge">Transactions / History</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">Your transaction history</div>
+    <div class="section-sub">
+      Includes policy purchases, renewals, coin redemptions and adjustments linked to your Paisabada account.
+    </div>
+
+    <div class="filter-row">
+      <div class="filter-chips" id="filterChips">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="policy">Policy payments</button>
+        <button class="chip" data-filter="coins">Coin usage</button>
+        <button class="chip" data-filter="refund">Refund / reversal</button>
+      </div>
+      <div class="date-range">
+        Range:
+        <select id="rangeSelect">
+          <option value="3m">Last 3 months</option>
+          <option value="6m">Last 6 months</option>
+          <option value="1y">Last 1 year</option>
+          <option value="all">All time</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="empty" class="empty" style="display:none;">
+      No transactions found for the selected filters. Try changing the range or filter type.
+    </div>
+
+    <div class="table-wrap" id="tableWrap" style="display:none;">
+      <table class="tx-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Details</th>
+            <th>Amount</th>
+            <th>Coins</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="txBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// auth
+if(localStorage.getItem("pbLoggedIn")!=="true"){
+  window.location.href="login.html";
+}
+let raw=localStorage.getItem("pbUser");
+let user=null;
+try{ if(raw) user=JSON.parse(raw);}catch(e){ localStorage.removeItem("pbUser");}
+if(!user) window.location.href="login.html";
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1200);
+}
+
+(function(){
+  const name=user.name||"User";
+  const first=name.split(" ")[0];
+  const initials=name.trim().split(" ").filter(Boolean).map(w=>w[0].toUpperCase()).slice(0,2).join("");
+  document.getElementById("avatar").textContent=initials||"P";
+  document.getElementById("hTitle").textContent=`Hi ${first}, here’s your history`;
+})();
+
+// we expect user.transactions = array
+// {date, type:'policy'|'coins'|'refund', details, amount, coinsDelta, status}
+const allTx = Array.isArray(user.transactions) ? user.transactions : [];
+
+const txBody=document.getElementById("txBody");
+let currentFilter="all";
+let currentRange="3m";
+
+function inRange(dateStr){
+  if(currentRange==="all") return true;
+  const d=new Date(dateStr);
+  if(isNaN(d.getTime())) return true;
+  const now=new Date();
+  let months=3;
+  if(currentRange==="6m") months=6;
+  if(currentRange==="1y") months=12;
+  const cut = new Date(now.getFullYear(), now.getMonth()-months, now.getDate());
+  return d>=cut;
+}
+function formatDate(d){
+  const dt=new Date(d);
+  if(isNaN(dt.getTime())) return d;
+  return dt.toLocaleDateString()+" "+dt.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+
+function renderTx(){
+  txBody.innerHTML="";
+  const filtered = allTx.filter(tx=>{
+    if(currentFilter!=="all" && tx.type!==currentFilter) return false;
+    return inRange(tx.date);
+  });
+  if(filtered.length===0){
+    document.getElementById("empty").style.display="block";
+    document.getElementById("tableWrap").style.display="none";
+    return;
+  }
+  document.getElementById("empty").style.display="none";
+  document.getElementById("tableWrap").style.display="block";
+
+  filtered
+    .sort((a,b)=> new Date(b.date)-new Date(a.date))
+    .forEach(tx=>{
+      const tr=document.createElement("tr");
+      const amtClass = tx.amount>0 ? "amount-pos" : (tx.amount<0 ? "amount-neg" : "");
+      const coinsText = tx.coinsDelta
+        ? `<span class="coins-pill">${tx.coinsDelta>0?"+":""}${tx.coinsDelta} 🪙</span>`
+        : "-";
+      let statusClass="status-success";
+      if(tx.status==="pending") statusClass="status-pending";
+      if(tx.status==="failed") statusClass="status-failed";
+
+      const typeLabel = tx.type==="policy" ? "Policy payment"
+                      : tx.type==="coins" ? "Coins"
+                      : "Refund / reversal";
+
+      tr.innerHTML=`
+        <td>${formatDate(tx.date)}</td>
+        <td>${typeLabel}</td>
+        <td>${tx.details||"-"}</td>
+        <td class="${amtClass}">${tx.amount ? "₹"+tx.amount.toLocaleString() : "-"}</td>
+        <td>${coinsText}</td>
+        <td><span class="status-pill ${statusClass}">${tx.status||"success"}</span></td>
+      `;
+      txBody.appendChild(tr);
+    });
+}
+
+// filters
+document.querySelectorAll("#filterChips .chip").forEach(ch=>{
+  ch.addEventListener("click",()=>{
+    document.querySelectorAll("#filterChips .chip").forEach(c=>c.classList.remove("active"));
+    ch.classList.add("active");
+    currentFilter=ch.dataset.filter;
+    renderTx();
+  });
+});
+
+document.getElementById("rangeSelect").addEventListener("change",e=>{
+  currentRange=e.target.value;
+  renderTx();
+});
+
+renderTx();
+</script>
+</body>
+</html>

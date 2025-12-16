@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Travel Insurance</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;
+  --navy:#002b5b;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:24px 12px;
+  box-sizing:border-box;
+}
+.shell{
+  width:100%;
+  max-width:960px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+  animation:fadeUp .45s ease-out;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:16px 22px 18px;
+  color:#fff;
+}
+.header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.back-btn{
+  border:none;
+  border-radius:999px;
+  padding:6px 12px;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-size:12px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.product-chip{
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  padding:4px 12px;
+  font-size:12px;
+}
+.prod-title{
+  margin-top:8px;
+  font-size:20px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.prod-sub{
+  margin-top:2px;
+  font-size:12px;
+  opacity:.9;
+}
+.wallet-inline{
+  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+}
+.wallet-inline-pill{
+  border-radius:999px;
+  background:rgba(255,255,255,.16);
+  padding:5px 11px;
+  font-size:11px;
+}
+.wallet-inline-highlight{
+  font-weight:600;
+}
+.coins-saved{
+  font-size:12px;
+}
+
+.content{
+  padding:18px 22px 22px;
+}
+.section-title{
+  font-size:15px;
+  font-weight:600;
+  color:#111827;
+  margin-bottom:6px;
+}
+.section-sub{
+  font-size:12px;
+  color:#6b7280;
+  margin-bottom:10px;
+}
+.plans-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:14px;
+}
+.plan-card{
+  background:#ffffff;
+  border-radius:16px;
+  border:1px solid #e4edf9;
+  box-shadow:0 6px 18px rgba(15,23,42,.08);
+  padding:12px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.plan-badge-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.plan-name{
+  font-size:14px;
+  font-weight:600;
+}
+.plan-badge{
+  font-size:10px;
+  padding:3px 8px;
+  border-radius:999px;
+  background:rgba(0,180,176,.1);
+  color:var(--teal);
+}
+.sum-insured{
+  font-size:13px;
+  font-weight:500;
+  color:#111827;
+}
+.premium-row{
+  font-size:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:8px;
+}
+.prem-main{
+  font-size:14px;
+  font-weight:700;
+  color:#111827;
+}
+.prem-striked{
+  font-size:11px;
+  text-decoration:line-through;
+  color:#9ca3af;
+}
+.prem-coins{
+  font-size:11px;
+  color:#059669;
+}
+.plan-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:4px;
+}
+.plan-tag{
+  font-size:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#f3f4ff;
+  color:#4b5563;
+}
+.plan-cta-row{
+  margin-top:6px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.plan-btn{
+  padding:6px 12px;
+  border-radius:999px;
+  border:none;
+  background:var(--teal);
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+.plan-note{
+  font-size:10px;
+  color:#6b7280;
+}
+.docs-section{
+  margin-top:18px;
+}
+.docs-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+.doc-card{
+  background:#ffffff;
+  border-radius:14px;
+  border:1px solid #e4edf9;
+  padding:10px 12px;
+  font-size:12px;
+}
+.doc-title{
+  font-weight:600;
+  margin-bottom:4px;
+}
+.doc-input{
+  margin-top:4px;
+}
+.doc-status{
+  margin-top:4px;
+  font-size:11px;
+  color:#059669;
+}
+.review-section{
+  margin-top:18px;
+  background:#ffffff;
+  border-radius:16px;
+  border:1px solid #e4edf9;
+  padding:12px 14px;
+  font-size:12px;
+}
+.review-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:4px;
+}
+.review-label{
+  color:#6b7280;
+}
+.review-value{
+  font-weight:600;
+}
+.review-cta{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.review-btn{
+  padding:8px 16px;
+  border-radius:999px;
+  border:none;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+.review-msg{
+  font-size:11px;
+  color:#6b7280;
+}
+.success-banner{
+  display:none;
+  margin-top:10px;
+  padding:8px 12px;
+  border-radius:12px;
+  background:#ecfdf5;
+  font-size:12px;
+  color:#166534;
+}
+@media(max-width:600px){
+  .content{padding:14px 14px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="header">
+    <div class="header-top">
+      <button class="back-btn" onclick="goBack()">← Back to Wallet</button>
+      <div class="product-chip">Travel Insurance</div>
+    </div>
+    <div class="prod-title">✈️ Travel Insurance</div>
+    <div class="prod-sub">
+      Travel with confidence – cover medical, baggage and trip issues.
+    </div>
+
+    <div class="wallet-inline">
+      <div class="wallet-inline-pill">
+        Coins in your wallet:
+        <span class="wallet-inline-highlight" id="coinsInline">0</span>
+      </div>
+      <div class="wallet-inline-pill coins-saved" id="coinsImpact">
+        Using coins to reduce your travel premium.
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div>
+      <div class="section-title">Recommended travel plans</div>
+      <div class="section-sub">
+        Pick a travel plan matching your destination and trip duration. Coins reduce your total premium.
+      </div>
+      <div class="plans-grid" id="plansGrid"></div>
+    </div>
+
+    <div class="docs-section">
+      <div class="section-title">Upload documents & trip details</div>
+      <div class="section-sub">
+        Upload KYC and basic trip details to activate your travel protection.
+      </div>
+
+      <div class="docs-grid">
+        <div class="doc-card">
+          <div class="doc-title">KYC Documents (Aadhaar / PAN) – Front & Back</div>
+          <div>Required to issue your policy. Please upload both sides.</div>
+
+          <div style="margin-top:6px;">
+            <label>Front side<br>
+              <input class="doc-input" type="file" id="kycFrontInput">
+            </label>
+            <div class="doc-status" id="kycFrontStatus"></div>
+          </div>
+
+          <div style="margin-top:6px;">
+            <label>Back side<br>
+              <input class="doc-input" type="file" id="kycBackInput">
+            </label>
+            <div class="doc-status" id="kycBackStatus"></div>
+          </div>
+        </div>
+        <div class="doc-card">
+          <div class="doc-title">Basic information</div>
+          <div>We’ll use this to create your travel proposal form.</div>
+          <div style="margin-top:6px;">
+            <label>City<br>
+              <input type="text" id="cityInput" style="width:100%;padding:4px 6px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;">
+            </label>
+          </div>
+          <div style="margin-top:6px;">
+            <label>Mobile<br>
+              <input type="tel" id="mobileInput" style="width:100%;padding:4px 6px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;">
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <div class="section-title" style="margin-bottom:4px;">Review & complete</div>
+      <div class="review-row">
+        <div class="review-label">Selected plan</div>
+        <div class="review-value" id="reviewPlan">None selected yet</div>
+      </div>
+      <div class="review-row">
+        <div class="review-label">Base premium</div>
+        <div class="review-value" id="reviewBasePremium">–</div>
+      </div>
+      <div class="review-row">
+        <div class="review-label">Coins applied</div>
+        <div class="review-value" id="reviewCoins">–</div>
+      </div>
+      <div class="review-row">
+        <div class="review-label">You pay (after coins)</div>
+        <div class="review-value" id="reviewFinalPremium">–</div>
+      </div>
+
+      <div class="review-cta">
+        <button class="review-btn" onclick="completeProposal()">Complete proposal & proceed</button>
+        <div class="review-msg">
+          On the next page, policy document will be generated with your details and discounts.
+        </div>
+      </div>
+      <div class="success-banner" id="successBanner">
+        ✅ Proposal completed! We’ve saved this selection. In production, this step will redirect to payment gateway and then your policy vault.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function goBack(){
+  window.location.href = "wallet.html";
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+let coinsFromURL = parseInt(urlParams.get("coins") || "0",10);
+if(isNaN(coinsFromURL)) coinsFromURL = 0;
+
+let coins = coinsFromURL;
+try{
+  const uRaw = localStorage.getItem("pbUser");
+  if(uRaw){
+    const u = JSON.parse(uRaw);
+    if(u && typeof u.coins === "number") coins = u.coins;
+  }
+}catch(e){}
+
+if(!coins) coins = 0;
+document.getElementById("coinsInline").textContent = coins;
+
+const COIN_USAGE_RATE = 0.10;
+const coinsImpact = document.getElementById("coinsImpact");
+if(coins > 0){
+  const maxUsable = Math.floor(coins * COIN_USAGE_RATE);
+  coinsImpact.textContent = `You can use up to 10% of your ${coins} coins (₹${maxUsable.toLocaleString("en-IN")}) on this policy.`;
+}else{
+  coinsImpact.textContent = `You don’t have coins yet. Complete a policy and start earning Paisabada Coins.`;
+}
+
+// TRAVEL PLANS
+const plansConfig = [
+  {
+    name:"Asia Short Trip",
+    badge:"Budget trip",
+    sumInsured:"US$50,000",
+    basePremium:800,
+    tags:["Medical cover","Trip delay","Baggage delay"]
+  },
+  {
+    name:"Worldwide Standard",
+    badge:"Most chosen",
+    sumInsured:"US$1,00,000",
+    basePremium:1500,
+    tags:["Medical & evacuation","Baggage loss","Trip cancellation"]
+  },
+  {
+    name:"Worldwide Plus",
+    badge:"Frequent travellers",
+    sumInsured:"US$2,50,000",
+    basePremium:2600,
+    tags:["Higher medical limit","Adventure sports (optional)","More benefits"]
+  }
+];
+
+function getDiscount(base){
+  if(!coins) return 0;
+  const maxByCoins = Math.floor(coins * COIN_USAGE_RATE);
+  return Math.min(maxByCoins, base);
+}
+
+const plansGrid = document.getElementById("plansGrid");
+let selectedPlan = null;
+
+plansConfig.forEach(plan=>{
+  const discount = getDiscount(plan.basePremium);
+  const finalPremium = plan.basePremium - discount;
+
+  const card = document.createElement("div");
+  card.className = "plan-card";
+  card.innerHTML = `
+    <div class="plan-badge-row">
+      <div class="plan-name">${plan.name}</div>
+      <div class="plan-badge">${plan.badge}</div>
+    </div>
+    <div class="sum-insured">${plan.sumInsured}</div>
+    <div class="premium-row">
+      <div>
+        <div class="prem-main">₹${finalPremium.toLocaleString("en-IN")}</div>
+        <div class="prem-coins">
+          ${discount > 0 
+            ? 'You save ₹'+discount.toLocaleString("en-IN")+' using 10% of your coins'
+            : 'No coins applied yet'}
+        </div>
+      </div>
+      <div>
+        <div class="prem-striked">${discount>0 ? '₹'+plan.basePremium.toLocaleString("en-IN") : ''}</div>
+      </div>
+    </div>
+    <div class="plan-tags">
+      ${plan.tags.map(t=>'<span class="plan-tag">'+t+'</span>').join("")}
+    </div>
+    <div class="plan-cta-row">
+      <button class="plan-btn" type="button">Select this plan</button>
+      <div class="plan-note">On the next page, you’ll see detailed options & premiums.</div>
+    </div>
+  `;
+  const btn = card.querySelector(".plan-btn");
+  btn.addEventListener("click", ()=>{
+    const d = getDiscount(plan.basePremium);
+    selectedPlan = {
+      name: plan.name,
+      base: plan.basePremium,
+      discount: d,
+      final: plan.basePremium - d
+    };
+    updateReview();
+  });
+  plansGrid.appendChild(card);
+});
+
+// KYC front/back
+const kycFrontInput = document.getElementById("kycFrontInput");
+const kycBackInput  = document.getElementById("kycBackInput");
+const kycFrontStatus = document.getElementById("kycFrontStatus");
+const kycBackStatus  = document.getElementById("kycBackStatus");
+
+kycFrontInput.addEventListener("change", ()=>{
+  if(kycFrontInput.files && kycFrontInput.files.length>0){
+    kycFrontStatus.textContent = "Front uploaded: " + kycFrontInput.files[0].name;
+  }else{
+    kycFrontStatus.textContent = "";
+  }
+});
+
+kycBackInput.addEventListener("change", ()=>{
+  if(kycBackInput.files && kycBackInput.files.length>0){
+    kycBackStatus.textContent = "Back uploaded: " + kycBackInput.files[0].name;
+  }else{
+    kycBackStatus.textContent = "";
+  }
+});
+
+const reviewPlan = document.getElementById("reviewPlan");
+const reviewBasePremium = document.getElementById("reviewBasePremium");
+const reviewCoins = document.getElementById("reviewCoins");
+const reviewFinalPremium = document.getElementById("reviewFinalPremium");
+const successBanner = document.getElementById("successBanner");
+
+function updateReview(){
+  if(!selectedPlan){
+    reviewPlan.textContent = "None selected yet";
+    reviewBasePremium.textContent = "–";
+    reviewCoins.textContent = "–";
+    reviewFinalPremium.textContent = "–";
+    return;
+  }
+  reviewPlan.textContent = selectedPlan.name;
+  reviewBasePremium.textContent = "₹" + selectedPlan.base.toLocaleString("en-IN");
+  reviewCoins.textContent = selectedPlan.discount > 0
+    ? "₹" + selectedPlan.discount.toLocaleString("en-IN") + " (using 10% of your " + coins + " coins)"
+    : "No coins applied";
+  reviewFinalPremium.textContent = "₹" + selectedPlan.final.toLocaleString("en-IN");
+}
+
+function completeProposal(){
+  if(!selectedPlan){
+    alert("Please select a travel plan first.");
+    return;
+  }
+
+  const hasFront = kycFrontInput.files && kycFrontInput.files.length>0;
+  const hasBack  = kycBackInput.files && kycBackInput.files.length>0;
+  if(!hasFront || !hasBack){
+    const proceedKyc = confirm("KYC front/back not fully uploaded. Continue anyway?");
+    if(!proceedKyc) return;
+  }
+
+  const city = document.getElementById("cityInput").value.trim();
+  const mobile = document.getElementById("mobileInput").value.trim();
+  if(!city || !mobile){
+    const proceed = confirm("City or mobile is empty. Continue anyway?");
+    if(!proceed) return;
+  }
+
+  try{
+    const selection = {
+      product: "travel",
+      plan: selectedPlan,
+      city,
+      mobile,
+      time: new Date().toISOString()
+    };
+    localStorage.setItem("pbLastSelection", JSON.stringify(selection));
+  }catch(e){}
+
+  successBanner.style.display = "block";
+  successBanner.scrollIntoView({behavior:"smooth",block:"center"});
+}
+</script>
+
+</body>
+</html>

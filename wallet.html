@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Wallet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;   /* second color for your site gradient */
+  --navy:#002b5b;
+  --gold:#f4c430;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+
+/* PAGE BG – as you specified */
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:32px 16px;
+  box-sizing:border-box;
+}
+
+/* MAIN SHELL (web) */
+.shell{
+  width:100%;
+  max-width:960px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+  animation:fadeUp .45s ease-out;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* HEADER (top gradient) */
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:18px 26px 26px;
+  color:#fff;
+}
+
+/* greeting row - wallet top right */
+.header-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+
+/* Avatar + text (left) */
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+#avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:conic-gradient(from 180deg,var(--teal),#9af7ec,var(--navy));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:22px;
+  box-shadow:0 0 0 3px rgba(255,255,255,.25);
+  animation:avatarPulse 2.2s infinite ease-in-out;
+}
+@keyframes avatarPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.03);}
+}
+.greet-main{
+  font-size:18px;
+  font-weight:600;
+}
+.greet-sub{
+  font-size:12px;
+  opacity:.85;
+}
+
+/* Wallet top-right small card */
+.wallet-top{
+  flex:0 0 230px;
+}
+.wallet-tag{
+  font-size:11px;
+  border-radius:999px;
+  padding:7px 48px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.3);
+  display:inline-block;
+}
+.wallet-card{
+  margin-top:8px;
+  background:rgba(255,255,255,.18);
+  border-radius:16px;
+  padding:10px 12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.25);
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  position:relative;
+}
+.wallet-card::before{
+  content:"";
+  position:absolute;
+  inset:-12px;
+  border-radius:22px;
+  background:radial-gradient(circle, rgba(255,255,255,.25), transparent 60%);
+  z-index:-1;
+  opacity:.7;
+}
+.wallet-label{
+  font-size:11px;
+  opacity:.9;
+}
+#coins{
+  font-size:24px;
+  font-weight:800;
+}
+.wallet-sub{
+  font-size:11px;
+  opacity:.85;
+}
+.wallet-btn{
+  margin-top:6px;
+  align-self:flex-start;
+  padding:10px 40px;
+  border-radius:999px;
+  border:none;
+  background:#fff;
+  color:var(--navy);
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.25s;
+}
+.wallet-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,.25);
+}
+
+/* Banner text + XP row */
+.banner-title{
+  margin-top:14px;
+  font-size:22px;
+  font-weight:700;
+}
+.banner-sub{
+  margin-top:4px;
+  font-size:13px;
+  opacity:.9;
+}
+.xp-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+.xp-mini{
+  flex:1;
+  min-width:220px;
+}
+.xp-mini-label{
+  font-size:12px;
+  opacity:.85;
+  margin-bottom:6px;
+}
+#xpBar{
+  width:100%;
+  background:#d8f8f6;
+  height:7px;
+  border-radius:999px;
+  overflow:hidden;
+}
+#xpFill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--teal),#3af3dc);
+  border-radius:999px;
+  transition:width .6s ease-out;
+}
+#streakRow{
+  margin-top:4px;
+  font-size:11px;
+  color:#fce29a;
+}
+#levelTag{
+  font-size:11px;
+  margin-top:4px;
+}
+.secure-line{
+  font-size:11px;
+  color:#cbd5f5;
+  margin-top:6px;
+}
+.logout-link{
+  font-size:11px;
+  opacity:.8;
+  cursor:pointer;
+  margin-top:6px;
+}
+.logout-link:hover{text-decoration:underline;}
+
+/* CONTENT AREA */
+.content{
+  padding:18px 24px 26px;
+}
+
+/* Section title */
+.section-title{
+  font-size:15px;
+  font-weight:600;
+  color:#253257;
+}
+
+/* Filter chips */
+.filter-chips{
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.chip{
+  border-radius:999px;
+  border:1px solid #d0d8f0;
+  padding:4px 10px;
+  font-size:11px;
+  background:#fff;
+  cursor:pointer;
+}
+.chip.active{
+  background:var(--teal);
+  color:#fff;
+  border-color:var(--teal);
+}
+
+/* CAROUSEL */
+.carousel-container{
+  margin-top:12px;
+  position:relative;
+}
+.carousel-track-wrapper{
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+}
+.carousel-track{
+  display:flex;
+  gap:16px;
+  padding:6px 2px 12px;
+}
+.product-card{
+  scroll-snap-align:start;
+  min-width:260px;
+  max-width:280px;
+  background:linear-gradient(135deg,#ffffff,#e6f9f7);
+  border-radius:18px;
+  padding:14px 16px;
+  box-shadow:0 8px 24px rgba(15,23,42,.18);
+  border:1px solid #e4edf9;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+  opacity:0;
+  transform:translateY(20px);
+  animation:cardIn .45s forwards;
+}
+.product-card:nth-child(1){animation-delay:.05s;}
+.product-card:nth-child(2){animation-delay:.15s;}
+.product-card:nth-child(3){animation-delay:.25s;}
+.product-card:nth-child(4){animation-delay:.35s;}
+.product-card:nth-child(5){animation-delay:.45s;}
+
+@keyframes cardIn{
+  to{opacity:1;transform:translateY(0);}
+}
+
+.product-card:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:0 14px 30px rgba(15,23,42,.25);
+}
+.product-card:active{
+  transform:translateY(-1px) scale(0.99);
+  box-shadow:0 6px 18px rgba(15,23,42,.25);
+}
+.product-card:focus{
+  outline:2px solid var(--teal);
+  outline-offset:2px;
+}
+
+/* card content */
+.pc-header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.pc-tag{
+  font-size:11px;
+  color:#4b5563;
+}
+.pc-icon{
+  font-size:28px;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.2));
+}
+.pc-title{
+  margin-top:6px;
+  font-size:15px;
+  font-weight:600;
+  color:#111827;
+}
+.pc-sub{
+  font-size:11px;
+  color:#6b7280;
+  margin:6px 0 10px;
+}
+.pc-pill-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.pc-pill{
+  font-size:11px;
+  padding:5px 11px;
+  border-radius:999px;
+  background:rgba(0,180,176,.12);
+  color:var(--teal);
+}
+.pc-cta-arrow{
+  font-size:16px;
+}
+
+/* arrows */
+.carousel-btn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:32px;height:32px;
+  border-radius:50%;
+  border:none;
+  background:#ffffff;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  z-index:2;
+}
+.carousel-btn.left{left:-8px;}
+.carousel-btn.right{right:-8px;}
+
+/* dots */
+.carousel-dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:6px;
+}
+.dot{
+  width:7px;height:7px;
+  border-radius:50%;
+  background:#cbd5f5;
+  transition:transform .2s, background .2s;
+}
+.dot.active{
+  background:var(--teal);
+  transform:scale(1.2);
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:#111827;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  z-index:999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* Bottom task panel */
+.task-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.45);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:998;
+}
+.task-backdrop.show{
+  display:flex;
+}
+.task-panel{
+  width:100%;
+  max-width:960px;
+  background:#ffffff;
+  border-radius:18px 18px 0 0;
+  padding:14px 18px 18px;
+  box-shadow:0 -10px 30px rgba(0,0,0,.4);
+}
+.task-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+}
+.task-title{
+  font-size:16px;
+  font-weight:600;
+  color:#111827;
+}
+.task-close{
+  border:none;
+  background:transparent;
+  font-size:20px;
+  cursor:pointer;
+}
+.task-body{
+  font-size:13px;
+  color:#4b5563;
+  margin-bottom:10px;
+}
+.task-steps{
+  margin:0;
+  padding-left:18px;
+  font-size:12px;
+  color:#374151;
+}
+.task-cta{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+#taskCTAButton{
+  padding:8px 16px;
+  border-radius:999px;
+  border:none;
+  background:var(--teal);
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+.task-note{
+  font-size:11px;
+  color:#6b7280;
+}
+
+/* === QUICK LINKS GRID (PB, Portfolio, E-learn, etc.) === */
+.quick-links{
+  margin-top:20px;
+}
+.quick-links-title{
+  font-size:14px;
+  font-weight:600;
+  color:#253257;
+}
+.quick-grid{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+}
+.q-card{
+  background:#ffffff;
+  border-radius:14px;
+  padding:10px 11px;
+  box-shadow:0 6px 16px rgba(15,23,42,.12);
+  border:1px solid #e5e7eb;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  cursor:pointer;
+  transition:transform .18s, box-shadow .18s, border-color .18s;
+}
+.q-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 22px rgba(15,23,42,.2);
+  border-color:var(--teal);
+}
+.q-card:active{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(15,23,42,.16);
+}
+.q-card:focus{
+  outline:2px solid var(--teal);
+  outline-offset:2px;
+}
+.q-icon{
+  font-size:20px;
+}
+.q-title{
+  font-size:13px;
+  font-weight:600;
+  color:#111827;
+}
+.q-sub{
+  font-size:11px;
+  color:#6b7280;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation-duration:0.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.001ms !important;
+  }
+}
+
+@media (max-width:768px){
+  .shell{border-radius:18px;}
+  .header{padding:16px 18px 22px;}
+  .content{padding:16px;}
+  .header-top{flex-direction:row;}
+  .wallet-top{flex:0 0 200px;}
+}
+
+/* Mobile cards wider */
+@media (max-width:600px){
+  .product-card{
+    min-width:80vw;
+    max-width:80vw;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <!-- Left: avatar + greeting -->
+      <div class="header-left">
+        <div id="avatar"></div>
+        <div>
+          <div class="greet-main" id="uName"></div>
+          <div class="greet-sub"></div>
+        </div>
+      </div>
+
+      <!-- Right: wallet at top -->
+      <div class="wallet-top">
+        <div class="wallet-tag" id="walletType">Paisabada Wallet</div>
+        <div class="wallet-card">
+          <div class="wallet-label">Available Coins</div>
+          <div id="coins">0</div>
+          <div class="wallet-sub" id="levelTag"></div>
+          <button class="wallet-btn" onclick="openWallet()">View wallet summary</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="banner-title">Best time to use your Paisabada Coins</div>
+    <div class="banner-sub">Convert your coins into protection & smart plans for your family.</div>
+
+    <div class="xp-row">
+      <div class="xp-mini">
+        <div class="xp-mini-label">XP Progress</div>
+        <div id="xpBar"><div id="xpFill"></div></div>
+        <div id="streakRow"></div>
+        <div class="secure-line">🔒 100% secure with trusted insurers</div>
+        <div class="logout-link" onclick="logout()">Logout</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="section-title">Explore insurance products</div>
+
+    <!-- Filter chips -->
+    <div class="filter-chips" id="filterChips">
+      <button class="chip active" data-filter="all">All</button>
+      <button class="chip" data-filter="family">Family</button>
+      <button class="chip" data-filter="vehicle">Vehicle</button>
+      <button class="chip" data-filter="protection">Protection</button>
+      <button class="chip" data-filter="travel">Travel</button>
+    </div>
+
+    <!-- CAROUSEL -->
+    <div class="carousel-container">
+      <button class="carousel-btn left" onclick="scrollCarousel(-1)">‹</button>
+      <div class="carousel-track-wrapper" id="carouselWrapper">
+        <div class="carousel-track" id="productTrack">
+          <!-- cards via JS -->
+        </div>
+      </div>
+      <button class="carousel-btn right" onclick="scrollCarousel(1)">›</button>
+      <div class="carousel-dots" id="dots"></div>
+    </div>
+
+    <!-- QUICK LINKS SECTION -->
+    <div class="quick-links">
+      <div class="quick-links-title">More from your Paisabada account</div>
+      <div class="quick-grid" id="quickGrid">
+        <!-- quick link cards via JS -->
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Bottom Task Panel -->
+<div class="task-backdrop" id="taskBackdrop">
+  <div class="task-panel">
+    <div class="task-header">
+      <div class="task-title" id="taskTitle"></div>
+      <button class="task-close" onclick="closeTask()">×</button>
+    </div>
+    <div class="task-body" id="taskBody"></div>
+    <ul class="task-steps" id="taskSteps"></ul>
+    <div class="task-cta">
+      <button id="taskCTAButton"></button>
+      <div class="task-note" id="taskNote"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Redirect if not logged in
+if(localStorage.getItem("pbLoggedIn")!=="true") window.location.href="login.html";
+
+let userRaw = localStorage.getItem("pbUser");
+let user = null;
+try{
+  if(userRaw) user = JSON.parse(userRaw);
+}catch(e){
+  console.error("Invalid user data, resetting", e);
+  localStorage.removeItem("pbUser");
+}
+if(!user){
+  window.location.href = "login.html";
+}
+
+function save(){
+  localStorage.setItem("pbUser",JSON.stringify(user));
+}
+
+// ----- Toast -----
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>{ t.classList.remove("show"); }, 1200);
+}
+
+// ----- Name & Avatar -----
+const name = user.name || "User";
+document.getElementById("uName").textContent = name;
+
+const initials = name.trim().split(" ")
+  .filter(Boolean)
+  .map(w=>w[0].toUpperCase())
+  .slice(0,2)
+  .join("");
+document.getElementById("avatar").textContent = initials || "P";
+
+// Dynamic greeting
+const hour = new Date().getHours();
+let greetTime = "Welcome back";
+if(hour < 12) greetTime = "Good morning";
+else if(hour < 18) greetTime = "Good afternoon";
+else greetTime = "Good evening";
+document.querySelector(".greet-sub").textContent =
+  `${greetTime}, ${name.split(" ")[0]}! Your coins are working for you.`;
+
+// ----- Wallet Tag -----
+document.getElementById("walletType").textContent =
+  user.walletType || "Paisabada Rewards Wallet";
+
+// ----- Task panel helpers -----
+const taskBackdrop = document.getElementById("taskBackdrop");
+const taskTitleEl = document.getElementById("taskTitle");
+const taskBodyEl = document.getElementById("taskBody");
+const taskStepsEl = document.getElementById("taskSteps");
+const taskCTAButton = document.getElementById("taskCTAButton");
+const taskNoteEl = document.getElementById("taskNote");
+
+let currentTaskURL = null;
+
+function showTask(title, body, stepsArr, ctaLabel, note, url){
+  taskTitleEl.textContent = title;
+  taskBodyEl.textContent = body;
+  taskStepsEl.innerHTML = "";
+  (stepsArr || []).forEach(step=>{
+    const li = document.createElement("li");
+    li.textContent = step;
+    taskStepsEl.appendChild(li);
+  });
+  taskCTAButton.textContent = ctaLabel || "Continue";
+  currentTaskURL = url || null;
+  taskNoteEl.textContent = note || "";
+  taskBackdrop.classList.add("show");
+}
+
+function closeTask(){
+  taskBackdrop.classList.remove("show");
+  currentTaskURL = null;
+}
+
+taskCTAButton.addEventListener("click", ()=>{
+  if(currentTaskURL){
+    window.location.href = currentTaskURL;
+  } else {
+    closeTask();
+  }
+});
+
+// ----- Wallet summary click -----
+function openWallet(){
+  const coins = user.coins || 0;
+  const xp = user.xp || 0;
+  const msg = `Here's how your Paisabada Wallet can help you save more on your next policy.`;
+  const steps = [
+    `Coins available: ${coins}`,
+    `Current XP: ${xp}`,
+    `Apply coins on any policy to get instant savings`
+  ];
+  const note = "You can change how you use coins on the next step.";
+  showTask(
+    "Your Wallet Summary",
+    msg,
+    steps,
+    "Go to detailed wallet view",
+    note,
+    "wallet-summary.html"
+  );
+}
+
+// ----- XP & Level + Approx value + next milestone -----
+const coinsValuePerCoin = 1; // change if 1 coin ≠ ₹1
+
+function getLevel(){
+  if((user.xp||0)>=300) return "🥇 Gold Saver";
+  if((user.xp||0)>=100) return "🥈 Silver Saver";
+  return "🥉 Bronze Saver";
+}
+
+function updateXP(){
+  const xp = user.xp || 0;
+  const coins = user.coins || 0;
+  const approxValue = coins * coinsValuePerCoin;
+  const level = getLevel();
+
+  let nextGoal = 100;
+  if(xp >= 300) nextGoal = null;
+  else if(xp >= 100) nextGoal = 300;
+
+  let walletMsg = `${level} • Approx ₹${approxValue} savings potential`;
+
+  if(coins === 0){
+    walletMsg = `No coins yet • Start your first policy & unlock savings`;
+  } else if(coins > 1000){
+    walletMsg = `${level} • You’re sitting on big savings!`;
+  }
+
+  if(nextGoal){
+    walletMsg += ` • ${nextGoal - xp} XP to next level`;
+  }
+
+  document.getElementById("levelTag").textContent = walletMsg;
+
+  const percent = Math.min((xp/300)*100,100);
+  document.getElementById("xpFill").style.width = percent + "%";
+}
+
+// ----- Coins animation -----
+function animateCoins(){
+  const coinsEl = document.getElementById("coins");
+  let start=0;
+  const end = user.coins || 0;
+  const step = Math.max(1,Math.ceil(end/25));
+  const timer=setInterval(()=>{
+    start+=step;
+    if(start>=end){start=end;clearInterval(timer);}
+    coinsEl.textContent=start;
+  },20);
+}
+
+// ----- Streak -----
+if(!user.streak) user.streak = 0;
+if(!user.lastClaim) user.lastClaim = "N/A";
+
+function updateStreak(){
+  const el = document.getElementById("streakRow");
+  if(user.streak<=0){el.textContent="";return;}
+  let icons="";
+  for(let i=0;i<user.streak && i<12;i++) icons += "🪙 ";
+  el.innerHTML = `🔥 ${user.streak}-Day Streak&nbsp;&nbsp;${icons}`;
+}
+
+// ----- Product data -----
+const products = [
+  {
+    group:"family",
+    type:"health",
+    icon:"❤️",
+    tag:"Health Insurance",
+    title:"Protect your family's health",
+    sub:"Cashless hospital network & tax benefits.",
+    pill:"Check health plans",
+    url:"health-insurance.html"
+  },
+  {
+    group:"vehicle",
+    type:"car",
+    icon:"🚗",
+    tag:"Car Insurance",
+    title:"Cover your four-wheeler",
+    sub:"Zero dep & roadside assistance options.",
+    pill:"View car quotes",
+    url:"car-insurance.html"
+  },
+  {
+    group:"vehicle",
+    type:"bike",
+    icon:"🏍️",
+    tag:"2-Wheeler Insurance",
+    title:"Ride worry-free",
+    sub:"Instant renewals with no inspection.",
+    pill:"Renew bike policy",
+    url:"two-wheeler-insurance.html"
+  },
+  {
+    group:"protection",
+    type:"term",
+    icon:"🛡️",
+    tag:"Term Life Insurance",
+    title:"Secure your family's future",
+    sub:"High cover, low premium protection.",
+    pill:"Explore term cover",
+    url:"term-life-insurance.html"
+  },
+  {
+    group:"travel",
+    type:"travel",
+    icon:"✈️",
+    tag:"Travel Insurance",
+    title:"Trips with peace of mind",
+    sub:"Cover flights, baggage & medical.",
+    pill:"Protect my trip",
+    url:"travel-insurance.html"
+  }
+];
+
+const track = document.getElementById("productTrack");
+const dotsWrap = document.getElementById("dots");
+const wrapper = document.getElementById("carouselWrapper");
+
+let currentIndex = 0;
+let autoTimer = null;
+const AUTO_DELAY = 5000;
+let currentFilter = "all";
+
+// open product page (with coins param + task)
+function openProduct(p){
+  const coins = user.coins || 0;
+  showToast(`Applying your ${coins} coins on ${p.tag}...`);
+
+  const baseSteps = [
+    "Check if the coverage suits your needs",
+    "Share basic details to get accurate quotes",
+    "Apply Paisabada Coins on payment page for instant savings"
+  ];
+
+  showTask(
+    `Next steps for ${p.tag}`,
+    `Use your Paisabada Coins to save more on ${p.tag.toLowerCase()}.`,
+    baseSteps,
+    "Go to " + p.tag + " page",
+    "On the next page, you’ll see detailed options & premiums.",
+    `${p.url}?coins=${coins}&source=wallet`
+  );
+}
+
+// Render products based on filter
+function renderProducts(filter="all"){
+  track.innerHTML = "";
+  dotsWrap.innerHTML = "";
+  const filtered = products.filter(p => filter==="all" || p.group===filter);
+
+  filtered.forEach((p,idx)=>{
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.tabIndex = 0;
+    card.setAttribute("data-url",p.url);
+    card.setAttribute("data-type",p.type);
+    card.setAttribute(
+      "aria-label",
+      `${p.tag}: ${p.title}. ${p.sub}. Click to view ${p.tag} options`
+    );
+    card.setAttribute("role","button");
+    card.innerHTML = `
+      <div>
+        <div class="pc-header-row">
+          <div class="pc-tag">${p.tag}</div>
+          <div class="pc-icon">${p.icon}</div>
+        </div>
+        <div class="pc-title">${p.title}</div>
+        <div class="pc-sub">${p.sub}</div>
+      </div>
+      <div class="pc-pill-row">
+        <div class="pc-pill">${p.pill} ›</div>
+        <div class="pc-cta-arrow">➜</div>
+      </div>
+    `;
+    card.addEventListener("click",()=>openProduct(p));
+    card.addEventListener("keydown",e=>{
+      if(e.key==="Enter" || e.key===" "){
+        e.preventDefault();
+        openProduct(p);
+      }
+    });
+    track.appendChild(card);
+
+    const dot = document.createElement("div");
+    dot.className = "dot" + (idx===0?" active":"");
+    dotsWrap.appendChild(dot);
+  });
+
+  currentIndex = 0;
+  goToIndex(0,false); // jump without restarting auto
+}
+
+// Dots
+function updateDots(){
+  [...dotsWrap.children].forEach((d,i)=>{
+    d.classList.toggle("active",i===currentIndex);
+  });
+}
+
+// go to index helper (loop)
+function goToIndex(idx, smooth=true){
+  const cards = track.children;
+  if(!cards.length) return;
+  if(idx<0) idx = cards.length-1;
+  if(idx>=cards.length) idx = 0;
+  currentIndex = idx;
+  const card = cards[currentIndex];
+  wrapper.scrollTo({
+    left: card.offsetLeft,
+    behavior: smooth ? "smooth" : "instant"
+  });
+  updateDots();
+}
+
+// auto slide control
+function startAutoSlide(){
+  stopAutoSlide();
+  autoTimer = setInterval(()=>{
+    goToIndex(currentIndex + 1);
+  }, AUTO_DELAY);
+}
+function stopAutoSlide(){
+  if(autoTimer) clearInterval(autoTimer);
+  autoTimer = null;
+}
+
+// arrow click -> also reset auto
+function scrollCarousel(direction){
+  goToIndex(currentIndex + direction);
+  startAutoSlide();
+}
+
+// drag-scroll (mouse / touch)
+let isDown = false;
+let startX, scrollLeft;
+
+wrapper.addEventListener("mousedown", e=>{
+  isDown = true;
+  startX = e.pageX - wrapper.offsetLeft;
+  scrollLeft = wrapper.scrollLeft;
+  stopAutoSlide();
+});
+wrapper.addEventListener("mouseleave", ()=>{
+  isDown=false;
+});
+wrapper.addEventListener("mouseup", ()=>{
+  isDown=false;
+  startAutoSlide();
+});
+wrapper.addEventListener("mousemove", e=>{
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - wrapper.offsetLeft;
+  const walk = (x - startX) * 1.2;
+  wrapper.scrollLeft = scrollLeft - walk;
+});
+
+wrapper.addEventListener("touchstart", e=>{
+  isDown = true;
+  startX = e.touches[0].pageX - wrapper.offsetLeft;
+  scrollLeft = wrapper.scrollLeft;
+  stopAutoSlide();
+});
+wrapper.addEventListener("touchend", ()=>{
+  isDown=false;
+  startAutoSlide();
+});
+wrapper.addEventListener("touchmove", e=>{
+  if(!isDown) return;
+  const x = e.touches[0].pageX - wrapper.offsetLeft;
+  const walk = (x - startX) * 1.2;
+  wrapper.scrollLeft = scrollLeft - walk;
+});
+
+// throttled scroll -> sync dots
+let scrollTimeout;
+wrapper.addEventListener("scroll", ()=>{
+  if(scrollTimeout) return;
+  scrollTimeout = setTimeout(()=>{
+    scrollTimeout = null;
+    const cards = track.children;
+    if(!cards.length) return;
+    let closest = 0;
+    let minDiff = Infinity;
+    [...cards].forEach((card,i)=>{
+      const diff = Math.abs(card.offsetLeft - wrapper.scrollLeft);
+      if(diff < minDiff){
+        minDiff = diff;
+        closest = i;
+      }
+    });
+    currentIndex = closest;
+    updateDots();
+  },80);
+});
+
+// Filter chips logic
+const filterChips = document.querySelectorAll("#filterChips .chip");
+filterChips.forEach(chip=>{
+  chip.addEventListener("click", ()=>{
+    const filter = chip.dataset.filter;
+    currentFilter = filter;
+    filterChips.forEach(c=>c.classList.toggle("active", c===chip));
+    renderProducts(currentFilter);
+    startAutoSlide();
+  });
+});
+
+/* === QUICK LINKS DATA & RENDER (PB, portfolio, SIP, Mutual Funds, e-learn, FAQ, history, refer) === */
+
+const quickLinks = [
+  {
+    id:"pb",
+    title:"PB (PaisaBada)",
+    icon:"💼",
+    sub:"Open main Paisabada dashboard.",
+    url:"pbindex.html",
+    body:"Open your main Paisabada dashboard to see everything in one place.",
+    steps:[
+      "View overall money snapshot",
+      "Access all tools, offers and vault",
+      "Check latest campaigns & rewards"
+    ],
+    note:"Best starting point if you are exploring multiple things."
+  },
+  {
+    id:"portfolio",
+    title:"My Portfolio",
+    icon:"📊",
+    sub:"See all your policies & plans.",
+    url:"portfolio.html",
+    body:"See all your active and past policies in one consolidated portfolio.",
+    steps:[
+      "Review current covers and maturity dates",
+      "Check premium amounts & due dates",
+      "Track gaps in your protection and investments"
+    ],
+    note:"Use this view to decide where to use your coins next."
+  },
+  {
+    id:"sip",
+    title:"SIP Plans",
+    icon:"📅",
+    sub:"Plan monthly investments via SIP.",
+    url:"sip-plans.html",
+    body:"Start a disciplined monthly SIP in a mutual fund aligned to your goals.",
+    steps:[
+      "Choose a mutual fund suitable for your risk profile",
+      "Select monthly SIP amount and debit date",
+      "Confirm mandate to auto-invest every month"
+    ],
+    note:"Best for long-term goals like retirement, kids’ education etc."
+  },
+  {
+    id:"mutualfunds",
+    title:"Mutual Funds",
+    icon:"📈",
+    sub:"Explore funds for SIP or lumpsum.",
+    url:"mutual-funds.html",
+    body:"Browse different mutual fund categories and select a fund to invest via SIP or lumpsum.",
+    steps:[
+      "Filter by category and risk level",
+      "Open fund details to see returns and basics",
+      "Proceed to set up SIP or one-time investment"
+    ],
+    note:"Use this screen before SIP to pick the right fund."
+  },
+  {
+    id:"elearn",
+    title:"E-Learn",
+    icon:"📚",
+    sub:"Short lessons on money & insurance.",
+    url:"elearn.html",
+    body:"Learn concepts like health cover, term insurance, SIPs and more in simple language.",
+    steps:[
+      "Pick a topic you want to understand",
+      "Watch bite-sized explainers or read guides",
+      "Apply learning directly while buying policies"
+    ],
+    note:"Ideal for first-time buyers or anyone who wants clarity before deciding."
+  },
+  {
+    id:"faq",
+    title:"FAQ",
+    icon:"❓",
+    sub:"Answers to common wallet & policy doubts.",
+    url:"faq.html",
+    body:"Find quick answers about coins, wallet usage, claims, refunds and more.",
+    steps:[
+      "Search or browse common questions",
+      "Read step-by-step explanations",
+      "Contact support if you still need help"
+    ],
+    note:"Saves you time before reaching out to support."
+  },
+  {
+    id:"history",
+    title:"Transactions / History",
+    icon:"📜",
+    sub:"See how your coins & payments were used.",
+    url:"transactions.html",
+    body:"See detailed history of payments, coin usage and rewards credited to your wallet.",
+    steps:[
+      "Check past policy purchases and renewals",
+      "Track when and where coins were redeemed",
+      "Download receipts if required"
+    ],
+    note:"Helpful for tax proof, reimbursement or personal tracking."
+  },
+  {
+    id:"refer",
+    title:"Refer & Earn",
+    icon:"🎁",
+    sub:"Invite friends & earn extra coins.",
+    url:"refer.html",
+    body:"Invite your friends and family to Paisabada and earn bonus coins when they take action.",
+    steps:[
+      "Share your referral link or code",
+      "Your friend signs up and buys/renews a policy",
+      "You both earn bonus coins or rewards"
+    ],
+    note:"Use this to grow your wallet faster without extra spending."
+  }
+];
+
+const quickGrid = document.getElementById("quickGrid");
+
+function openQuickLink(item){
+  showToast(item.title);
+  showTask(
+    item.title,
+    item.body,
+    item.steps,
+    "Open " + item.title,
+    item.note,
+    item.url
+  );
+}
+
+function renderQuickLinks(){
+  quickGrid.innerHTML = "";
+  quickLinks.forEach(item=>{
+    const card = document.createElement("button");
+    card.className = "q-card";
+    card.type = "button";
+    card.setAttribute("aria-label", item.title + ". " + item.sub);
+    card.innerHTML = `
+      <div class="q-icon">${item.icon}</div>
+      <div class="q-title">${item.title}</div>
+      <div class="q-sub">${item.sub}</div>
+    `;
+    card.addEventListener("click", ()=>openQuickLink(item));
+    quickGrid.appendChild(card);
+  });
+}
+
+// ----- Refresh UI -----
+function refresh(){
+  animateCoins();
+  updateXP();
+  updateStreak();
+  renderProducts("all");
+  renderQuickLinks();
+  startAutoSlide();
+}
+refresh();
+
+// ----- Logout -----
+function logout(){
+  localStorage.removeItem("pbLoggedIn");
+  localStorage.removeItem("pbUser");
+  window.location.href="login.html";
+}
+</script>
+
+</body>
+</html>

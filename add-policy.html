@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Add Policy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+body{margin:0;font-family:Poppins,Arial,sans-serif;background:linear-gradient(90deg,#00b4b0,#0077ff);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}
+.card{width:100%;max-width:820px;background:#fff;border-radius:14px;padding:18px;box-shadow:0 14px 40px rgba(2,6,23,.18)}
+h1{margin:0 0 8px;font-size:20px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.input{display:flex;flex-direction:column;margin-bottom:8px}
+label{font-size:12px;color:#374151;margin-bottom:6px}
+input,select,textarea{padding:10px;border-radius:8px;border:1px solid #d1d5db;font-size:14px}
+textarea{min-height:86px;resize:vertical}
+.btn{background:#0077ff;color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer}
+.btn-secondary{background:#00b4b0}
+.small{font-size:12px;color:#6b7280}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>➕ Add Policy</h1>
+  <div style="margin-top:12px">
+    <div class="form-grid">
+      <div>
+        <div class="input"><label>Policy Name</label><input id="name" placeholder="e.g. Family Floater Health Plan"></div>
+        <div class="input"><label>Type</label>
+          <select id="type"><option value="health">Health</option><option value="term">Term</option><option value="vehicle">Vehicle</option><option value="investment">Investment</option></select>
+        </div>
+        <div class="input"><label>Insurer</label><input id="insurer" placeholder="Insurer name"></div>
+        <div class="input"><label>Cover Amount (₹)</label><input type="number" id="cover" placeholder="1000000"></div>
+      </div>
+
+      <div>
+        <div class="input"><label>Premium (₹)</label><input type="number" id="premium" placeholder="e.g. 12000"></div>
+        <div class="input"><label>Premium Frequency</label><select id="frequency"><option>Yearly</option><option>Monthly</option></select></div>
+        <div class="input"><label>Policy Start Date</label><input type="date" id="startDate"></div>
+        <div class="input"><label>Maturity / End Date</label><input type="date" id="maturity"></div>
+      </div>
+    </div>
+
+    <div class="input"><label>Tenure (years) — optional</label><input id="years" type="number" min="0" placeholder="e.g. 10"></div>
+    <div class="input"><label>Benefits (bullet points)</label><textarea id="benefits" placeholder="E.g. Cashless hospitalisation; Critical illness sum; Maturity payout"></textarea></div>
+
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+      <button class="btn" id="saveBtn">Save & View</button>
+      <button class="btn btn-secondary" id="saveAddBtn">Save & Add another</button>
+      <button class="btn" id="cancelBtn" style="background:#f3f4f6;color:#111">Cancel</button>
+    </div>
+  </div>
+
+  <div id="previewList" style="margin-top:12px"></div>
+</div>
+
+<script>
+let raw = localStorage.getItem("pbUser");
+let user = raw?JSON.parse(raw):{ name:"User", policies:[] };
+user.policies = Array.isArray(user.policies)?user.policies:[];
+
+function buildPolicyFromForm(){
+  const name = document.getElementById("name").value.trim(); if(!name){ alert("Enter policy name"); return null; }
+  const type = document.getElementById("type").value;
+  const insurer = document.getElementById("insurer").value.trim();
+  const cover = Number(document.getElementById("cover").value)||0;
+  const premium = Number(document.getElementById("premium").value)||0;
+  const frequency = document.getElementById("frequency").value;
+  const startDate = document.getElementById("startDate").value || null;
+  const maturity = document.getElementById("maturity").value || null;
+  let years = Number(document.getElementById("years").value) || null;
+  const benefits = document.getElementById("benefits").value.trim();
+  if(!years && startDate && maturity){ const days = Math.round((new Date(maturity)-new Date(startDate))/(1000*60*60*24)); years = Math.round(days/365); }
+  const id = "P"+Date.now();
+  return { id, name, type, insurer, cover, premium, frequency, startDate, nextDue:maturity||null, maturity:maturity||null, years, benefits, createdAt:new Date().toISOString() };
+}
+
+function savePolicy(goToDetail=true, addAnother=false){
+  const p = buildPolicyFromForm(); if(!p) return;
+  user.policies.push(p); localStorage.setItem("pbUser", JSON.stringify(user));
+  if(goToDetail){ window.location.href = `policy-detail.html?id=${encodeURIComponent(p.id)}`; }
+  else { previewAdded(p); if(addAnother) clearForm(); }
+}
+
+function previewAdded(p){ const list=document.getElementById("previewList"); const div=document.createElement("div"); div.style.padding="8px"; div.style.border="1px solid #eef2ff"; div.style.borderRadius="8px"; div.style.marginBottom="8px"; div.innerHTML = `<b>${p.name}</b> • ${p.type} <div class="small">Maturity: ${p.maturity||'—'} • Years: ${p.years||'—'}</div><div class="small">Benefits: ${p.benefits||'—'}</div>`; list.prepend(div); }
+
+document.getElementById("saveBtn").addEventListener("click", ()=> savePolicy(true,false));
+document.getElementById("saveAddBtn").addEventListener("click", ()=> savePolicy(false,true));
+document.getElementById("cancelBtn").addEventListener("click", ()=> window.history.back());
+
+function clearForm(){ ["name","insurer","cover","premium","startDate","maturity","years","benefits"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=""; }); }
+</script>
+</body>
+</html>

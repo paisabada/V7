@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Spin & Win</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root{--teal:#00b4b0;--gold:#F4C430;}
+body{
+ margin:0;font-family:Poppins,Arial,sans-serif;
+ background:linear-gradient(135deg,#e3fffb,#ffffff);
+ display:flex;justify-content:center;align-items:center;
+ min-height:100vh;padding:16px;
+}
+.card{
+ width:100%;max-width:480px;
+ background:#fff;padding:20px;border-radius:20px;
+ box-shadow:0 12px 32px rgba(0,0,0,.15);text-align:center;
+}
+.wheel-container{position:relative;width:260px;height:260px;margin:auto}
+.wheel{
+ width:100%;height:100%;border-radius:50%;
+ border:10px solid var(--gold);
+ background-image:conic-gradient(#00b4b0 0deg 60deg,#ffeecc 60deg 120deg,#00b4b0 120deg 180deg,#ffeecc 180deg 240deg,#00b4b0 240deg 300deg,#ffeecc 300deg 360deg);
+ transition:4s ease-out;
+}
+.pointer{
+ width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:35px solid red;
+ position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+}
+.center-coin{
+ width:75px;height:75px;border-radius:50%;background:#fff;
+ position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+ display:flex;justify-content:center;align-items:center;font-size:40px;
+ border:4px solid gold;
+}
+.spin-btn{
+ width:100%;padding:14px;font-size:18px;font-weight:700;
+ background:#00b4b0;color:#fff;border:none;border-radius:14px;
+ cursor:pointer;margin-top:16px;
+}
+.back-btn{
+ width:100%;margin-top:10px;padding:12px;
+ background:none;border:2px solid var(--teal);color:var(--teal);
+ border-radius:12px;font-weight:700;cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+ <h2>🎯 Spin & Win</h2>
+ <div class="wheel-container">
+  <div class="pointer"></div>
+  <div class="wheel" id="wheel"></div>
+  <div class="center-coin">🪙</div>
+ </div>
+ <button class="spin-btn" onclick="spin()" id="spinBtn">SPIN NOW</button>
+ <div id="resultMsg" style="margin-top:14px;font-weight:700"></div>
+ <button class="back-btn" onclick="back()">⬅ Back</button>
+</div>
+
+<script>
+if(localStorage.getItem("pbLoggedIn")!=="true")window.location.href="login.html";
+
+let user=JSON.parse(localStorage.getItem("pbUser"));
+let wheel=document.getElementById("wheel");
+let msg=document.getElementById("resultMsg");
+let spinBtn=document.getElementById("spinBtn");
+let used=localStorage.getItem("spinUsed")==="true";
+
+if(used){lock()}
+
+function spin(){
+ if(used)return;
+ used=true;
+ localStorage.setItem("spinUsed","true");
+
+ wheel.style.transform=`rotate(${360*6+Math.random()*360}deg)`;
+ setTimeout(()=>{
+   user.coins+=5;
+   msg.innerText="🎉 You won +5 Coins!";
+   save();lock();
+ },4200);
+}
+
+function lock(){
+ spinBtn.disabled=true;
+ spinBtn.style.background="#b6b6b6";
+ spinBtn.style.cursor="not-allowed";
+ msg.innerText="✔ Spin already used!";
+}
+
+function save(){localStorage.setItem("pbUser",JSON.stringify(user))}
+function back(){window.location.href="wallet.html";}
+</script>
+
+</body>
+</html>

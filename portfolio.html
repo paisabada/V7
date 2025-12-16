@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | My Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+:root{--teal:#00b4b0;--teal2:#0077ff;--navy:#002b5b;--gold:#f4c430;--bg1:#2c1b66;--bg2:#a0208c}
+body{margin:0;font-family:Poppins,Arial,sans-serif;background:linear-gradient(90deg,var(--teal),var(--teal2));min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:32px 16px;box-sizing:border-box}
+.shell{width:100%;max-width:1040px;background:#f7f9ff;border-radius:24px;box-shadow:0 22px 48px rgba(0,0,0,.35);overflow:hidden;animation:fadeUp .45s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.header{background:radial-gradient(circle at top,var(--bg2),var(--bg1));padding:18px 26px 20px;color:#fff}
+.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.header-left{display:flex;gap:12px;align-items:center}
+#avatar{width:52px;height:52px;border-radius:50%;background:conic-gradient(from 180deg,var(--teal),#9af7ec,var(--navy));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.hl-title{font-size:18px;font-weight:600}
+.hl-sub{font-size:12px;opacity:.9;margin-top:2px}
+.header-right{text-align:right}
+.portfolio-tag{display:inline-block;font-size:11px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35)}
+.last-sync{font-size:11px;opacity:.85;margin-top:6px}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:16px}
+.stat-card{background:rgba(255,255,255,.14);border-radius:14px;padding:9px 11px;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px)}
+.stat-label{font-size:11px;opacity:.9}
+.stat-value{margin-top:4px;font-size:18px;font-weight:700}
+.stat-foot{margin-top:2px;font-size:11px;opacity:.9}
+.content{padding:18px 22px 22px}
+.section-title{font-size:15px;font-weight:600;color:#253257;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.section-title small{font-size:11px;font-weight:400;color:#6b7280}
+.do-card{margin-top:10px;background:#ffffff;border-radius:16px;padding:10px 12px;box-shadow:0 6px 18px rgba(15,23,42,.12);border:1px solid #e5e7eb;font-size:11px;color:#374151}
+.do-title{font-size:13px;font-weight:600;color:#111827;margin-bottom:4px}
+.do-list{margin:0;padding-left:16px}
+.do-list li{margin-bottom:2px}
+.layout{margin-top:14px;display:grid;grid-template-columns:minmax(0,2.1fr) minmax(0,1.6fr);gap:14px}
+.block{background:#ffffff;border-radius:16px;padding:12px 14px;box-shadow:0 8px 20px rgba(15,23,42,.12);border:1px solid #e5e7eb}
+.block-title{font-size:13px;font-weight:600;color:#111827}
+.block-sub{font-size:11px;color:#6b7280;margin-top:2px;display:flex;justify-content:space-between;align-items:center}
+.add-btn{background:var(--teal);color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px}
+.filter-chips{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.chip{border-radius:999px;border:1px solid #d0d8f0;padding:4px 10px;font-size:11px;background:#fff;cursor:pointer}
+.chip.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.policy-list{margin-top:10px;display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto}
+.policy-card{border-radius:14px;padding:8px 9px;background:#f9fafb;border:1px solid #e5e7eb;font-size:11px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.policy-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(15,23,42,.08)}
+.policy-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.p-name{font-size:12px;font-weight:600;color:#111827}
+.p-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.p-tag{padding:2px 7px;border-radius:999px;background:#e0f2fe;color:#1d4ed8;font-size:10px}
+.p-section{margin-top:4px;display:flex;flex-wrap:wrap;gap:8px}
+.p-label{color:#6b7280}
+.p-value{font-weight:600;color:#111827}
+.p-gap{margin-top:4px;font-size:10px;color:#92400e}
+.empty-state{margin-top:10px;padding:10px 11px;border-radius:12px;background:#eff6ff;font-size:11px;color:#1e40af}
+.empty-state button{margin-top:6px;border-radius:999px;border:none;padding:6px 12px;font-size:11px;background:var(--teal);color:#fff;cursor:pointer}
+.timeline{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.timeline-item{border-radius:12px;padding:8px 9px;background:#fefce8;border:1px solid #facc15;font-size:11px}
+.t-main{display:flex;justify-content:space-between;align-items:center}
+.t-policy{font-weight:600;color:#854d0e}
+.t-date{font-size:11px;color:#6b7280}
+.t-foot{margin-top:4px;font-size:10px;color:#92400e}
+.gap-card{margin-top:10px;padding:9px 10px;border-radius:12px;background:#ecfdf5;font-size:11px;color:#166534}
+.gap-card strong{font-weight:600}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-10px);background:#111827;color:#fff;padding:8px 14px;border-radius:999px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:768px){.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-left">
+        <div id="avatar"></div>
+        <div>
+          <div class="hl-title" id="greetTitle"></div>
+          <div class="hl-sub">Review current covers, premiums and maturity dates in one place.</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="portfolio-tag">My Portfolio</div>
+        <div class="last-sync" id="lastSyncText"></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Total Policies</div><div class="stat-value" id="statTotalPolicies">0</div><div class="stat-foot">Health, term, vehicle & more.</div></div>
+      <div class="stat-card"><div class="stat-label">Annual Premium (₹)</div><div class="stat-value" id="statAnnualPremium">0</div><div class="stat-foot">Approx total across all active policies.</div></div>
+      <div class="stat-card"><div class="stat-label">Next Premium Due</div><div class="stat-value" id="statNextDue">–</div><div class="stat-foot" id="statNextDueFoot"></div></div>
+      <div class="stat-card"><div class="stat-label">Protection View</div><div class="stat-value" id="statGapLabel">–</div><div class="stat-foot" id="statGapFoot"></div></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title"><span>What you can do in My Portfolio</span><small>Review, track and plug gaps – from one screen.</small></div>
+
+    <div class="do-card"><div class="do-title">From here you can:</div><ul class="do-list"><li>Review current covers and maturity dates</li><li>Check premium amounts & due dates</li><li>Track gaps in your protection and investments</li></ul></div>
+
+    <div class="layout">
+      <div class="block">
+        <div class="block-title">Your policies</div>
+        <div class="block-sub">
+          <div>Health, term, vehicle, investment & more</div>
+          <button class="add-btn" id="addPolicyBtn">+ Add Policies</button>
+        </div>
+
+        <div class="filter-chips" id="filterChips">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="health">Health</button>
+          <button class="chip" data-filter="term">Term</button>
+          <button class="chip" data-filter="vehicle">Vehicle</button>
+          <button class="chip" data-filter="investment">Investment</button>
+        </div>
+
+        <div id="policyList" class="policy-list"></div>
+        <div id="emptyState" class="empty-state" style="display:none;">
+          You haven't added any policies yet. Add your first policy to get a clear view of your coverage.
+          <button onclick="goToAdd()">Add first policy</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="block"><div class="block-title">Upcoming premiums</div><div class="block-sub">Check dates so you never miss a payment.</div><div id="timeline" class="timeline"></div></div>
+        <div id="gapCard" class="gap-card"><strong>Protection gap summary:</strong> <span id="gapText">We will analyse your covers once you add policies.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// local auth stub (comment redirect for local testing)
+if(localStorage.getItem("pbLoggedIn")!=="true"){
+  // window.location.href = "login.html";
+}
+
+let raw = localStorage.getItem("pbUser");
+let user = null;
+try{ if(raw) user = JSON.parse(raw); } catch(e){ console.error(e); localStorage.removeItem("pbUser"); }
+if(!user){
+  user = {
+    name: "Ravi Bhisikar",
+    policies: [
+      { id:"H1", type:"health", name:"Family Floater Health Plan", insurer:"ABC Health Insurance", cover:1000000, premium:18000, frequency:"Yearly", nextDue:"2026-01-10", maturity:"2035-01-10", gapNote:"Sum insured may be low if your city has high hospital costs.", benefits:"Cashless hospitalization; Pre-existing cover after waiting period." },
+      { id:"T1", type:"term", name:"Term Life – 1 Cr Cover", insurer:"SecureLife", cover:10000000, premium:12000, frequency:"Yearly", nextDue:"2025-06-20", maturity:"2055-06-20", gapNote:"Check if 1 Cr covers 10–15x your annual income.", benefits:"Death benefit; Tax benefits under Sec 80C." },
+      { id:"V1", type:"vehicle", name:"Car Insurance – Maruti Swift", insurer:"XYZ General Insurance", cover:500000, premium:6500, frequency:"Yearly", nextDue:"2025-03-05", maturity:"2025-03-04", gapNote:"Consider adding zero dep add-on if car is <5 years old.", benefits:"Third-party cover; Own-damage cover; Roadside assistance." }
+    ]
+  };
+  localStorage.setItem("pbUser", JSON.stringify(user));
+}
+
+function showToast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1200); }
+
+(function setupHeader(){
+  const name = user.name || "User"; const first = name.split(" ")[0];
+  const initials = name.trim().split(" ").filter(Boolean).map(w=>w[0].toUpperCase()).slice(0,2).join("");
+  document.getElementById("avatar").textContent = initials || "P";
+  document.getElementById("greetTitle").textContent = `Hi ${first}, here's your portfolio overview`;
+  document.getElementById("lastSyncText").textContent = `Last synced: ${new Date().toLocaleString()}`;
+})();
+
+const policies = user.policies = Array.isArray(user.policies) ? user.policies : [];
+let currentFilter = "all";
+
+function formatDate(iso){ if(!iso) return "–"; const d=new Date(iso); if(isNaN(d.getTime())) return "–"; return d.toLocaleDateString(); }
+function daysBetween(end){ const now=new Date(); const e=new Date(end); const diff=Math.ceil((e-now)/(1000*60*60*24)); return diff>0?diff:0; }
+
+function renderPolicies(){
+  const list=document.getElementById("policyList"), empty=document.getElementById("emptyState");
+  list.innerHTML="";
+  const filtered = policies.filter(p => currentFilter==="all" || p.type===currentFilter);
+  if(!policies.length){ list.style.display="none"; empty.style.display="block"; return; }
+  empty.style.display="none"; list.style.display="flex";
+  filtered.forEach(p=>{
+    const card=document.createElement("div"); card.className="policy-card"; card.dataset.id=p.id;
+    card.style.cursor="pointer";
+    card.addEventListener("click", ()=>{ window.location.href = `policy-detail.html?id=${encodeURIComponent(p.id)}`; });
+    const typeLabel = p.type ? p.type.charAt(0).toUpperCase()+p.type.slice(1) : "Policy";
+    card.innerHTML = `
+      <div class="policy-head">
+        <div>
+          <div class="p-name">${p.name}</div>
+          <div class="p-tags"><span class="p-tag">${typeLabel}</span><span class="p-tag">${p.insurer || "Insurer"}</span></div>
+        </div>
+        <div style="text-align:right;font-size:11px;">
+          <div class="p-label">Cover (approx)</div><div class="p-value">₹${(p.cover||0).toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="p-section">
+        <div><span class="p-label">Premium: </span><span class="p-value">₹${(p.premium||0).toLocaleString()} / ${p.frequency||"Year"}</span></div>
+        <div><span class="p-label">Next due: </span><span class="p-value">${formatDate(p.nextDue)}</span></div>
+        <div><span class="p-label">Maturity: </span><span class="p-value">${formatDate(p.maturity)}</span></div>
+      </div>
+      ${p.gapNote ? `<div class="p-gap">⚠ ${p.gapNote}</div>` : ""}
+    `;
+    list.appendChild(card);
+  });
+}
+
+function renderStatsAndGap(){
+  document.getElementById("statTotalPolicies").textContent = policies.length;
+  const totalPremium = policies.reduce((s,p)=>s+(p.premium||0),0);
+  document.getElementById("statAnnualPremium").textContent = totalPremium.toLocaleString();
+  let next=null; policies.forEach(p=>{ if(!p.nextDue) return; const d=new Date(p.nextDue); if(isNaN(d)) return; if(!next||d<next.date) next={date:d,name:p.name}; });
+  if(next){ document.getElementById("statNextDue").textContent = next.date.toLocaleDateString(); document.getElementById("statNextDueFoot").textContent = `Next: ${next.name}`; }
+  else{ document.getElementById("statNextDue").textContent="–"; document.getElementById("statNextDueFoot").textContent="Add due dates to see reminders here."; }
+  const hasHealth = policies.some(p=>p.type==="health"); const hasTerm = policies.some(p=>p.type==="term");
+  let label="",foot="",gapText="";
+  if(hasHealth && hasTerm){ label="Core covers in place"; foot="Health + Term present. Focus on adequacy and add-ons."; gapText="You already have key covers. Next step: check if sums assured match your current income, city and lifestyle."; }
+  else if(hasHealth && !hasTerm){ label="Life cover missing"; foot="You have health cover but no visible term plan."; gapText="Consider adding a term life plan that covers 10–15x your annual income to protect your family."; }
+  else if(!hasHealth && hasTerm){ label="Health cover missing"; foot="You have term life but no visible health insurance."; gapText="A hospitalisation can disturb savings. Add a family health plan with comfortable room rent and cashless network."; }
+  else{ label="Protection base not built"; foot="No health or term policy detected."; gapText="Start by creating a base with health + term. You can still add vehicle/investment covers, but core risk cover comes first."; }
+  document.getElementById("statGapLabel").textContent = label;
+  document.getElementById("statGapFoot").textContent = foot;
+  document.getElementById("gapText").textContent = gapText;
+}
+
+function renderTimeline(){
+  const container=document.getElementById("timeline"); container.innerHTML="";
+  const withDue = policies.filter(p=>p.nextDue).slice().sort((a,b)=> new Date(a.nextDue)-new Date(b.nextDue));
+  if(!withDue.length){ container.innerHTML=`<div class="timeline-item"><div class="t-main"><div class="t-policy">No upcoming premiums</div></div><div class="t-foot">Add or update due dates to see them here.</div></div>`; return; }
+  withDue.slice(0,4).forEach(p=>{ const d=new Date(p.nextDue); const item=document.createElement("div"); item.className="timeline-item"; item.innerHTML=`<div class="t-main"><div class="t-policy">${p.name}</div><div class="t-date">${d.toLocaleDateString()}</div></div><div class="t-foot">Approx premium: ₹${(p.premium||0).toLocaleString()} • ${p.frequency||"Yearly"}</div>`; container.appendChild(item); });
+}
+
+document.querySelectorAll("#filterChips .chip").forEach(btn=>{ btn.addEventListener("click", ()=>{ document.querySelectorAll("#filterChips .chip").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); currentFilter = btn.dataset.filter; renderPolicies(); }); });
+
+document.getElementById("addPolicyBtn").addEventListener("click", ()=>{ showToast("Opening Add Policy..."); window.location.href = "add-policy.html"; });
+function goToAdd(){ window.location.href="add-policy.html"; }
+function goToVault(){ window.location.href="vault.html?from=portfolio-empty"; }
+
+(function init(){ renderPolicies(); renderStatsAndGap(); renderTimeline(); })();
+</script>
+</body>
+</html>

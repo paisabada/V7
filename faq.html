@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | FAQ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;
+  --navy:#002b5b;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:32px 16px;
+  box-sizing:border-box;
+}
+.shell{
+  width:100%;
+  max-width:900px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:18px 24px 18px;
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+}
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+#avatar{
+  width:46px;height:46px;border-radius:50%;
+  background:conic-gradient(from 180deg,var(--teal),#9af7ec,var(--navy));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:20px;
+}
+.hl-title{
+  font-size:17px;font-weight:600;
+}
+.hl-sub{
+  font-size:11px;opacity:.9;margin-top:2px;
+}
+.faq-tag{
+  font-size:11px;
+  padding:6px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.4);
+}
+
+/* CONTENT */
+.content{
+  padding:16px 20px 20px;
+}
+.section-title{
+  font-size:15px;
+  font-weight:600;
+  color:#253257;
+}
+.search-box{
+  margin-top:8px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:#ffffff;
+  border-radius:999px;
+  padding:5px 10px;
+  border:1px solid #e5e7eb;
+}
+.search-box input{
+  flex:1;
+  border:none;
+  font-size:12px;
+  background:transparent;
+  outline:none;
+}
+
+/* CATEGORY TABS */
+.tab-row{
+  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.tab{
+  font-size:11px;
+  padding:5px 11px;
+  border-radius:999px;
+  border:1px solid #d0d8f0;
+  background:#fff;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--teal);
+  color:#fff;
+  border-color:var(--teal);
+}
+
+/* ACCORDION */
+.faq-list{
+  margin-top:12px;
+}
+.faq-item{
+  border-radius:14px;
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  margin-bottom:8px;
+  overflow:hidden;
+}
+.faq-q{
+  padding:9px 11px;
+  font-size:12px;
+  font-weight:500;
+  color:#111827;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+}
+.faq-q span.icon{
+  font-size:16px;
+}
+.faq-a{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .25s ease;
+  font-size:11px;
+  color:#4b5563;
+  padding:0 11px;
+}
+.faq-a-inner{
+  padding:6px 0 9px;
+}
+.faq-item.open .faq-a{
+  max-height:200px;
+}
+.faq-item.open .faq-q{
+  background:#f9fafb;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:#111827;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  z-index:999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:768px){
+  .shell{border-radius:18px;}
+  .header{padding:14px 16px;}
+  .content{padding:12px 14px 16px;}
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+  <div class="header">
+    <div class="header-left">
+      <div id="avatar"></div>
+      <div>
+        <div class="hl-title" id="greetTitle"></div>
+        <div class="hl-sub">Quick answers about wallet, coins, policies & more.</div>
+      </div>
+    </div>
+    <div class="faq-tag">FAQ & Help</div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">Search or browse questions</div>
+    <div class="search-box">
+      <span style="font-size:14px;">🔍</span>
+      <input id="searchInput" placeholder="Type a keyword, e.g. coins, refund, claim..." />
+    </div>
+
+    <div class="tab-row" id="tabRow">
+      <button class="tab active" data-cat="all">All</button>
+      <button class="tab" data-cat="wallet">Wallet & Coins</button>
+      <button class="tab" data-cat="policy">Policies & Purchase</button>
+      <button class="tab" data-cat="claims">Claims & Service</button>
+      <button class="tab" data-cat="account">Account & Login</button>
+    </div>
+
+    <div id="faqList" class="faq-list"></div>
+  </div>
+</div>
+
+<script>
+// Auth
+if(localStorage.getItem("pbLoggedIn")!=="true"){
+  window.location.href="login.html";
+}
+let raw = localStorage.getItem("pbUser");
+let user = null;
+try{ if(raw) user = JSON.parse(raw);}catch(e){
+  console.error(e);
+  localStorage.removeItem("pbUser");
+}
+if(!user){
+  window.location.href="login.html";
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1200);
+}
+
+// header
+(function(){
+  const name = user.name || "User";
+  const first = name.split(" ")[0];
+  const initials = name.trim().split(" ")
+    .filter(Boolean).map(w=>w[0].toUpperCase()).slice(0,2).join("");
+  document.getElementById("avatar").textContent = initials || "P";
+  document.getElementById("greetTitle").textContent =
+    `Hi ${first}, how can we help?`;
+})();
+
+const faqs = [
+  {
+    cat:"wallet",
+    q:"What are Paisabada Coins and how do I earn them?",
+    a:"Paisabada Coins are reward points you earn when you complete actions like buying a policy, renewing through Paisabada, completing quizzes or referring friends. You’ll see your live balance in the Wallet section."
+  },
+  {
+    cat:"wallet",
+    q:"How can I use Paisabada Coins?",
+    a:"While buying or renewing a policy on Paisabada, you’ll see an option to apply coins on the payment page. Eligible policies will allow you to convert some or all coins into instant premium savings, as per campaign rules."
+  },
+  {
+    cat:"wallet",
+    q:"Do Paisabada Coins expire?",
+    a:"Coins can have an expiry date depending on the campaign. We will always show you the expiry date or notify you in advance so you get a chance to use them. Check your Wallet for details."
+  },
+  {
+    cat:"policy",
+    q:"I already have a policy. Can I add it to my portfolio?",
+    a:"Yes. You can add existing policies in the Policy Vault / Portfolio section by entering basic details and uploading documents. This helps you track all covers in one place."
+  },
+  {
+    cat:"policy",
+    q:"Will my premium change if I buy through Paisabada?",
+    a:"You get the same base premium as the insurer, plus Paisabada benefits like coins or special offers wherever applicable. We never increase the premium – our aim is to help you save or get more value."
+  },
+  {
+    cat:"policy",
+    q:"Can I compare multiple plans before deciding?",
+    a:"Yes. For most categories like health, term and vehicle, you can compare features, premiums and key highlights side by side before choosing."
+  },
+  {
+    cat:"claims",
+    q:"How do I raise a claim for a policy I bought via Paisabada?",
+    a:"Claims are always settled by the insurer, but we guide you on the process. From your Portfolio, you can click on a policy and see claim contact details and steps, or raise a support request for guidance."
+  },
+  {
+    cat:"claims",
+    q:"Does Paisabada help during claims?",
+    a:"We help you with information, document checklists and escalation paths. However, approval and settlement are purely at the insurer’s discretion."
+  },
+  {
+    cat:"account",
+    q:"I forgot my password. What should I do?",
+    a:"On the login screen, use the 'Forgot password' or OTP based login option. If you still face issues, you can contact support with your registered mobile number or email."
+  },
+  {
+    cat:"account",
+    q:"How do I update my contact details?",
+    a:"Go to the profile / account section and update your mobile or email. For policies already issued, some changes might require insurer approval – we’ll guide you where needed."
+  }
+];
+
+const faqListEl = document.getElementById("faqList");
+const searchInput = document.getElementById("searchInput");
+const tabs = document.querySelectorAll("#tabRow .tab");
+let currentCat = "all";
+let currentSearch = "";
+
+tabs.forEach(tab=>{
+  tab.addEventListener("click", ()=>{
+    tabs.forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    currentCat = tab.dataset.cat;
+    renderFaqs();
+  });
+});
+
+searchInput.addEventListener("input", ()=>{
+  currentSearch = searchInput.value.trim().toLowerCase();
+  renderFaqs();
+});
+
+function renderFaqs(){
+  faqListEl.innerHTML = "";
+  const filtered = faqs.filter(f=>{
+    if(currentCat!=="all" && f.cat!==currentCat) return false;
+    if(!currentSearch) return true;
+    const text = (f.q + " " + f.a).toLowerCase();
+    return text.includes(currentSearch);
+  });
+
+  if(!filtered.length){
+    const div = document.createElement("div");
+    div.style.fontSize="11px";
+    div.style.color="#6b7280";
+    div.style.marginTop="10px";
+    div.textContent = "No questions match your search. Try another keyword.";
+    faqListEl.appendChild(div);
+    return;
+  }
+
+  filtered.forEach(f=>{
+    const item = document.createElement("div");
+    item.className="faq-item";
+    item.innerHTML = `
+      <div class="faq-q">
+        <span>${f.q}</span>
+        <span class="icon">+</span>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-inner">${f.a}</div>
+      </div>
+    `;
+    const qEl = item.querySelector(".faq-q");
+    qEl.addEventListener("click", ()=>{
+      const open = item.classList.contains("open");
+      document.querySelectorAll(".faq-item").forEach(i=>i.classList.remove("open"));
+      if(!open){
+        item.classList.add("open");
+      }
+    });
+    faqListEl.appendChild(item);
+  });
+}
+
+renderFaqs();
+</script>
+</body>
+</html>

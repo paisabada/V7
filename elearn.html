@@ -1,0 +1,506 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | E-Learn</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;
+  --navy:#002b5b;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:32px 16px;
+  box-sizing:border-box;
+}
+.shell{
+  width:100%;
+  max-width:1040px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:18px 26px 18px;
+  color:#fff;
+}
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+.header-left{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+#avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:conic-gradient(from 180deg,var(--teal),#9af7ec,var(--navy));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:22px;
+  box-shadow:0 0 0 3px rgba(255,255,255,.25);
+}
+.hl-title{
+  font-size:18px;
+  font-weight:600;
+}
+.hl-sub{
+  font-size:12px;
+  opacity:.9;
+  margin-top:2px;
+}
+.header-right{
+  text-align:right;
+}
+.elearn-tag{
+  display:inline-block;
+  font-size:11px;
+  padding:6px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.35);
+}
+
+/* CONTENT */
+.content{
+  padding:18px 22px 22px;
+}
+.section-title{
+  font-size:15px;
+  font-weight:600;
+  color:#253257;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+.section-title small{
+  font-size:11px;
+  color:#6b7280;
+}
+
+/* CATEGORY CHIPS */
+.category-chips{
+  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.cat-chip{
+  border-radius:999px;
+  border:1px solid #d0d8f0;
+  padding:5px 11px;
+  font-size:11px;
+  background:#fff;
+  cursor:pointer;
+}
+.cat-chip.active{
+  background:var(--teal);
+  color:#fff;
+  border-color:var(--teal);
+}
+
+/* MODULE GRID */
+.module-grid{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+.module-card{
+  background:#ffffff;
+  border-radius:16px;
+  padding:10px 11px;
+  box-shadow:0 6px 16px rgba(15,23,42,.12);
+  border:1px solid #e5e7eb;
+  font-size:11px;
+  cursor:pointer;
+  transition:transform .18s, box-shadow .18s, border-color .18s;
+}
+.module-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 22px rgba(15,23,42,.2);
+  border-color:var(--teal);
+}
+.m-title{
+  font-size:13px;
+  font-weight:600;
+  color:#111827;
+}
+.m-tag{
+  margin-top:2px;
+  font-size:10px;
+  color:#0f766e;
+}
+.m-desc{
+  margin-top:4px;
+  color:#6b7280;
+}
+.m-meta{
+  margin-top:6px;
+  display:flex;
+  justify-content:space-between;
+  font-size:10px;
+  color:#4b5563;
+}
+
+/* BOTTOM PANEL FOR MODULE DETAILS */
+.panel-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.45);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:998;
+}
+.panel-backdrop.show{display:flex;}
+.panel{
+  width:100%;
+  max-width:960px;
+  background:#ffffff;
+  border-radius:18px 18px 0 0;
+  padding:14px 18px 16px;
+  box-shadow:0 -10px 30px rgba(0,0,0,.4);
+}
+.panel-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.panel-title{
+  font-size:15px;
+  font-weight:600;
+  color:#111827;
+}
+.panel-close{
+  border:none;
+  background:transparent;
+  font-size:20px;
+  cursor:pointer;
+}
+.panel-body{
+  margin-top:4px;
+  font-size:12px;
+  color:#4b5563;
+}
+.panel-steps{
+  margin:8px 0 0;
+  padding-left:18px;
+  font-size:11px;
+}
+.panel-foot{
+  margin-top:8px;
+  font-size:11px;
+  color:#6b7280;
+}
+.panel-cta{
+  margin-top:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.panel-cta button{
+  border:none;
+  border-radius:999px;
+  padding:7px 14px;
+  font-size:11px;
+  background:var(--teal);
+  color:#fff;
+  cursor:pointer;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:#111827;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  z-index:999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:768px){
+  .shell{border-radius:18px;}
+  .header{padding:14px 16px 16px;}
+  .content{padding:14px 14px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-left">
+        <div id="avatar"></div>
+        <div>
+          <div class="hl-title" id="greetTitle"></div>
+          <div class="hl-sub">Short lessons on health, term, SIPs & more – in simple language.</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="elearn-tag">E-Learn</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">
+      <span>Pick a topic to learn</span>
+      <small>Finish a module & apply learning while buying policies.</small>
+    </div>
+
+    <div class="category-chips" id="categoryChips">
+      <button class="cat-chip active" data-cat="all">All</button>
+      <button class="cat-chip" data-cat="health">Health Insurance</button>
+      <button class="cat-chip" data-cat="term">Term & Life</button>
+      <button class="cat-chip" data-cat="sip">SIP & Investments</button>
+      <button class="cat-chip" data-cat="wallet">Wallet & Coins</button>
+    </div>
+
+    <div id="moduleGrid" class="module-grid"></div>
+  </div>
+</div>
+
+<div id="panelBackdrop" class="panel-backdrop">
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title" id="panelTitle"></div>
+      <button class="panel-close" onclick="closePanel()">×</button>
+    </div>
+    <div class="panel-body" id="panelBody"></div>
+    <ul class="panel-steps" id="panelSteps"></ul>
+    <div class="panel-foot" id="panelFoot"></div>
+    <div class="panel-cta">
+      <button id="panelCTA">Start this module</button>
+      <div style="font-size:10px;color:#6b7280;">You can revisit anytime from E-Learn.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auth
+if(localStorage.getItem("pbLoggedIn")!=="true"){
+  window.location.href="login.html";
+}
+let raw = localStorage.getItem("pbUser");
+let user = null;
+try{ if(raw) user = JSON.parse(raw);}catch(e){
+  console.error(e);
+  localStorage.removeItem("pbUser");
+}
+if(!user){
+  window.location.href="login.html";
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1200);
+}
+
+// Header avatar
+(function setupHeader(){
+  const name = user.name || "User";
+  const first = name.split(" ")[0];
+  const initials = name.trim().split(" ")
+    .filter(Boolean).map(w=>w[0].toUpperCase()).slice(0,2).join("");
+  document.getElementById("avatar").textContent = initials || "P";
+  document.getElementById("greetTitle").textContent =
+    `Hi ${first}, learn before you buy`;
+})();
+
+// Modules
+const modules = [
+  {
+    id:"health-basics",
+    cat:"health",
+    title:"Health Insurance Basics",
+    tag:"Start here",
+    desc:"Understand sum insured, room rent, waiting periods and cashless networks.",
+    time:"8–10 min",
+    level:"Beginner",
+    body:"This module helps you understand core concepts of health insurance in plain language.",
+    steps:[
+      "See what a sum insured really means in real-life scenarios",
+      "Understand room rent limits and why they matter at claim time",
+      "Learn about waiting periods and pre-existing disease coverage"
+    ],
+    foot:"After this, you will be able to compare health plans with more confidence."
+  },
+  {
+    id:"term-cover",
+    cat:"term",
+    title:"How much Term Cover do I need?",
+    tag:"High impact",
+    desc:"Simple rule-of-thumb methods to decide your life cover amount.",
+    time:"6–8 min",
+    level:"Beginner",
+    body:"This module explains how to choose the right term insurance cover for your family.",
+    steps:[
+      "Learn the 10–15x income thumb rule for term cover",
+      "See how existing loans & dependents change required cover",
+      "Understand the difference between cover amount & policy duration"
+    ],
+    foot:"You can use this while creating or upgrading your term plan from Paisabada."
+  },
+  {
+    id:"sip-start",
+    cat:"sip",
+    title:"SIP Basics – How monthly investing works",
+    tag:"Wealth building",
+    desc:"What is a SIP, how compounding works and what to expect.",
+    time:"7–9 min",
+    level:"Beginner",
+    body:"A short introduction to SIPs so that you can start small and stay consistent.",
+    steps:[
+      "Understand how SIPs spread investments across months",
+      "See simple compounding examples for 5, 10 and 20 years",
+      "Know the basic risks and how to stay disciplined"
+    ],
+    foot:"Useful before starting any long-term SIP-based goal."
+  },
+  {
+    id:"wallet-coins",
+    cat:"wallet",
+    title:"How Paisabada Wallet & Coins work",
+    tag:"Maximise benefits",
+    desc:"Learn how to earn, use and track Paisabada Coins effectively.",
+    time:"5–7 min",
+    level:"Beginner",
+    body:"This module explains your Paisabada Wallet – coins, XP and how to apply them on policies.",
+    steps:[
+      "See how coins are earned through actions & referrals",
+      "Understand where coins can be applied while buying policies",
+      "Learn the difference between coins, XP and levels"
+    ],
+    foot:"Great to read once so you never miss an opportunity to save."
+  },
+  {
+    id:"health-advanced",
+    cat:"health",
+    title:"Advanced Health Insurance choices",
+    tag:"Deeper dive",
+    desc:"Family floater vs individual, top-ups, super top-ups and add-ons.",
+    time:"10–12 min",
+    level:"Intermediate",
+    body:"This module is for you if you already have a basic health plan or are evaluating upgrades.",
+    steps:[
+      "Compare individual vs floater covers with examples",
+      "See how top-ups and super top-ups can increase cover smartly",
+      "Learn which add-ons are useful vs optional"
+    ],
+    foot:"Use this when you are planning a big change in your health coverage."
+  }
+];
+
+let currentCat = "all";
+let currentModule = null;
+const moduleGrid = document.getElementById("moduleGrid");
+const chips = document.querySelectorAll("#categoryChips .cat-chip");
+
+chips.forEach(ch=>{
+  ch.addEventListener("click", ()=>{
+    chips.forEach(c=>c.classList.remove("active"));
+    ch.classList.add("active");
+    currentCat = ch.dataset.cat;
+    renderModules();
+  });
+});
+
+function renderModules(){
+  moduleGrid.innerHTML = "";
+  const filtered = modules.filter(m => currentCat==="all" || m.cat===currentCat);
+  filtered.forEach(m=>{
+    const card = document.createElement("div");
+    card.className="module-card";
+    card.innerHTML = `
+      <div class="m-title">${m.title}</div>
+      <div class="m-tag">${m.tag}</div>
+      <div class="m-desc">${m.desc}</div>
+      <div class="m-meta">
+        <span>⏱ ${m.time}</span>
+        <span>${m.level}</span>
+      </div>
+    `;
+    card.addEventListener("click", ()=>openModule(m));
+    moduleGrid.appendChild(card);
+  });
+}
+
+const panelBackdrop = document.getElementById("panelBackdrop");
+const panelTitle = document.getElementById("panelTitle");
+const panelBody = document.getElementById("panelBody");
+const panelSteps = document.getElementById("panelSteps");
+const panelFoot = document.getElementById("panelFoot");
+const panelCTA = document.getElementById("panelCTA");
+
+function openModule(m){
+  currentModule = m;
+  panelTitle.textContent = m.title;
+  panelBody.textContent = m.body;
+  panelSteps.innerHTML = "";
+  (m.steps||[]).forEach(s=>{
+    const li = document.createElement("li");
+    li.textContent = s;
+    panelSteps.appendChild(li);
+  });
+  panelFoot.textContent = m.foot || "";
+  panelCTA.textContent = "Start " + m.title;
+  panelBackdrop.classList.add("show");
+}
+
+function closePanel(){
+  panelBackdrop.classList.remove("show");
+  currentModule = null;
+}
+
+panelCTA.addEventListener("click", ()=>{
+  if(!currentModule) return;
+  showToast("Module started: " + currentModule.title);
+  // future: open detailed page/video
+  closePanel();
+});
+
+// init
+renderModules();
+</script>
+</body>
+</html>

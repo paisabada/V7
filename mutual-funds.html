@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Mutual Funds</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;
+  --navy:#002b5b;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:32px 16px;
+  box-sizing:border-box;
+}
+.shell{
+  width:100%;
+  max-width:1000px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+  animation:fadeUp .45s ease-out;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+/* Header */
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:18px 24px 18px;
+  color:#fff;
+}
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+}
+.header-left{
+  display:flex;gap:12px;align-items:center;
+}
+#avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:conic-gradient(from 180deg,var(--teal),#9af7ec,var(--navy));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:20px;
+}
+.hl-title{font-size:18px;font-weight:600;}
+.hl-sub{font-size:12px;opacity:.9;margin-top:2px;}
+.header-right{text-align:right;font-size:11px;}
+.tag{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+}
+
+/* Content */
+.content{
+  padding:18px 20px 22px;
+}
+.section-title{
+  font-size:15px;
+  font-weight:600;
+  color:#253257;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+.section-title small{
+  font-size:11px;
+  color:#6b7280;
+}
+
+/* Filter chips */
+.filter-row{
+  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.chip{
+  border-radius:999px;
+  border:1px solid #d0d8f0;
+  padding:4px 10px;
+  font-size:11px;
+  background:#fff;
+  cursor:pointer;
+}
+.chip.active{
+  background:var(--teal);
+  color:#fff;
+  border-color:var(--teal);
+}
+
+/* Fund list */
+.fund-section-title{
+  margin-top:14px;
+  font-size:13px;
+  font-weight:600;
+  color:#374151;
+}
+.fund-list{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:10px;
+}
+.fund-card{
+  background:#ffffff;
+  border-radius:16px;
+  padding:10px 12px;
+  box-shadow:0 6px 16px rgba(15,23,42,.12);
+  border:1px solid #e5e7eb;
+  font-size:11px;
+  color:#374151;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.fund-name{
+  font-size:13px;
+  font-weight:600;
+  color:#111827;
+}
+.fund-meta{
+  font-size:11px;
+  color:#6b7280;
+}
+.fund-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:4px;
+}
+.fund-tag{
+  font-size:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+.fund-return-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  margin-top:4px;
+}
+.fund-return-label{
+  color:#6b7280;
+}
+.fund-return-value{
+  font-weight:600;
+}
+.btn{
+  align-self:flex-start;
+  margin-top:6px;
+  border-radius:999px;
+  border:none;
+  padding:6px 12px;
+  font-size:11px;
+  cursor:pointer;
+  background:var(--teal);
+  color:#fff;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:#111827;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  z-index:999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media (max-width:768px){
+  .shell{border-radius:18px;}
+  .header{padding:14px 16px 16px;}
+  .content{padding:14px 14px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-left">
+        <div id="avatar"></div>
+        <div>
+          <div class="hl-title" id="greetTitle"></div>
+          <div class="hl-sub">Pick a mutual fund, then start SIP or invest lumpsum.</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="tag">Mutual Funds</div>
+        <div style="margin-top:4px;">Based on your Paisabada profile.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">
+      <span>Explore mutual funds</span>
+      <small>Select a fund to see details & start SIP.</small>
+    </div>
+
+    <div class="filter-row" id="filterRow">
+      <button class="chip active" data-filter="all">All</button>
+      <button class="chip" data-filter="recommended">Recommended</button>
+      <button class="chip" data-filter="equity">Equity / Growth</button>
+      <button class="chip" data-filter="debt">Debt / Low risk</button>
+      <button class="chip" data-filter="elss">Tax Saving (ELSS)</button>
+    </div>
+
+    <div class="fund-section-title">Funds for your SIP</div>
+    <div class="fund-list" id="fundList">
+      <!-- JS will add cards -->
+    </div>
+  </div>
+</div>
+
+<script>
+// Auth
+if(localStorage.getItem("pbLoggedIn")!=="true"){
+  window.location.href="login.html";
+}
+let raw = localStorage.getItem("pbUser");
+let user = null;
+try{
+  if(raw) user = JSON.parse(raw);
+}catch(e){
+  console.error("Invalid pbUser", e);
+  localStorage.removeItem("pbUser");
+}
+if(!user){
+  window.location.href="login.html";
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 1200);
+}
+
+// Header
+(function(){
+  const name = user.name || "User";
+  const firstName = name.split(" ")[0];
+  const initials = name.trim().split(" ").filter(Boolean)
+    .map(w=>w[0].toUpperCase()).slice(0,2).join("");
+  document.getElementById("avatar").textContent = initials || "P";
+  document.getElementById("greetTitle").textContent =
+    `Hi ${firstName}, choose a mutual fund`;
+})();
+
+// Mutual funds list (dummy / static config)
+const funds = [
+  {
+    id:"flexiCap",
+    name:"Paisabada Flexi Cap Fund",
+    category:"Equity • Flexi Cap",
+    filter:"equity,recommended",
+    risk:"High Risk",
+    returns3Y:"+18.2%",
+    returns5Y:"+15.0%",
+    minSip:500,
+    taglines:["Good for 7+ year goals","Popular with long-term SIP investors"],
+    expectedReturn:12
+  },
+  {
+    id:"indexFund",
+    name:"Paisabada Nifty 50 Index Fund",
+    category:"Equity • Index",
+    filter:"equity",
+    risk:"Moderate to High",
+    returns3Y:"+16.4%",
+    returns5Y:"+14.2%",
+    minSip:500,
+    taglines:["Low cost index investing","Suitable for simple equity exposure"],
+    expectedReturn:11
+  },
+  {
+    id:"elssFund",
+    name:"Paisabada Tax Saver ELSS Fund",
+    category:"Equity • ELSS (80C)",
+    filter:"elss,equity,recommended",
+    risk:"High Risk",
+    returns3Y:"+17.0%",
+    returns5Y:"+14.8%",
+    minSip:500,
+    taglines:["Helps in 80C tax saving","Lock-in 3 years"],
+    expectedReturn:12
+  },
+  {
+    id:"shortTermDebt",
+    name:"Paisabada Short Term Debt Fund",
+    category:"Debt • Short Duration",
+    filter:"debt",
+    risk:"Low to Moderate",
+    returns3Y:"+7.2%",
+    returns5Y:"+7.0%",
+    minSip:1000,
+    taglines:["Relatively lower risk","Suitable for 1–3 year goals"],
+    expectedReturn:7
+  },
+  {
+    id:"liquidFund",
+    name:"Paisabada Liquid Fund",
+    category:"Debt • Liquid",
+    filter:"debt,recommended",
+    risk:"Low Risk",
+    returns3Y:"+5.2%",
+    returns5Y:"+5.1%",
+    minSip:1000,
+    taglines:["Parking short-term money","Quick redemption (as per rules)"],
+    expectedReturn:5
+  }
+];
+
+// Save config so sip-plans.html can re-use
+localStorage.setItem("pbMFConfig", JSON.stringify(funds));
+
+const fundListEl = document.getElementById("fundList");
+
+function openFundDetails(fund){
+  // Navigate to SIP plans page with fund id
+  const url = `sip-plans.html?fundId=${encodeURIComponent(fund.id)}`;
+  window.location.href = url;
+}
+
+function renderFunds(activeFilter="all"){
+  fundListEl.innerHTML = "";
+  const list = funds.filter(f=>{
+    if(activeFilter==="all") return true;
+    return (f.filter || "").split(",").includes(activeFilter);
+  });
+
+  list.forEach(f=>{
+    const card = document.createElement("div");
+    card.className = "fund-card";
+    card.innerHTML = `
+      <div class="fund-name">${f.name}</div>
+      <div class="fund-meta">${f.category} • ${f.risk}</div>
+      <div class="fund-tags">
+        ${(f.taglines||[]).slice(0,2).map(t=>`<span class="fund-tag">${t}</span>`).join("")}
+      </div>
+      <div class="fund-return-row">
+        <div>
+          <div class="fund-return-label">3Y Return</div>
+          <div class="fund-return-value">${f.returns3Y}</div>
+        </div>
+        <div>
+          <div class="fund-return-label">5Y Return</div>
+          <div class="fund-return-value">${f.returns5Y}</div>
+        </div>
+        <div>
+          <div class="fund-return-label">Min SIP</div>
+          <div class="fund-return-value">₹${f.minSip}</div>
+        </div>
+      </div>
+    `;
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.textContent = "View details & Start SIP";
+    btn.addEventListener("click", ()=>{
+      showToast("Opening " + f.name);
+      openFundDetails(f);
+    });
+    card.appendChild(btn);
+    fundListEl.appendChild(card);
+  });
+}
+
+// filter chip logic
+const filterChips = document.querySelectorAll("#filterRow .chip");
+filterChips.forEach(chip=>{
+  chip.addEventListener("click", ()=>{
+    filterChips.forEach(c=>c.classList.remove("active"));
+    chip.classList.add("active");
+    const filter = chip.dataset.filter;
+    renderFunds(filter);
+  });
+});
+
+// init
+renderFunds("all");
+</script>
+</body>
+</html>

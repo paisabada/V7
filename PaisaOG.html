@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Paisabada OG Studio — Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600;700&family=Outfit:wght@300;400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1: linear-gradient(135deg,#eef2f7,#dee8ff);
+    --panel-bg: rgba(255,255,255,0.55);
+    --text: #0f172a;
+    --accent: #2978ff;
+    --glass-border: rgba(255,255,255,0.35);
+    --modal-backdrop: rgba(2,6,23,0.45);
+    --modal-bg: #fff;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+    margin:0;
+    min-height:100vh;
+    background:var(--bg-1);
+    color:var(--text);
+    display:flex;
+    gap:20px;
+    padding:18px;
+    box-sizing:border-box;
+  }
+
+  /* NAVBAR (floating) */
+  .topbar{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    top:14px;
+    width:calc(100% - 40px);
+    max-width:1100px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:rgba(255,255,255,0.5);
+    backdrop-filter:blur(8px) saturate(120%);
+    border-radius:14px;
+    padding:10px 14px;
+    border:1px solid rgba(255,255,255,0.35);
+    box-shadow:0 8px 30px rgba(2,6,23,0.06);
+    z-index:60;
+  }
+  .brand{display:flex;gap:12px;align-items:center;}
+  .logo{
+    width:40px;height:40px;border-radius:10px;
+    background:linear-gradient(135deg,#ffb86b,#ff6b6b);
+    display:flex;align-items:center;justify-content:center;color:white;font-weight:700;
+    box-shadow:0 6px 18px rgba(255,107,107,0.22);
+    font-family:'Poppins',sans-serif;
+  }
+  .brand-title{font-weight:700;color:#06203a;letter-spacing:0.2px;}
+  .nav-actions{display:flex;gap:10px;align-items:center;}
+  .icon-btn{padding:8px;border-radius:10px;background:rgba(255,255,255,0.85);border:0;cursor:pointer;box-shadow:0 4px 14px rgba(2,6,23,0.06);}
+  .toggle{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,0.06);}
+
+  /* LAYOUT */
+  .sidebar{
+    width:72px;
+    background:rgba(255,255,255,0.18);
+    border-radius:14px;
+    padding:12px;
+    display:flex;flex-direction:column;gap:8px;align-items:center;
+    backdrop-filter: blur(8px);
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 10px 30px rgba(2,6,23,0.05);
+    height:calc(100vh - 72px);
+    position:sticky;top:60px;align-self:flex-start;
+    z-index:20;
+  }
+  .sidebar button{ width:48px;height:48px;border-radius:10px;border:0;background:rgba(255,255,255,0.06);color:#08324d; display:flex;align-items:center;justify-content:center;cursor:pointer; }
+
+  .main{ flex:1;display:flex;gap:18px;max-width:1100px;margin-left:auto;margin-right:auto;padding-top:72px; box-sizing:border-box; }
+
+  /* LEFT PANEL */
+  .panel{
+    width:380px;
+    padding:22px;
+    border-radius:16px;
+    background:var(--panel-bg);
+    backdrop-filter:blur(14px) saturate(160%);
+    border:1px solid var(--glass-border);
+    box-shadow:0 15px 40px rgba(2,6,23,0.06);
+    display:flex;flex-direction:column;
+    gap:10px;
+  }
+  h3{margin:0;font-size:18px;font-weight:700;color:#06203a}
+  .hint{font-size:13px;color:#123445;margin-top:4px}
+  label{font-weight:600;margin-top:12px;font-size:13px;color:#123445}
+  select,input,button{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(180,190,210,0.4);background:rgba(255,255,255,0.88);font-size:14px;outline:none}
+  .row{display:flex;gap:8px}
+  .row .half{flex:1}
+  .small{font-size:13px;color:#274556;margin-top:6px}
+
+  /* BUTTON STYLES */
+  .btn{cursor:pointer;border-radius:12px;padding:10px 12px;border:0;font-weight:700}
+  .primary{background:linear-gradient(135deg,#4e89ff,#2978ff);color:white;box-shadow:0 10px 30px rgba(41,120,255,0.14)}
+  .ghost{background:rgba(255,255,255,0.9);border:1px solid rgba(180,190,210,0.45);color:#08324d}
+
+  /* PREVIEW COLUMN */
+  .canvas-wrap{flex:1;display:flex;flex-direction:column;gap:10px;align-items:center}
+  .canvas-card{
+    width:100%;max-width:980px;background:linear-gradient(180deg,#0b1220,#071426);padding:18px;border-radius:16px;
+    display:flex;flex-direction:column;align-items:center;box-shadow:0 18px 60px rgba(2,6,23,0.45);
+  }
+  canvas{border-radius:12px;background:#000;display:block;max-width:100%;height:auto;cursor:grab;box-sizing:border-box}
+  canvas:active{cursor:grabbing}
+
+  .controls{ width:100%;display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:8px }
+  .meta{ color:#cfe4ff;font-size:13px; }
+
+  /* Toast */
+  .toast{ position:fixed;right:20px;bottom:20px;background:#072a3a;color:white;padding:12px 16px;border-radius:10px; box-shadow:0 8px 30px rgba(2,6,23,0.18); display:none; z-index:80; }
+
+  /* Modal */
+  .modal-backdrop{
+    position:fixed; inset:0; background:var(--modal-backdrop); display:none; align-items:center; justify-content:center; z-index:120;
+    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  }
+  .modal{
+    width:calc(100% - 40px); max-width:920px; border-radius:12px; padding:16px; background:var(--modal-bg); box-shadow:0 20px 60px rgba(2,6,23,0.6);
+    color:var(--text); max-height:80vh; overflow:auto;
+  }
+  .modal h4{margin:0 0 8px 0}
+  .modal .row-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px }
+
+  .thumb{ border-radius:10px; overflow:hidden; border:1px solid #e6eefc; background:#fff; cursor:pointer; padding:6px; text-align:center }
+  .thumb img{ width:100%; display:block; height:90px; object-fit:cover; border-radius:6px }
+
+  /* small control chips */
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .chip{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,0.95);border:1px solid rgba(0,0,0,0.06);cursor:pointer;font-weight:600}
+  .chip.active{box-shadow:0 8px 18px rgba(41,120,255,0.12);background:linear-gradient(90deg,#9ec5ff,#62a6ff);color:#041c3a}
+
+  /* responsive */
+  @media(max-width:980px){
+    body{padding:12px}
+    .sidebar{position:fixed;left:12px;top:auto;bottom:12px;width:calc(100% - 24px);height:auto;display:flex;flex-direction:row;gap:8px;padding:10px;z-index:70;overflow:auto}
+    .panel{width:100%}
+    .main{margin-top:24px}
+    .topbar{display:none}
+    .canvas-card{padding:10px}
+  }
+
+  /* dark theme */
+  body.dark{
+    --bg-1: linear-gradient(180deg,#071426,#03101a);
+    --panel-bg: rgba(7,16,30,0.55);
+    --text: #e6f2ff;
+    --accent: #38bdf8;
+    --glass-border: rgba(255,255,255,0.06);
+    --modal-bg: #071426;
+    --modal-backdrop: rgba(0,0,0,0.6);
+  }
+  body.dark .modal{ color:var(--text); background: #071426; }
+  body.dark .logo{ box-shadow:0 6px 18px rgba(0,0,0,0.6) }
+
+</style>
+</head>
+<body>
+  <!-- TOP NAV -->
+  <div class="topbar" role="banner">
+    <div class="brand">
+      <div class="logo">PB</div>
+      <div>
+        <div class="brand-title">Paisabada OG Studio</div>
+        <div style="font-size:12px;color:rgba(3,22,35,0.7)">Create viral OG cards • modern name placement</div>
+      </div>
+    </div>
+
+    <div class="nav-actions" role="navigation">
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="toggle" title="Theme">
+          <label style="font-weight:600;font-size:13px;color:#06203a;margin-right:8px">Theme</label>
+          <select id="themeSelect" style="padding:6px;border-radius:8px;border:0;background:transparent">
+            <option value="blue">Blue</option>
+            <option value="gold">Gold</option>
+            <option value="sunset">Sunset</option>
+            <option value="minimal">Minimal</option>
+          </select>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="modeToggle" class="icon-btn" title="Toggle dark/light" aria-pressed="false">🌙</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEFT SIDEBAR -->
+  <div class="sidebar" aria-hidden>
+    <button title="Upload template" id="uploadBtn">⬆️</button>
+    <button title="Templates" id="templatesBtn">📚</button>
+    <button title="History" id="historyBtn">🕘</button>
+    <div style="flex:1"></div>
+    <button title="Help" id="helpBtn">❓</button>
+  </div>
+
+  <!-- MAIN AREA -->
+  <div class="main" role="main">
+    <!-- LEFT PANEL -->
+    <div class="panel" id="controlPanel" aria-labelledby="editorHeading">
+      <h3 id="editorHeading">Editor</h3>
+      <div class="hint">Drag the name on the preview, or use sliders & chips for fine control.</div>
+
+      <label for="ogSelect">Select template</label>
+      <select id="ogSelect" aria-label="Select template"></select>
+
+      <label for="nameInput">Enter name</label>
+      <input id="nameInput" placeholder="Type name (e.g. Ravi)" maxlength="36" aria-label="Name"/>
+
+      <label>Font</label>
+      <div style="display:flex;gap:8px;">
+        <select id="fontSelect" style="flex:1">
+          <option value="Poppins">Poppins</option>
+          <option value="Inter">Inter</option>
+          <option value="Outfit">Outfit</option>
+          <option value="Montserrat">Montserrat</option>
+          <option value="Sora">Sora</option>
+        </select>
+        <select id="formatSelect" style="width:120px">
+          <option value="image/png">PNG</option>
+          <option value="image/jpeg">JPG</option>
+          <option value="image/webp">WEBP</option>
+        </select>
+      </div>
+
+      <label>Font scale (%)</label>
+      <input id="scaleSlider" type="range" min="50" max="200" value="100">
+
+      <label>Vertical offset</label>
+      <input id="offsetSlider" type="range" min="-300" max="300" value="0"/>
+      <div class="small">Drag canvas text or use slider for fine vertical placement</div>
+
+      <div class="chips" style="margin-top:12px">
+        <div class="chip" id="toggleGlow">Glow</div>
+        <div class="chip" id="toggleShadow">Drop Shadow</div>
+        <div class="chip" id="toggleStroke">Stroke</div>
+        <div class="chip" id="beforeAfterChip">Before/After</div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button id="applyBtn" class="btn primary">Preview</button>
+        <button id="downloadBtn" class="btn ghost">Download</button>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="saveBtn" class="btn ghost">Save</button>
+        <button id="resetBtn" class="btn ghost">Reset</button>
+      </div>
+
+      <div style="margin-top:14px">
+        <label for="uploadInputSmall">Upload your image</label>
+        <input id="uploadInputSmall" type="file" accept="image/*">
+        <div class="small" style="margin-top:8px">Tip: upload a square image for best results.</div>
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="canvas-wrap">
+      <div class="canvas-card" role="region" aria-label="Preview canvas">
+        <div class="skeleton" id="skeleton" style="display:none"></div>
+        <canvas id="ogCanvas" width="1200" height="630" aria-label="OG preview"></canvas>
+        <div class="controls" style="margin-top:10px">
+          <div class="meta" id="metaText">Preview: 1200 × 630</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div style="font-size:13px;color:#cfe4ff">Theme</div>
+            <div class="chip" id="themePreview">Blue</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:8px">
+        <div class="help">Drag → place → download. Works offline after load.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal backdrop (shared for templates/history/help) -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" id="modalContent" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Saved</div>
+
+<script>
+/* -------------- CONFIG & STATE -------------- */
+const templates = [
+  { id:'budget', label:'Budget Boss', src:'https://raw.githubusercontent.com/paisabada/Paisa_Personality_V1/refs/heads/main/budget_boss_og.png', def:{x:600,y:470,font:120} },
+  { id:'risky', label:'Risky Rockstar', src:'https://raw.githubusercontent.com/paisabada/Paisa_Personality_V1/refs/heads/main/risky_rockstar_og.png', def:{x:600,y:380,font:120} },
+  { id:'panda', label:'Investor Panda', src:'https://raw.githubusercontent.com/paisabada/Paisa_Personality_V1/refs/heads/main/investor_panda_og.png', def:{x:600,y:500,font:120} }
+];
+const storageHistoryKey = 'paisabada_og_history_v1';
+const storagePrefsKey = 'paisabada_pro_v1';
+const maxHistory = 16;
+
+const canvas = document.getElementById('ogCanvas');
+const ctx = canvas.getContext('2d', { alpha:false });
+
+/* UI elements */
+const ogSelect = document.getElementById('ogSelect');
+const nameInput = document.getElementById('nameInput');
+const offsetSlider = document.getElementById('offsetSlider');
+const scaleSlider = document.getElementById('scaleSlider');
+const applyBtn = document.getElementById('applyBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const resetBtn = document.getElementById('resetBtn');
+const saveBtn = document.getElementById('saveBtn');
+const skeleton = document.getElementById('skeleton');
+const themeSelect = document.getElementById('themeSelect');
+const themePreview = document.getElementById('themePreview');
+const fontSelect = document.getElementById('fontSelect');
+const formatSelect = document.getElementById('formatSelect');
+const toggleGlow = document.getElementById('toggleGlow');
+const toggleShadow = document.getElementById('toggleShadow');
+const toggleStroke = document.getElementById('toggleStroke');
+const beforeAfterChip = document.getElementById('beforeAfterChip');
+const templatesBtn = document.getElementById('templatesBtn');
+const historyBtn = document.getElementById('historyBtn');
+const helpBtn = document.getElementById('helpBtn');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalContent = document.getElementById('modalContent');
+const uploadBtn = document.getElementById('uploadBtn');
+const uploadInputSmall = document.getElementById('uploadInputSmall');
+const modeToggle = document.getElementById('modeToggle');
+const toast = document.getElementById('toast');
+
+/* persistent saved prefs */
+let prefs = {};
+try{ prefs = JSON.parse(localStorage.getItem(storagePrefsKey) || '{}'); } catch(e){ prefs = {}; }
+
+/* runtime state */
+let current = { img:null, cfg:null };
+let state = {
+  offset:0, scalePct:100, fontFamily:'Poppins', glow:false, shadow:false, stroke:true, beforeAfter:false
+};
+
+/* history */
+let historyArr = [];
+try { historyArr = JSON.parse(localStorage.getItem(storageHistoryKey) || '[]'); } catch(e){ historyArr = []; }
+
+/* -------------- UTIL -------------- */
+function showToast(txt='Saved'){
+  toast.textContent = txt;
+  toast.style.display = 'block';
+  setTimeout(()=> { toast.style.display = 'none'; }, 1400);
+}
+function openModal(html){
+  modalContent.innerHTML = html;
+  modalBackdrop.style.display = 'flex';
+  modalBackdrop.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modalBackdrop.style.display = 'none';
+  modalBackdrop.setAttribute('aria-hidden','true');
+  modalContent.innerHTML = '';
+  document.body.style.overflow = '';
+}
+modalBackdrop.addEventListener('click', (e)=> {
+  if(e.target === modalBackdrop) closeModal();
+});
+
+/* -------------- POPULATE SELECT -------------- */
+function populateTemplateSelect(){
+  ogSelect.innerHTML = '';
+  templates.forEach(t => {
+    const o = document.createElement('option'); o.value = t.id; o.textContent = t.label;
+    ogSelect.appendChild(o);
+  });
+}
+populateTemplateSelect();
+
+/* -------------- IMAGE LOADING -------------- */
+function loadImage(cfg){
+  skeleton.style.display = 'block';
+  canvas.style.display = 'none';
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    current = { img, cfg };
+    // restore prefs for this template if present
+    const savedPrefs = prefs[cfg.id] || {};
+    state.offset = savedPrefs.offset || 0;
+    state.scalePct = savedPrefs.scalePct || 100;
+    state.fontFamily = savedPrefs.fontFamily || state.fontFamily;
+    state.glow = !!savedPrefs.glow;
+    state.shadow = !!savedPrefs.shadow;
+    state.stroke = savedPrefs.stroke === undefined ? true : !!savedPrefs.stroke;
+
+    // sync UI
+    offsetSlider.value = state.offset;
+    scaleSlider.value = state.scalePct;
+    fontSelect.value = state.fontFamily;
+    toggleGlow.classList.toggle('active', state.glow);
+    toggleShadow.classList.toggle('active', state.shadow);
+    toggleStroke.classList.toggle('active', state.stroke);
+
+    setTimeout(()=> {
+      skeleton.style.display = 'none';
+      canvas.style.display = 'block';
+      render();
+    }, 180);
+  };
+  img.onerror = () => {
+    skeleton.style.display = 'none';
+    canvas.style.display = 'block';
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#ddd'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#333'; ctx.font = '18px Inter'; ctx.textAlign = 'center';
+    ctx.fillText('Failed to load image', canvas.width/2, canvas.height/2);
+  };
+  img.src = cfg.src;
+}
+
+/* -------------- DRAW HELPERS -------------- */
+function drawContain(img){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+  const iw = img.width * scale, ih = img.height * scale;
+  const ix = (canvas.width - iw)/2, iy = (canvas.height - ih)/2;
+  ctx.drawImage(img, ix, iy, iw, ih);
+  return {ix,iy,iw,ih,scale};
+}
+
+function drawName(cfg){
+  const name = nameInput.value.trim();
+  if(!name) return;
+  const offset = Number(offsetSlider.value || 0);
+  const scalePct = Number(scaleSlider.value || 100)/100;
+  let baseFont = (cfg && cfg.def && cfg.def.font) ? cfg.def.font : 120;
+  baseFont = Math.round(baseFont * scalePct);
+  ctx.font = `700 ${baseFont}px ${state.fontFamily}, Poppins, Arial`;
+  let measured = ctx.measureText(name).width;
+  const maxW = canvas.width * 0.86;
+  while(measured > maxW && baseFont > 18){
+    baseFont -= 4;
+    ctx.font = `700 ${baseFont}px ${state.fontFamily}, Poppins, Arial`;
+    measured = ctx.measureText(name).width;
+  }
+  const x = (cfg && cfg.def && cfg.def.x) ? cfg.def.x : canvas.width/2;
+  const y = ((cfg && cfg.def && cfg.def.y) ? cfg.def.y : canvas.height*0.6) + offset;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  if(state.shadow){
+    ctx.shadowColor = 'rgba(0,0,0,0.45)';
+    ctx.shadowBlur = Math.max(6, baseFont*0.08);
+    ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 3;
+  } else {
+    ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+  }
+  if(state.stroke){
+    ctx.lineWidth = Math.max(2, Math.round(baseFont * 0.06));
+    ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+    ctx.strokeText(name, x, y);
+  }
+  if(state.glow){
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = '#8fd4ff';
+    ctx.shadowColor = '#62a6ff';
+    ctx.shadowBlur = Math.max(6, baseFont*0.18);
+    ctx.fillText(name, x, y);
+    ctx.restore();
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(name, x, y);
+  } else {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(name, x, y);
+  }
+  ctx.shadowBlur = 0;
+}
+
+/* -------------- RENDER -------------- */
+function render(){
+  if(!current.img || !current.cfg) return;
+  drawContain(current.img);
+  if(!state.beforeAfter) drawName(current.cfg);
+  document.getElementById('metaText').textContent = `Preview: ${canvas.width} × ${canvas.height}`;
+  themePreview.textContent = themeSelect.value.charAt(0).toUpperCase() + themeSelect.value.slice(1);
+}
+
+/* -------------- EVENTS -------------- */
+ogSelect.addEventListener('change', ()=> {
+  const id = ogSelect.value;
+  const cfg = templates.find(t=>t.id === id);
+  if(cfg) loadImage(cfg);
+});
+
+// UI interactions
+nameInput.addEventListener('input', render);
+offsetSlider.addEventListener('input', ()=> { state.offset = Number(offsetSlider.value); render(); });
+scaleSlider.addEventListener('input', ()=> { state.scalePct = Number(scaleSlider.value); render(); });
+fontSelect.addEventListener('change', ()=> { state.fontFamily = fontSelect.value; render(); });
+
+toggleGlow.addEventListener('click', ()=> { state.glow = !state.glow; toggleGlow.classList.toggle('active', state.glow); render(); });
+toggleShadow.addEventListener('click', ()=> { state.shadow = !state.shadow; toggleShadow.classList.toggle('active', state.shadow); render(); });
+toggleStroke.addEventListener('click', ()=> { state.stroke = !state.stroke; toggleStroke.classList.toggle('active', state.stroke); render(); });
+beforeAfterChip.addEventListener('click', ()=> { state.beforeAfter = !state.beforeAfter; beforeAfterChip.classList.toggle('active', state.beforeAfter); render(); });
+
+themeSelect.addEventListener('change', ()=>{
+  const t = themeSelect.value;
+  if(t==='blue'){ document.documentElement.style.setProperty('--accent','#2978ff'); document.querySelector('.logo').style.background='linear-gradient(135deg,#4e89ff,#2978ff)'; }
+  else if(t==='gold'){ document.documentElement.style.setProperty('--accent','#ffb86b'); document.querySelector('.logo').style.background='linear-gradient(135deg,#ffd27f,#ff9a3c)'; }
+  else if(t==='sunset'){ document.documentElement.style.setProperty('--accent','#ff6b6b'); document.querySelector('.logo').style.background='linear-gradient(135deg,#ff8a8a,#ff6b6b)'; }
+  else { document.documentElement.style.setProperty('--accent','#6b7280'); document.querySelector('.logo').style.background='linear-gradient(135deg,#ffffff,#e6e6e6)'; }
+  themePreview.textContent = t.charAt(0).toUpperCase()+t.slice(1);
+});
+
+// dark mode
+modeToggle.addEventListener('click', ()=>{
+  const isDark = document.body.classList.toggle('dark');
+  modeToggle.textContent = isDark ? '☀️' : '🌙';
+  modeToggle.setAttribute('aria-pressed', String(isDark));
+});
+
+// Download
+downloadBtn.addEventListener('click', ()=>{
+  render();
+  const mime = (formatSelect && formatSelect.value) ? formatSelect.value : 'image/png';
+  let dataURL;
+  if(mime === 'image/jpeg') dataURL = canvas.toDataURL('image/jpeg', 0.92);
+  else dataURL = canvas.toDataURL(mime);
+  const a = document.createElement('a');
+  a.href = dataURL;
+  a.download = 'paisabada_og.' + (mime==='image/png'?'png': mime==='image/webp'?'webp':'jpg');
+  a.click();
+});
+
+// Save to history
+function pushHistory(entry){
+  historyArr.unshift(entry);
+  if(historyArr.length > maxHistory) historyArr.length = maxHistory;
+  localStorage.setItem(storageHistoryKey, JSON.stringify(historyArr));
+  showToast('Saved to History');
+}
+saveBtn.addEventListener('click', ()=> {
+  if(!current.cfg) return;
+  render();
+  const thumb = canvas.toDataURL('image/png');
+  const cfg = {
+    cfgId: current.cfg.id || ('uploaded_'+Date.now()),
+    label: current.cfg.label || current.cfg.id || 'Custom',
+    name: nameInput.value,
+    fontFamily: state.fontFamily,
+    offset: Number(offsetSlider.value || 0),
+    scalePct: Number(scaleSlider.value || 100),
+    glow: state.glow, shadow: state.shadow, stroke: state.stroke,
+    imgSrc: current.cfg.src || (current.img ? current.img.src : '')
+  };
+  pushHistory({ thumb, cfg, created: Date.now() });
+});
+
+// Reset
+resetBtn.addEventListener('click', ()=>{
+  if(!current.cfg) return;
+  const id = current.cfg.id;
+  if(prefs[id]) delete prefs[id];
+  localStorage.setItem(storagePrefsKey, JSON.stringify(prefs));
+  offsetSlider.value = 0; scaleSlider.value = 100; nameInput.value = '';
+  toggleGlow.classList.remove('active'); toggleShadow.classList.remove('active'); toggleStroke.classList.add('active');
+  state = Object.assign(state, { offset:0, scalePct:100, glow:false, shadow:false, stroke:true, fontFamily:'Poppins' });
+  fontSelect.value = 'Poppins';
+  render();
+  showToast('Reset done');
+});
+
+// persist small prefs when user changes them (debounced)
+let prefTimer = null;
+function savePrefsDebounced(){
+  if(!current.cfg) return;
+  clearTimeout(prefTimer);
+  prefTimer = setTimeout(()=>{
+    const id = current.cfg.id;
+    prefs[id] = prefs[id] || {};
+    prefs[id].offset = Number(offsetSlider.value || 0);
+    prefs[id].scalePct = Number(scaleSlider.value || 100);
+    prefs[id].fontFamily = fontSelect.value;
+    prefs[id].glow = state.glow; prefs[id].shadow = state.shadow; prefs[id].stroke = state.stroke;
+    localStorage.setItem(storagePrefsKey, JSON.stringify(prefs));
+  }, 350);
+}
+[offsetSlider, scaleSlider, fontSelect].forEach(el => el.addEventListener('input', savePrefsDebounced));
+[toggleGlow, toggleShadow, toggleStroke].forEach(el => el.addEventListener('click', savePrefsDebounced));
+
+// Drag to move text
+let dragging = false, pointerOffset = {x:0,y:0};
+canvas.addEventListener('pointerdown', (e)=> {
+  if(!current.cfg) return;
+  const rect = canvas.getBoundingClientRect();
+  const px = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const py = (e.clientY - rect.top) * (canvas.height / rect.height);
+  const name = nameInput.value.trim();
+  if(!name) return;
+  const cfg = current.cfg;
+  const offset = Number(offsetSlider.value || 0);
+  const scalePct = Number(scaleSlider.value || 100)/100;
+  let baseFont = (cfg && cfg.def && cfg.def.font) ? cfg.def.font : 120;
+  baseFont = Math.round(baseFont * scalePct);
+  ctx.font = `700 ${baseFont}px ${state.fontFamily}`;
+  const measured = ctx.measureText(name).width;
+  const x = (cfg.def && cfg.def.x) ? cfg.def.x : canvas.width/2;
+  const y = ((cfg.def && cfg.def.y) ? cfg.def.y : canvas.height*0.6) + offset;
+  const halfW = measured/2;
+  const halfH = baseFont/2;
+  if(px >= x-halfW && px <= x+halfW && py >= y-halfH && py <= y+halfH){
+    dragging = true;
+    pointerOffset.x = px - x;
+    pointerOffset.y = py - y;
+    canvas.setPointerCapture(e.pointerId);
+  }
+});
+canvas.addEventListener('pointermove', (e)=>{
+  if(!dragging || !current.cfg) return;
+  const rect = canvas.getBoundingClientRect();
+  const px = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const py = (e.clientY - rect.top) * (canvas.height / rect.height);
+  current.cfg.def.x = px - pointerOffset.x;
+  current.cfg.def.y = py - pointerOffset.y;
+  render();
+});
+canvas.addEventListener('pointerup', (e)=>{
+  if(dragging){
+    dragging = false;
+    if(current && current.cfg){
+      const id = current.cfg.id;
+      prefs[id] = prefs[id] || {};
+      prefs[id].x = current.cfg.def.x; prefs[id].y = current.cfg.def.y;
+      localStorage.setItem(storagePrefsKey, JSON.stringify(prefs));
+      savePrefsDebounced();
+    }
+  }
+});
+canvas.addEventListener('pointercancel', ()=> dragging = false);
+
+// keyboard nudges + quick save
+window.addEventListener('keydown', (e)=>{
+  if(!current.cfg) return;
+  if(e.key === 'ArrowUp'){ current.cfg.def.y -= 6; render(); savePrefsDebounced(); }
+  if(e.key === 'ArrowDown'){ current.cfg.def.y += 6; render(); savePrefsDebounced(); }
+  if(e.key === 'ArrowLeft'){ current.cfg.def.x -= 6; render(); savePrefsDebounced(); }
+  if(e.key === 'ArrowRight'){ current.cfg.def.x += 6; render(); savePrefsDebounced(); }
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){ e.preventDefault(); saveBtn.click(); }
+});
+
+/* -------------- TEMPLATES MODAL -------------- */
+templatesBtn.addEventListener('click', ()=>{
+  let html = '<h4>Templates</h4><div class="row-grid" style="margin-top:12px">';
+  templates.forEach(t => {
+    html += `<div class="thumb" data-id="${t.id}" title="${t.label}"><img src="${t.src}" alt="${t.label}"><div style="padding-top:8px;font-weight:700">${t.label}</div></div>`;
+  });
+  html += '</div><div style="display:flex;gap:8px;margin-top:14px;justify-content:flex-end"><button id="closeTemplates" class="btn ghost">Close</button></div>';
+  openModal(html);
+  modalContent.querySelectorAll('.thumb').forEach(node => {
+    node.addEventListener('click', ()=> {
+      const id = node.getAttribute('data-id');
+      const cfg = templates.find(x=>x.id === id);
+      if(cfg){
+        // select in dropdown (if missing, add)
+        if(!Array.from(ogSelect.options).some(o=>o.value===id)){
+          const opt = document.createElement('option'); opt.value = id; opt.textContent = cfg.label; ogSelect.appendChild(opt);
+        }
+        ogSelect.value = id;
+        loadImage(cfg);
+      }
+      closeModal();
+    });
+  });
+  document.getElementById('closeTemplates').addEventListener('click', closeModal);
+});
+
+/* -------------- HISTORY MODAL -------------- */
+historyBtn.addEventListener('click', ()=>{
+  const arr = JSON.parse(localStorage.getItem(storageHistoryKey) || '[]');
+  if(!arr || arr.length === 0){
+    openModal('<h4>History</h4><div style="padding:12px 0">No saved designs yet. Use <strong>Save</strong> to add designs to History.</div><div style="display:flex;justify-content:flex-end;margin-top:12px"><button id="closeEmptyHistory" class="btn ghost">Close</button></div>');
+    document.getElementById('closeEmptyHistory').addEventListener('click', closeModal);
+    return;
+  }
+  let html = '<h4>History (click to restore)</h4><div class="row-grid" style="margin-top:12px">';
+  arr.forEach((it, idx) => {
+    html += `<div class="thumb" data-idx="${idx}"><img src="${it.thumb}" alt="saved"><div style="padding-top:8px;font-weight:600;font-size:13px">${(it.cfg && it.cfg.label) ? it.cfg.label : 'Saved' }</div></div>`;
+  });
+  html += `</div><div style="display:flex;gap:8px;margin-top:12px;justify-content:space-between"><button id="clearHistory" class="btn ghost">Clear all</button><div><button id="closeHistory" class="btn ghost">Close</button></div></div>`;
+  openModal(html);
+
+  modalContent.querySelectorAll('.thumb').forEach(node => {
+    node.addEventListener('click', ()=>{
+      const idx = Number(node.getAttribute('data-idx'));
+      const item = arr[idx];
+      if(!item) return;
+      // create an object to load (if image is from saved, use its imgSrc)
+      const id = item.cfg && item.cfg.cfgId ? item.cfg.cfgId : ('hist_'+Date.now());
+      const obj = { id, label: item.cfg.label || 'Restored', src: item.cfg.imgSrc || item.thumb, def: { x: item.cfg.x || canvas.width/2, y: item.cfg.y || canvas.height*0.6, font: item.cfg.font || 120 } };
+      // add to templates if not present
+      if(!templates.find(t=>t.id === id)){
+        templates.unshift(obj);
+        populateTemplateSelect();
+        // prepend select option
+        const opt = document.createElement('option'); opt.value = obj.id; opt.textContent = obj.label;
+        ogSelect.prepend(opt);
+      }
+      ogSelect.value = obj.id;
+      loadImage(obj);
+      nameInput.value = item.cfg.name || '';
+      fontSelect.value = item.cfg.fontFamily || 'Poppins';
+      offsetSlider.value = item.cfg.offset || 0;
+      scaleSlider.value = item.cfg.scalePct || 100;
+      toggleGlow.classList.toggle('active', !!item.cfg.glow);
+      toggleShadow.classList.toggle('active', !!item.cfg.shadow);
+      toggleStroke.classList.toggle('active', item.cfg.stroke === undefined ? true : !!item.cfg.stroke);
+      state.glow = !!item.cfg.glow; state.shadow = !!item.cfg.shadow; state.stroke = item.cfg.stroke === undefined ? true : !!item.cfg.stroke;
+      closeModal();
+    });
+  });
+
+  document.getElementById('clearHistory').addEventListener('click', ()=>{
+    if(!confirm('Clear saved history?')) return;
+    localStorage.removeItem(storageHistoryKey);
+    historyArr = [];
+    closeModal();
+    showToast('History cleared');
+  });
+  document.getElementById('closeHistory').addEventListener('click', closeModal);
+});
+
+/* -------------- HELP MODAL -------------- */
+helpBtn.addEventListener('click', ()=>{
+  const html = `
+    <h4>How to use Paisabada OG Studio</h4>
+    <div style="font-size:14px;color:#334;margin-top:8px;line-height:1.4">
+      <ol>
+        <li>Select a template from the dropdown or open <strong>Templates</strong>.</li>
+        <li>Type a name in the editor, then use <strong>Font scale</strong> or drag the text in preview to position.</li>
+        <li>Toggle <em>Glow / Drop Shadow / Stroke</em> for visual styles.</li>
+        <li>Click <strong>Save</strong> to save a copy to History, or <strong>Download</strong> to export the image.</li>
+        <li>Use <strong>Upload</strong> to add your own background image; it will be added as a template.</li>
+      </ol>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button id="closeHelp" class="btn ghost">Close</button></div>
+  `;
+  openModal(html);
+  document.getElementById('closeHelp').addEventListener('click', closeModal);
+});
+
+/* -------------- UPLOAD (sidebar + small input) -------------- */
+function handleUploadFile(file){
+  if(!file) return;
+  const url = URL.createObjectURL(file);
+  const id = 'uploaded_' + Date.now();
+  const obj = { id, label: file.name, src: url, def:{ x: canvas.width/2, y: canvas.height*0.6, font:120 } };
+  templates.unshift(obj);
+  populateTemplateSelect();
+  // add option to select
+  const opt = document.createElement('option'); opt.value = id; opt.textContent = file.name;
+  ogSelect.prepend(opt);
+  ogSelect.value = id;
+  loadImage(obj);
+}
+uploadBtn.addEventListener('click', ()=> {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'image/*';
+  inp.onchange = (ev)=> handleUploadFile(ev.target.files[0]);
+  inp.click();
+});
+uploadInputSmall.addEventListener('change', (e)=> handleUploadFile(e.target.files[0]));
+
+/* -------------- INIT -------------- */
+(function init(){
+  // set default template options
+  populateTemplateSelect();
+  // default select
+  if(templates.length) {
+    ogSelect.value = templates[0].id;
+    loadImage(templates[0]);
+  }
+
+  // ensure toggles in initial state
+  toggleStroke.classList.add('active');
+
+  // restore history if any
+  try { historyArr = JSON.parse(localStorage.getItem(storageHistoryKey) || '[]'); } catch(e){ historyArr = []; }
+})();
+</script>
+</body>
+</html>

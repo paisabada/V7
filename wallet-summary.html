@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | Wallet Summary</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;
+  --navy:#002b5b;
+  --gold:#f4c430;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+
+/* Page background */
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:24px 12px;
+  box-sizing:border-box;
+}
+
+/* Main shell */
+.shell{
+  width:100%;
+  max-width:960px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+  animation:fadeUp .45s ease-out;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Header hero */
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:18px 24px 20px;
+  color:#fff;
+}
+.header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+.back-btn{
+  border:none;
+  border-radius:999px;
+  padding:6px 12px;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-size:12px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.header-left{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.head-title{
+  font-size:20px;
+  font-weight:600;
+}
+.head-sub{
+  font-size:12px;
+  opacity:.9;
+}
+
+/* Hero right side */
+.hero-right{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:8px;
+}
+.coins-hero-card{
+  min-width:180px;
+  background:rgba(255,255,255,.18);
+  border-radius:18px;
+  padding:10px 12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.25);
+  position:relative;
+}
+.coins-hero-card::before{
+  content:"";
+  position:absolute;
+  inset:-12px;
+  border-radius:24px;
+  background:radial-gradient(circle,rgba(255,255,255,.3),transparent 60%);
+  z-index:-1;
+}
+.coins-label{
+  font-size:11px;
+  opacity:.9;
+}
+.coins-main{
+  font-size:24px;
+  font-weight:700;
+}
+.coins-sub{
+  font-size:11px;
+  opacity:.9;
+}
+.wallet-tag{
+  font-size:11px;
+  border-radius:999px;
+  padding:4px 10px;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.3);
+}
+
+/* XP & streak row */
+.header-bottom{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:12px;
+}
+.xp-block{
+  flex:1;
+  min-width:220px;
+}
+.xp-label{
+  font-size:11px;
+  opacity:.85;
+}
+.xp-bar{
+  margin-top:5px;
+  width:100%;
+  height:6px;
+  border-radius:999px;
+  background:rgba(255,255,255,.25);
+  overflow:hidden;
+}
+.xp-fill{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  background:linear-gradient(90deg,#9af7ec,#ffffff);
+  transition:width .6s ease-out;
+}
+.xp-level{
+  margin-top:4px;
+  font-size:11px;
+}
+.streak-block{
+  font-size:11px;
+  min-width:150px;
+}
+.streak-coins{
+  margin-top:3px;
+}
+
+/* Content */
+.content{
+  padding:18px 22px 22px;
+}
+
+/* Cards grid */
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;
+}
+.card{
+  background:#ffffff;
+  border-radius:16px;
+  border:1px solid #e4edf9;
+  box-shadow:0 8px 20px rgba(15,23,42,.06);
+  padding:12px 14px;
+  font-size:12px;
+}
+.card-title{
+  font-size:14px;
+  font-weight:600;
+  color:#111827;
+  margin-bottom:4px;
+}
+.card-sub{
+  font-size:11px;
+  color:#6b7280;
+  margin-bottom:8px;
+}
+.key-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:4px;
+}
+.key-label{
+  color:#6b7280;
+}
+.key-value{
+  font-weight:600;
+}
+
+/* small pill items */
+.pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:4px;
+}
+.pill{
+  font-size:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#eef2ff;
+  color:#374151;
+}
+
+/* last selection */
+.selection-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:11px;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#eff6ff;
+  color:#1d4ed8;
+  margin-bottom:6px;
+}
+
+/* actions row */
+.actions-row{
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.primary-btn{
+  border:none;
+  border-radius:999px;
+  padding:7px 14px;
+  font-size:12px;
+  font-weight:600;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  color:#fff;
+  cursor:pointer;
+}
+.outline-btn{
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:11px;
+  background:#fff;
+  border:1px solid #d1d5db;
+  cursor:pointer;
+}
+
+/* help list */
+.help-list{
+  margin:6px 0 0;
+  padding-left:17px;
+  font-size:11px;
+  color:#4b5563;
+}
+
+/* empty state */
+.empty-msg{
+  font-size:12px;
+  color:#6b7280;
+}
+
+/* small footer note */
+.footer-note{
+  margin-top:14px;
+  font-size:10px;
+  color:#9ca3af;
+}
+
+/* responsive */
+@media(max-width:640px){
+  .header{
+    padding:16px 18px 18px;
+  }
+  .content{
+    padding:14px 14px 18px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- HEADER HERO -->
+  <div class="header">
+    <div class="header-top">
+      <div class="header-left">
+        <button class="back-btn" onclick="goBack()">← Back to Wallet</button>
+        <div class="head-title" id="headTitle">Your Paisabada Wallet</div>
+        <div class="head-sub" id="headSub">
+          See how your coins, XP and rewards are working across all products.
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="wallet-tag" id="walletTypeTag">Paisabada Rewards Wallet</div>
+        <div class="coins-hero-card">
+          <div class="coins-label">Available coins</div>
+          <div class="coins-main" id="coinsMain">0</div>
+          <div class="coins-sub" id="coinsApprox">Approx ₹0 savings potential</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-bottom">
+      <div class="xp-block">
+        <div class="xp-label">XP Progress</div>
+        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+        <div class="xp-level" id="xpLevelText"></div>
+      </div>
+      <div class="streak-block" id="streakBlock">
+        <!-- Filled via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="cards-grid">
+
+      <!-- Wallet details card -->
+      <div class="card">
+        <div class="card-title">Wallet details</div>
+        <div class="card-sub">
+          Your coins can be used directly on premium payments across health, car, bike, term and travel.
+        </div>
+
+        <div class="key-row">
+          <div class="key-label">Coins balance</div>
+          <div class="key-value" id="wdCoins">–</div>
+        </div>
+        <div class="key-row">
+          <div class="key-label">Savings potential</div>
+          <div class="key-value" id="wdSavings">–</div>
+        </div>
+        <div class="key-row">
+          <div class="key-label">Wallet type</div>
+          <div class="key-value" id="wdType">–</div>
+        </div>
+
+        <div class="pills">
+          <span class="pill">1 coin = approx ₹1 saving (configurable)</span>
+          <span class="pill">Works on new policies & renewals</span>
+        </div>
+
+        <div class="actions-row">
+          <button class="primary-btn" onclick="openWalletHome()">Use coins on products</button>
+          <button class="outline-btn" onclick="openHealth()">Try on health plans</button>
+        </div>
+      </div>
+
+      <!-- XP & levels card -->
+      <div class="card">
+        <div class="card-title">XP, levels & streak</div>
+        <div class="card-sub">
+          Higher XP unlocks better offers, early access campaigns and higher coin earning rate.
+        </div>
+
+        <div class="key-row">
+          <div class="key-label">XP earned</div>
+          <div class="key-value" id="xpValue">–</div>
+        </div>
+        <div class="key-row">
+          <div class="key-label">Current level</div>
+          <div class="key-value" id="xpLevelLabel">–</div>
+        </div>
+        <div class="key-row">
+          <div class="key-label">XP to next level</div>
+          <div class="key-value" id="xpToNext">–</div>
+        </div>
+
+        <div id="streakMini"></div>
+
+        <ul class="help-list">
+          <li>Earn XP by completing quizzes, buying/renewing policies.</li>
+          <li>Maintain streak to unlock bonus coin drops.</li>
+        </ul>
+      </div>
+
+      <!-- Last selection / usage card -->
+      <div class="card">
+        <div class="card-title">Last product you explored</div>
+        <div class="card-sub">
+          See where you last applied your coins and continue from there.
+        </div>
+
+        <div id="lastSelectionBlock">
+          <div class="empty-msg">
+            No recent product selection found. Start from wallet page to see here.
+          </div>
+        </div>
+
+        <div class="actions-row" id="lastSelectionActions" style="display:none;">
+          <button class="primary-btn" id="continueBtn">Continue where I left</button>
+          <button class="outline-btn" onclick="clearLastSelection()">Clear last selection</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">How Paisabada Coins work</div>
+      <ul class="help-list">
+        <li>Coins are earned on eligible actions (quizzes, spin & win, completing policies, referrals etc.).</li>
+        <li>At the time of payment, you can choose how many coins to apply – which reduces your payable premium.</li>
+        <li>Some products may have a max percentage discount (for example, 40% of premium).</li>
+        <li>In production, all rules will be shown clearly before you pay.</li>
+      </ul>
+      <div class="footer-note">
+        Note: This wallet summary is a product prototype. Live integration with insurers/payment will be added in production.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ----- Helpers -----
+function goBack(){
+  // back to main wallet UI
+  window.location.href = "wallet.html"; // change if your wallet file name is different
+}
+
+function openWalletHome(){
+  window.location.href = "wallet.html";
+}
+function openHealth(){
+  window.location.href = "health-insurance.html";
+}
+
+// Load user
+let user = null;
+try{
+  const raw = localStorage.getItem("pbUser");
+  if(raw) user = JSON.parse(raw);
+}catch(e){
+  console.error("Invalid pbUser", e);
+}
+
+if(!user){
+  // if not logged in, redirect to login
+  window.location.href = "login.html";
+}
+
+// Basic user info
+const coins = user.coins || 0;
+const xp = user.xp || 0;
+const streak = user.streak || 0;
+const walletType = user.walletType || "Paisabada Rewards Wallet";
+const name = user.name || "User";
+
+document.getElementById("headTitle").textContent =
+  name.split(" ")[0] + ", here’s your wallet summary";
+
+// approx value: simple 1 coin = ₹1 (you can change)
+const approxValue = coins;
+
+// Header hero
+document.getElementById("walletTypeTag").textContent = walletType;
+document.getElementById("coinsMain").textContent = coins.toLocaleString("en-IN");
+document.getElementById("coinsApprox").textContent =
+  "Approx ₹" + approxValue.toLocaleString("en-IN") + " savings potential";
+
+// Wallet details card
+document.getElementById("wdCoins").textContent = coins.toLocaleString("en-IN");
+document.getElementById("wdSavings").textContent =
+  "₹" + approxValue.toLocaleString("en-IN");
+document.getElementById("wdType").textContent = walletType;
+
+// XP / levels
+function getLevelLabel(){
+  if(xp >= 300) return "🥇 Gold Saver";
+  if(xp >= 100) return "🥈 Silver Saver";
+  return "🥉 Bronze Saver";
+}
+function getNextGoal(){
+  if(xp >= 300) return null;
+  if(xp >= 100) return 300;
+  return 100;
+}
+
+const levelLabel = getLevelLabel();
+const nextGoal = getNextGoal();
+
+// Fill XP bar
+const xpFill = document.getElementById("xpFill");
+const xpPercent = Math.min((xp/300)*100, 100);
+xpFill.style.width = xpPercent + "%";
+
+const xpLevelText = document.getElementById("xpLevelText");
+let xpLine = levelLabel + " • " + xp + " XP";
+if(nextGoal){
+  xpLine += " • " + (nextGoal - xp) + " XP to next level";
+}
+xpLevelText.textContent = xpLine;
+
+// XP card values
+document.getElementById("xpValue").textContent = xp + " XP";
+document.getElementById("xpLevelLabel").textContent = levelLabel;
+document.getElementById("xpToNext").textContent =
+  nextGoal ? (nextGoal - xp) + " XP" : "Max level reached";
+
+// Streak
+const streakBlock = document.getElementById("streakBlock");
+const streakMini = document.getElementById("streakMini");
+
+if(streak > 0){
+  let icons = "";
+  const count = Math.min(streak, 10);
+  for(let i=0;i<count;i++) icons += "🪙";
+  streakBlock.innerHTML =
+    `🔥 <strong>${streak}-day streak active</strong><div class="streak-coins">${icons}</div>`;
+  streakMini.innerHTML =
+    `<div style="margin-top:6px;font-size:11px;">Streak: <strong>${streak} days</strong> – keep it going to earn bonus coins.</div>`;
+}else{
+  streakBlock.textContent = "No active streak yet • Start using products and quizzes to build one.";
+  streakMini.innerHTML =
+    `<div style="margin-top:6px;font-size:11px;">Start your first streak by using wallet benefits this week.</div>`;
+}
+
+// ----- Last selection block -----
+const lastBlock = document.getElementById("lastSelectionBlock");
+const actions = document.getElementById("lastSelectionActions");
+const continueBtn = document.getElementById("continueBtn");
+
+let lastSelection = null;
+try{
+  const raw = localStorage.getItem("pbLastSelection");
+  if(raw) lastSelection = JSON.parse(raw);
+}catch(e){
+  console.error("Invalid pbLastSelection", e);
+}
+
+if(!lastSelection){
+  lastBlock.innerHTML = `
+    <div class="empty-msg">
+      No recent product selection found. Use the wallet page to pick a product – it will appear here.
+    </div>
+  `;
+  actions.style.display = "none";
+}else{
+  actions.style.display = "flex";
+
+  const productMap = {
+    health:"Health Insurance",
+    car:"Car Insurance",
+    bike:"2-Wheeler Insurance",
+    term:"Term Life Insurance",
+    travel:"Travel Insurance"
+  };
+  const productLabel = productMap[lastSelection.product] || "Insurance Product";
+
+  const plan = lastSelection.plan || {};
+  const base = plan.base || 0;
+  const discount = plan.discount || 0;
+  const finalPrem = plan.final || (base - discount);
+  const city = lastSelection.city || "Not provided";
+  const mobile = lastSelection.mobile || "Not provided";
+
+  let when = "";
+  if(lastSelection.time){
+    try{
+      const dt = new Date(lastSelection.time);
+      when = dt.toLocaleString();
+    }catch(e){
+      when = lastSelection.time;
+    }
+  }
+
+  lastBlock.innerHTML = `
+    <div class="selection-badge">
+      Last explored: ${productLabel}
+    </div>
+
+    <div class="key-row">
+      <div class="key-label">Plan name</div>
+      <div class="key-value">${plan.name || "N/A"}</div>
+    </div>
+    <div class="key-row">
+      <div class="key-label">Base premium</div>
+      <div class="key-value">${base ? "₹"+base.toLocaleString("en-IN") : "N/A"}</div>
+    </div>
+    <div class="key-row">
+      <div class="key-label">Coins applied</div>
+      <div class="key-value">
+        ${discount ? "₹"+discount.toLocaleString("en-IN")+" (from your coins)" : "No coins applied"}
+      </div>
+    </div>
+    <div class="key-row">
+      <div class="key-label">You pay</div>
+      <div class="key-value">
+        ${finalPrem ? "₹"+finalPrem.toLocaleString("en-IN") : "N/A"}
+      </div>
+    </div>
+    <div class="key-row">
+      <div class="key-label">City</div>
+      <div class="key-value">${city}</div>
+    </div>
+    <div class="key-row">
+      <div class="key-label">Mobile</div>
+      <div class="key-value">${mobile}</div>
+    </div>
+    <div class="key-row">
+      <div class="key-label">Last updated</div>
+      <div class="key-value">${when || "Just now"}</div>
+    </div>
+  `;
+
+  // Continue button logic
+  let targetUrl = "wallet.html";
+  switch(lastSelection.product){
+    case "health": targetUrl = "health-insurance.html"; break;
+    case "car": targetUrl = "car-insurance.html"; break;
+    case "bike": targetUrl = "two-wheeler-insurance.html"; break;
+    case "term": targetUrl = "term-life-insurance.html"; break;
+    case "travel": targetUrl = "travel-insurance.html"; break;
+  }
+
+  continueBtn.onclick = function(){
+    // pass coins and source
+    const query = `?coins=${encodeURIComponent(coins)}&source=wallet-summary`;
+    window.location.href = targetUrl + query;
+  };
+}
+
+function clearLastSelection(){
+  localStorage.removeItem("pbLastSelection");
+  location.reload();
+}
+</script>
+
+</body>
+</html>

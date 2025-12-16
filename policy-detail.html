@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Policy Detail</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+/* ---------------- GLOBAL ---------------- */
+body{
+  margin:0;
+  font-family: 'Poppins', Arial;
+  background:linear-gradient(135deg,#dff1ff,#f5f9ff,#e3f0ff);
+  padding:28px;
+}
+
+/* ---------------- CONTAINER ---------------- */
+.wrap{
+  max-width:950px;
+  margin:auto;
+  background:rgba(255,255,255,0.75);
+  border-radius:22px;
+  backdrop-filter:blur(12px);
+  padding:26px;
+  box-shadow:0 20px 45px rgba(0,0,0,0.08);
+  animation:fadeUp .4s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(25px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* ---------------- HEADER ---------------- */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+h2{
+  margin:0;
+  font-size:26px;
+  font-weight:700;
+  color:#0f172a;
+}
+.small{
+  font-size:13px;
+  color:#64748b;
+}
+
+/* ---------------- META CARDS ---------------- */
+.meta{
+  display:flex;
+  gap:18px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+.card{
+  background:white;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 8px 25px rgba(15,23,42,0.08);
+  border:1px solid #e5e7eb;
+  flex:1;
+  min-width:260px;
+  transition:0.25s;
+}
+.card:hover{
+  box-shadow:0 10px 28px rgba(15,23,42,0.12);
+  transform:translateY(-3px);
+}
+
+/* ---------------- METER ---------------- */
+.canvas-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:280px;
+  height:280px;
+}
+#multiSegmentMeter{
+  width:260px;
+  height:260px;
+}
+
+/* ---------------- LEGEND ---------------- */
+.legend-box{
+  margin-top:16px;
+  background:#ffffff;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(15,23,42,0.08);
+  border:1px solid #e5e7eb;
+}
+.legend-title{
+  font-weight:600;
+  font-size:15px;
+  margin-bottom:10px;
+  color:#0f172a;
+}
+.legend-item{
+  display:flex;
+  align-items:center;
+  margin-bottom:8px;
+  font-size:14px;
+  color:#334155;
+}
+.legend-color{
+  width:16px;
+  height:16px;
+  border-radius:4px;
+  margin-right:10px;
+}
+
+/* ---------------- BENEFITS ---------------- */
+.benefits{
+  margin-top:20px;
+  background:linear-gradient(135deg,#fff7ed,#fff3d6);
+  padding:18px;
+  border-radius:16px;
+  border:1px solid #fde2b5;
+  box-shadow:0 8px 20px rgba(251,146,60,0.15);
+}
+
+/* ---------------- BUTTONS ---------------- */
+.btn{
+  background:#0ea5e9;
+  color:white;
+  border:none;
+  padding:10px 16px;
+  border-radius:10px;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.25s;
+}
+.btn:hover{
+  background:#0284c7;
+  box-shadow:0 6px 14px rgba(2,132,199,0.35);
+}
+.back{
+  background:#e2e8f0;
+  color:#0f172a;
+}
+.back:hover{
+  background:#cbd5e1;
+}
+.delete{
+  background:#ef4444 !important;
+}
+.delete:hover{
+  background:#dc2626 !important;
+}
+
+.note{
+  font-size:14px;
+  margin-top:12px;
+  color:#475569;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h2 id="pName">Policy Details</h2>
+      <div class="small" id="pType"></div>
+      <div class="small" id="pInsurer"></div>
+    </div>
+    <button class="btn back" onclick="goBack()">← Back</button>
+  </div>
+
+  <!-- META ROW -->
+  <div class="meta">
+    
+    <!-- INFO CARD -->
+    <div class="card">
+      <div class="small">Cover Amount</div>
+      <div style="font-size:22px;font-weight:700" id="pCover">₹0</div>
+
+      <div class="small" style="margin-top:10px">
+        Premium: <span id="pPremium"></span> • 
+        <span id="pFreq"></span>
+      </div>
+
+      <div class="small" style="margin-top:10px">Start: <span id="pStart">—</span></div>
+      <div class="small">Maturity: <span id="pMaturity">—</span></div>
+      <div class="small">Tenure: <span id="pYears">—</span> years</div>
+
+      <div class="note" id="daysLeft"></div>
+    </div>
+
+    <!-- METER AREA -->
+    <div class="card canvas-wrap">
+      <canvas id="multiSegmentMeter" width="260" height="260"></canvas>
+    </div>
+
+  </div>
+
+  <!-- LEGEND -->
+  <div id="legend" class="legend-box">
+    <div class="legend-title">Meter Breakdown</div>
+  </div>
+
+  <!-- BENEFITS SECTION -->
+  <div class="benefits">
+    <strong>Benefits & Notes</strong>
+    <div id="pBenefits" style="margin-top:10px;font-size:14px;color:#444"></div>
+  </div>
+
+  <div style="margin-top:16px; display:flex; gap:10px;">
+    <button class="btn" id="editBtn">Edit Policy</button>
+    <button class="btn delete" id="deleteBtn">Delete Policy</button>
+  </div>
+
+</div>
+
+
+<script>
+/* ---------------- NAVIGATION ---------------- */
+function goBack(){ window.location.href="portfolio.html"; }
+
+/* ---------------- LOAD DATA ---------------- */
+let raw = localStorage.getItem("pbUser");
+let user = raw ? JSON.parse(raw) : { policies: [] };
+
+function getParam(n){ return new URL(location.href).searchParams.get(n); }
+const id = getParam("id");
+
+const policy = user.policies.find(p=>p.id===id);
+if(!policy){ alert("Policy not found"); goBack(); }
+
+/* ---------------- FILL BASE DATA ---------------- */
+document.getElementById("pName").textContent = policy.name;
+document.getElementById("pType").textContent = policy.type.toUpperCase();
+document.getElementById("pInsurer").textContent = policy.insurer;
+document.getElementById("pCover").textContent = "₹" + policy.cover.toLocaleString();
+document.getElementById("pPremium").textContent = "₹" + policy.premium.toLocaleString();
+document.getElementById("pFreq").textContent = policy.frequency;
+
+/* ---------------- DATE INFO ---------------- */
+document.getElementById("pStart").textContent = policy.startDate ? new Date(policy.startDate).toLocaleDateString() : "—";
+document.getElementById("pMaturity").textContent = policy.maturity ? new Date(policy.maturity).toLocaleDateString() : "—";
+
+if(policy.startDate && policy.maturity){
+  let yr = Math.round((new Date(policy.maturity)-new Date(policy.startDate))/(1000*60*60*24*365));
+  document.getElementById("pYears").textContent = yr;
+}
+
+document.getElementById("pBenefits").textContent =
+  policy.benefits || policy.gapNote || "No benefits available.";
+
+/* Days Left */
+if(policy.maturity){
+  let d = Math.ceil((new Date(policy.maturity)-new Date())/(1000*60*60*24));
+  document.getElementById("daysLeft").textContent =
+    (d>0 ? d : 0) + " days until maturity";
+}
+
+/* ---------------- DEFAULT METER VALUES ---------------- */
+policy.meters = policy.meters || [
+  { label:"Maturity Progress", value:60, color:"#16a34a" },
+  { label:"Investment Growth", value:40, color:"#2563eb" },
+  { label:"Add-on Strength", value:20, color:"#eab308" },
+  { label:"Risk Score", value:10, color:"#dc2626" }
+];
+
+/* ---------------- DRAW MULTI-SEGMENT METER ---------------- */
+function drawMultiSegmentMeter(segments){
+  const canvas = document.getElementById("multiSegmentMeter");
+  const ctx = canvas.getContext("2d");
+
+  const cx=canvas.width/2, cy=canvas.height/2;
+  const radius=95, lw=26;
+
+  let progress=0;
+
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let start=-Math.PI/2;
+
+    segments.forEach(seg=>{
+      let full=(seg.value/100)*(Math.PI*2);
+      let ang=full*progress;
+
+      // Background arc
+      ctx.beginPath();
+      ctx.lineWidth=lw;
+      ctx.strokeStyle="#e5e7eb";
+      ctx.arc(cx,cy,radius,start,start+full);
+      ctx.stroke();
+
+      // Active colored arc
+      ctx.beginPath();
+      ctx.lineWidth=lw;
+      ctx.lineCap="round";
+      ctx.strokeStyle=seg.color;
+      ctx.arc(cx,cy,radius,start,start+ang);
+      ctx.stroke();
+
+      start += full;
+    });
+
+    // Center text
+    ctx.font="700 15px Poppins";
+    ctx.fillStyle="#0f172a";
+    ctx.textAlign="center";
+    ctx.fillText("POLICY HEALTH", cx, cy+6);
+
+    if(progress < 1){
+      progress += 0.02;
+      requestAnimationFrame(animate);
+    }
+  }
+  animate();
+}
+
+/* ---------------- LEGEND ---------------- */
+function renderLegend(segments){
+  const box=document.getElementById("legend");
+
+  segments.forEach(seg=>{
+    box.innerHTML += `
+      <div class="legend-item">
+        <div class="legend-color" style="background:${seg.color}"></div>
+        ${seg.label}: <strong>${seg.value}%</strong>
+      </div>
+    `;
+  });
+}
+
+drawMultiSegmentMeter(policy.meters);
+renderLegend(policy.meters);
+
+/* ---------------- DELETE POLICY ---------------- */
+document.getElementById("deleteBtn").onclick = ()=>{
+  if(confirm("Delete this policy?")){
+    user.policies = user.policies.filter(p=>p.id!==policy.id);
+    localStorage.setItem("pbUser", JSON.stringify(user));
+    goBack();
+  }
+};
+
+/* ---------------- EDIT POLICY ---------------- */
+document.getElementById("editBtn").onclick = ()=>{
+  window.location.href = "add-policy.html?id="+policy.id;
+};
+</script>
+
+</body>
+</html>

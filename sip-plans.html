@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paisabada | SIP Plans</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+:root{
+  --teal:#00b4b0;
+  --teal2:#0077ff;
+  --navy:#002b5b;
+  --bg1:#2c1b66;
+  --bg2:#a0208c;
+}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:32px 16px;
+  box-sizing:border-box;
+}
+.shell{
+  width:100%;
+  max-width:1000px;
+  background:#f7f9ff;
+  border-radius:24px;
+  box-shadow:0 22px 48px rgba(0,0,0,.35);
+  overflow:hidden;
+  animation:fadeUp .45s ease-out;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Header */
+.header{
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  padding:18px 24px 18px;
+  color:#fff;
+}
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+}
+.header-left{
+  display:flex;gap:12px;align-items:center;
+}
+#avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:conic-gradient(from 180deg,var(--teal),#9af7ec,var(--navy));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:20px;
+}
+.hl-title{font-size:18px;font-weight:600;}
+.hl-sub{font-size:12px;opacity:.9;margin-top:2px;}
+.header-right{text-align:right;font-size:11px;}
+.tag{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+}
+
+/* Content */
+.content{
+  padding:18px 20px 22px;
+}
+.section-title{
+  font-size:15px;
+  font-weight:600;
+  color:#253257;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+.section-title small{
+  font-size:11px;
+  color:#6b7280;
+}
+
+/* Fund summary card */
+.fund-card{
+  margin-top:10px;
+  background:#ffffff;
+  border-radius:16px;
+  padding:10px 12px;
+  box-shadow:0 6px 16px rgba(15,23,42,.12);
+  border:1px solid #e5e7eb;
+  font-size:11px;
+  color:#374151;
+}
+.fund-name{
+  font-size:14px;
+  font-weight:600;
+  color:#111827;
+}
+.fund-meta{
+  margin-top:2px;
+  font-size:11px;
+  color:#6b7280;
+}
+.badges-row{
+  margin-top:6px;
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+.badge{
+  font-size:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+.stats-row{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:8px;
+}
+.stat-box{
+  background:#f9fafb;
+  border-radius:10px;
+  padding:6px 7px;
+}
+.stat-label{
+  font-size:10px;
+  color:#6b7280;
+}
+.stat-value{
+  margin-top:3px;
+  font-size:13px;
+  font-weight:600;
+  color:#111827;
+}
+
+/* SIP setup */
+.sip-section{
+  margin-top:16px;
+  background:#ffffff;
+  border-radius:16px;
+  padding:10px 12px;
+  box-shadow:0 6px 16px rgba(15,23,42,.12);
+  border:1px solid #e5e7eb;
+  font-size:11px;
+  color:#374151;
+}
+.sip-title{
+  font-size:13px;
+  font-weight:600;
+  color:#111827;
+}
+.sip-sub{
+  margin-top:2px;
+  font-size:11px;
+  color:#6b7280;
+}
+.chip-row{
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.chip{
+  border-radius:999px;
+  border:1px solid #d0d8f0;
+  padding:5px 10px;
+  font-size:11px;
+  background:#fff;
+  cursor:pointer;
+}
+.chip.active{
+  background:var(--teal);
+  color:#fff;
+  border-color:var(--teal);
+}
+.input-row{
+  margin-top:8px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.input-row input{
+  flex:1;
+  padding:6px 8px;
+  border-radius:10px;
+  border:1px solid #d0d8f0;
+  font-size:12px;
+  box-sizing:border-box;
+}
+.helper-text{
+  margin-top:4px;
+  font-size:10px;
+  color:#6b7280;
+}
+
+/* Projection box */
+.projection{
+  margin-top:10px;
+  background:#ecfdf5;
+  border-radius:12px;
+  padding:7px 9px;
+  font-size:11px;
+  color:#166534;
+}
+
+/* CTA */
+.sip-cta{
+  margin-top:12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+.btn-primary{
+  border-radius:999px;
+  border:none;
+  padding:7px 14px;
+  font-size:12px;
+  cursor:pointer;
+  background:var(--teal);
+  color:#fff;
+  font-weight:600;
+}
+.btn-secondary{
+  border-radius:999px;
+  border:1px solid #d0d8f0;
+  padding:7px 12px;
+  font-size:11px;
+  cursor:pointer;
+  background:#fff;
+  color:#111827;
+}
+
+/* === SIP CALCULATOR CARD === */
+.calc-card{
+  margin-top:18px;
+  background:#ffffff;
+  border-radius:16px;
+  padding:12px 14px;
+  box-shadow:0 6px 18px rgba(15,23,42,.12);
+  border:1px solid #e5e7eb;
+  font-size:11px;
+  color:#374151;
+}
+.calc-title{
+  font-size:13px;
+  font-weight:600;
+  color:#111827;
+}
+.calc-sub{
+  margin-top:2px;
+  font-size:11px;
+  color:#6b7280;
+}
+.calc-grid{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns: minmax(0,1.1fr) minmax(0,0.9fr);
+  gap:14px;
+}
+.slider-group{
+  margin-bottom:10px;
+}
+.slider-label-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  color:#4b5563;
+}
+.slider-group input[type="range"]{
+  width:100%;
+  margin-top:4px;
+}
+.calc-output{
+  background:#f9fafb;
+  border-radius:12px;
+  padding:8px 9px;
+  font-size:11px;
+}
+.calc-output-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:4px;
+}
+.calc-output-row span:first-child{
+  color:#6b7280;
+}
+.calc-output-row span:last-child{
+  font-weight:600;
+  color:#111827;
+}
+
+/* mini bar visualization */
+.bar-visual{
+  margin-top:8px;
+  display:flex;
+  gap:10px;
+  align-items:flex-end;
+  height:90px;
+}
+.bar-col{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:10px;
+  color:#6b7280;
+}
+.bar{
+  width:70%;
+  border-radius:999px;
+  background:#d1fae5;
+  position:relative;
+  overflow:hidden;
+}
+.bar-inner-invested{
+  position:absolute;
+  inset:0;
+  background:#a5b4fc;
+}
+.bar-inner-value{
+  position:absolute;
+  inset:0;
+  background:#22c55e;
+}
+.bar-label{
+  margin-top:4px;
+}
+
+/* Bottom sheet */
+.sheet-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.45);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:998;
+}
+.sheet-backdrop.show{
+  display:flex;
+}
+.sheet-panel{
+  width:100%;
+  max-width:1000px;
+  background:#ffffff;
+  border-radius:18px 18px 0 0;
+  padding:14px 18px 18px;
+  box-shadow:0 -10px 30px rgba(0,0,0,.4);
+  font-size:11px;
+}
+.sheet-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.sheet-title{
+  font-size:15px;
+  font-weight:600;
+  color:#111827;
+}
+.sheet-close{
+  border:none;
+  background:transparent;
+  font-size:20px;
+  cursor:pointer;
+}
+.sheet-body{
+  margin-top:6px;
+  color:#374151;
+}
+.sheet-body ul{
+  margin:6px 0 0;
+  padding-left:18px;
+}
+.sheet-foot{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+.sheet-note{
+  font-size:10px;
+  color:#6b7280;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:#111827;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  z-index:999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media (max-width:768px){
+  .shell{border-radius:18px;}
+  .header{padding:14px 16px 16px;}
+  .content{padding:14px 14px 18px;}
+  .calc-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-left">
+        <div id="avatar"></div>
+        <div>
+          <div class="hl-title" id="greetTitle"></div>
+          <div class="hl-sub" id="greetSub"></div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="tag">SIP Plans</div>
+        <div style="margin-top:4px;">Set up a disciplined monthly investment.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">
+      <span id="fundHeaderTitle">Selected mutual fund</span>
+      <small id="fundHeaderSub">You can adjust SIP amount anytime before confirming.</small>
+    </div>
+
+    <!-- Fund summary -->
+    <div class="fund-card" id="fundCard">
+      <div class="fund-name" id="fundName">Fund name</div>
+      <div class="fund-meta" id="fundMeta">Category • Risk</div>
+      <div class="badges-row" id="fundBadges"></div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-label">NAV (approx)</div>
+          <div class="stat-value" id="fundNav">₹100.00</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">3Y Return</div>
+          <div class="stat-value" id="fund3Y">–</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">5Y Return</div>
+          <div class="stat-value" id="fund5Y">–</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Min SIP</div>
+          <div class="stat-value" id="fundMinSip">₹500</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIP setup -->
+    <div class="sip-section">
+      <div class="sip-title">Choose your SIP amount</div>
+      <div class="sip-sub">You can change this later, but starting early and staying regular matters most.</div>
+
+      <div class="chip-row" id="amountChips">
+        <button class="chip" data-amount="1000">₹1,000 / month</button>
+        <button class="chip" data-amount="3000">₹3,000 / month</button>
+        <button class="chip" data-amount="5000">₹5,000 / month</button>
+      </div>
+      <div class="input-row">
+        <span style="font-size:12px;">₹</span>
+        <input type="number" id="sipAmountInput" placeholder="Enter monthly SIP amount" min="500" step="100">
+      </div>
+      <div class="helper-text" id="minSipHelper">Minimum SIP: ₹500</div>
+
+      <div class="sip-title" style="margin-top:12px;">Choose SIP date</div>
+      <div class="sip-sub">We’ll try to debit on this date every month (subject to bank / mandate). </div>
+
+      <div class="chip-row" id="dateChips">
+        <button class="chip" data-date="5">5th of every month</button>
+        <button class="chip" data-date="10">10th of every month</button>
+        <button class="chip" data-date="15">15th of every month</button>
+        <button class="chip" data-date="25">25th of every month</button>
+      </div>
+
+      <div class="projection" id="projectionBox">
+        Enter an amount to see a rough 10-year projection.
+      </div>
+
+      <div class="sip-cta">
+        <button class="btn-primary" id="btnStartSip">Start SIP</button>
+        <button class="btn-secondary" id="btnBackToFunds">Back to fund list</button>
+      </div>
+    </div>
+
+    <!-- === INTERACTIVE SIP CALCULATOR === -->
+    <div class="calc-card">
+      <div class="calc-title">Try a quick SIP calculator</div>
+      <div class="calc-sub">
+        Play with amount, years and expected return – see how compounding can grow your money.
+      </div>
+
+      <div class="calc-grid">
+        <!-- left: sliders -->
+        <div>
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Monthly SIP amount</span>
+              <span id="calcAmtLabel">₹5,000</span>
+            </div>
+            <input type="range" id="calcAmtRange" min="500" max="50000" step="500" value="5000">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Investment period (years)</span>
+              <span id="calcYearsLabel">10 years</span>
+            </div>
+            <input type="range" id="calcYearsRange" min="1" max="30" step="1" value="10">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Expected annual return</span>
+              <span id="calcRateLabel">11%</span>
+            </div>
+            <input type="range" id="calcRateRange" min="6" max="16" step="0.5" value="11">
+          </div>
+        </div>
+
+        <!-- right: result + bars -->
+        <div>
+          <div class="calc-output">
+            <div class="calc-output-row">
+              <span>Total invested</span>
+              <span id="calcInvestedVal">₹6,00,000</span>
+            </div>
+            <div class="calc-output-row">
+              <span>Estimated value</span>
+              <span id="calcFutureVal">₹13,80,000</span>
+            </div>
+            <div class="calc-output-row">
+              <span>Estimated gain</span>
+              <span id="calcGainVal">₹7,80,000</span>
+            </div>
+
+            <div class="bar-visual">
+              <div class="bar-col">
+                <div class="bar" id="barInvested" style="height:40px;">
+                  <div class="bar-inner-invested"></div>
+                </div>
+                <div class="bar-label">Invested</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar" id="barFuture" style="height:80px;">
+                  <div class="bar-inner-value"></div>
+                </div>
+                <div class="bar-label">Estimated value</div>
+              </div>
+            </div>
+
+            <div style="margin-top:6px;font-size:10px;color:#6b7280;">
+              This is just an illustration, not a guaranteed return. Markets go up and down.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bottom sheet summary -->
+<div class="sheet-backdrop" id="sheetBackdrop">
+  <div class="sheet-panel">
+    <div class="sheet-header">
+      <div class="sheet-title">Confirm SIP details</div>
+      <button class="sheet-close" id="sheetClose">×</button>
+    </div>
+    <div class="sheet-body" id="sheetBody">
+      <!-- JS fills summary -->
+    </div>
+    <div class="sheet-foot">
+      <button class="btn-primary" id="sheetConfirm">Confirm & Create SIP</button>
+      <div class="sheet-note">
+        This is a mock flow inside Paisabada. Actual bank / mandate setup will happen in the next step
+        when you integrate with your payment partner / BSE / MF platform.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auth
+if(localStorage.getItem("pbLoggedIn")!=="true"){
+  window.location.href="login.html";
+}
+let raw = localStorage.getItem("pbUser");
+let user = null;
+try{
+  if(raw) user = JSON.parse(raw);
+}catch(e){
+  console.error("Invalid pbUser", e);
+  localStorage.removeItem("pbUser");
+}
+if(!user){
+  window.location.href="login.html";
+}
+function saveUser(){
+  localStorage.setItem("pbUser", JSON.stringify(user));
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 1200);
+}
+
+// Header
+(function(){
+  const name = user.name || "User";
+  const firstName = name.split(" ")[0];
+  const initials = name.trim().split(" ")
+    .filter(Boolean).map(w=>w[0].toUpperCase()).slice(0,2).join("");
+  document.getElementById("avatar").textContent = initials || "P";
+  document.getElementById("greetTitle").textContent =
+    `Hi ${firstName}, set up your SIP`;
+  document.getElementById("greetSub").textContent =
+    "Stay invested every month without thinking about timing the market.";
+})();
+
+// Get fund config from localStorage (set by mutual-funds.html)
+let mfConfig = [];
+try{
+  const cfg = localStorage.getItem("pbMFConfig");
+  if(cfg) mfConfig = JSON.parse(cfg);
+}catch(e){
+  console.warn("No mf config found", e);
+}
+
+function getFundFromConfig(fundId){
+  if(!mfConfig || !mfConfig.length) return null;
+  return mfConfig.find(f=>f.id === fundId) || mfConfig[0] || null;
+}
+
+// Read fundId from URL
+const params = new URLSearchParams(window.location.search);
+const fundId = params.get("fundId");
+let fund = getFundFromConfig(fundId);
+
+// If nothing, create a default dummy fund
+if(!fund){
+  fund = {
+    id:"defaultFund",
+    name:"Paisabada Balanced Advantage Fund",
+    category:"Hybrid • Balanced Advantage",
+    risk:"Moderate Risk",
+    returns3Y:"+11.4%",
+    returns5Y:"+10.1%",
+    minSip:1000,
+    taglines:["Dynamic allocation between equity & debt","Suitable if you want smoother ride"],
+    expectedReturn:10
+  };
+}
+
+// Fill fund summary
+(function fillFundCard(){
+  document.getElementById("fundName").textContent = fund.name;
+  document.getElementById("fundMeta").textContent = `${fund.category} • ${fund.risk}`;
+  document.getElementById("fund3Y").textContent = fund.returns3Y || "–";
+  document.getElementById("fund5Y").textContent = fund.returns5Y || "–";
+  document.getElementById("fundMinSip").textContent = "₹" + (fund.minSip || 500);
+  document.getElementById("minSipHelper").textContent =
+    `Minimum SIP allowed (for this fund): ₹${fund.minSip || 500}`;
+  // simple dummy NAV
+  const nav = 100 + Math.round(Math.random()*30);
+  document.getElementById("fundNav").textContent = "₹" + nav.toFixed(2);
+
+  const badgesEl = document.getElementById("fundBadges");
+  badgesEl.innerHTML = "";
+  (fund.taglines || []).slice(0,3).forEach(t=>{
+    const span = document.createElement("span");
+    span.className = "badge";
+    span.textContent = t;
+    badgesEl.appendChild(span);
+  });
+
+  document.getElementById("fundHeaderTitle").textContent = "SIP in " + fund.name;
+  document.getElementById("fundHeaderSub").textContent =
+    "Select amount & date, then confirm SIP. This is similar to how Navi & other apps keep it simple.";
+})();
+
+// SIP controls
+const amountInput = document.getElementById("sipAmountInput");
+const amountChips = document.querySelectorAll("#amountChips .chip");
+const dateChips   = document.querySelectorAll("#dateChips .chip");
+const projectionBox = document.getElementById("projectionBox");
+
+let selectedAmount = 0;
+let selectedDate = null;
+
+// amount chips
+amountChips.forEach(chip=>{
+  chip.addEventListener("click", ()=>{
+    amountChips.forEach(c=>c.classList.remove("active"));
+    chip.classList.add("active");
+    const amt = parseInt(chip.dataset.amount,10) || 0;
+    selectedAmount = amt;
+    amountInput.value = amt;
+    updateProjection();
+  });
+});
+
+// manual input
+amountInput.addEventListener("input", ()=>{
+  const val = parseInt(amountInput.value,10) || 0;
+  selectedAmount = val;
+  amountChips.forEach(c=>c.classList.remove("active"));
+  updateProjection();
+});
+
+// date chips
+dateChips.forEach(chip=>{
+  chip.addEventListener("click", ()=>{
+    dateChips.forEach(c=>c.classList.remove("active"));
+    chip.classList.add("active");
+    selectedDate = parseInt(chip.dataset.date,10) || null;
+  });
+});
+
+// simple SIP future value calc (approx)
+function calcSipFutureValue(monthly, years, ratePercent){
+  if(!monthly || monthly <= 0) return 0;
+  const r = ratePercent/100/12;
+  const n = years*12;
+  if(r <= 0){
+    return monthly * n;
+  }
+  const fv = monthly * ((Math.pow(1+r,n)-1)/r) * (1+r);
+  return Math.round(fv);
+}
+
+function updateProjection(){
+  if(!selectedAmount || selectedAmount <= 0){
+    projectionBox.textContent = "Enter an amount to see a rough 10-year projection.";
+    return;
+  }
+  const years = 10;
+  const rate  = fund.expectedReturn || 11;
+  const fv = calcSipFutureValue(selectedAmount, years, rate);
+  projectionBox.textContent =
+    `If you invest ₹${selectedAmount.toLocaleString()} every month for ${years} years at an assumed ` +
+    `${rate}% return, the value can become approx ₹${fv.toLocaleString()} (not guaranteed, just an illustration).`;
+}
+
+// Bottom sheet
+const sheetBackdrop = document.getElementById("sheetBackdrop");
+const sheetBody = document.getElementById("sheetBody");
+const sheetClose = document.getElementById("sheetClose");
+const sheetConfirm = document.getElementById("sheetConfirm");
+
+function openSheet(){
+  sheetBackdrop.classList.add("show");
+}
+function closeSheet(){
+  sheetBackdrop.classList.remove("show");
+}
+sheetClose.addEventListener("click", closeSheet);
+sheetBackdrop.addEventListener("click", e=>{
+  if(e.target === sheetBackdrop) closeSheet();
+});
+
+// Start SIP button
+document.getElementById("btnBackToFunds").addEventListener("click", ()=>{
+  window.location.href = "mutual-funds.html";
+});
+
+document.getElementById("btnStartSip").addEventListener("click", ()=>{
+  const minSip = fund.minSip || 500;
+  if(!selectedAmount || selectedAmount < minSip){
+    showToast(`Please enter at least ₹${minSip} to start SIP.`);
+    return;
+  }
+  if(!selectedDate){
+    showToast("Please choose a SIP date.");
+    return;
+  }
+
+  const years = 10;
+  const rate  = fund.expectedReturn || 11;
+  const fv = calcSipFutureValue(selectedAmount, years, rate);
+  const invested = selectedAmount * years * 12;
+
+  sheetBody.innerHTML = `
+    <div>
+      <strong>Fund:</strong> ${fund.name}<br>
+      <strong>Category:</strong> ${fund.category} • ${fund.risk}<br>
+      <strong>SIP amount:</strong> ₹${selectedAmount.toLocaleString()} per month<br>
+      <strong>SIP date:</strong> ${selectedDate} of every month<br>
+      <strong>Illustration:</strong> Over ${years} years at ${rate}% assumed return,<br>
+      you invest approx ₹${invested.toLocaleString()} and it may grow to ₹${fv.toLocaleString()}
+      (not guaranteed).
+    </div>
+    <ul>
+      <li>We’ll create a SIP instruction for this mutual fund (mock inside Paisabada).</li>
+      <li>On the next step (future integration), you’ll confirm bank / UPI Autopay mandate.</li>
+      <li>You can change SIP amount or date later from your portfolio section.</li>
+    </ul>
+  `;
+  openSheet();
+});
+
+// Confirm + save mock SIP in user object
+sheetConfirm.addEventListener("click", ()=>{
+  if(!user.sips) user.sips = [];
+  user.sips.push({
+    fundId: fund.id,
+    fundName: fund.name,
+    amount: selectedAmount,
+    date: selectedDate,
+    createdAt: new Date().toISOString()
+  });
+  saveUser();
+  closeSheet();
+  showToast("SIP created (mock). Check in your portfolio section.");
+});
+
+/* === INTERACTIVE CALCULATOR LOGIC === */
+const calcAmtRange   = document.getElementById("calcAmtRange");
+const calcYearsRange = document.getElementById("calcYearsRange");
+const calcRateRange  = document.getElementById("calcRateRange");
+
+const calcAmtLabel   = document.getElementById("calcAmtLabel");
+const calcYearsLabel = document.getElementById("calcYearsLabel");
+const calcRateLabel  = document.getElementById("calcRateLabel");
+
+const calcInvestedVal = document.getElementById("calcInvestedVal");
+const calcFutureVal   = document.getElementById("calcFutureVal");
+const calcGainVal     = document.getElementById("calcGainVal");
+
+const barInvested = document.getElementById("barInvested");
+const barFuture   = document.getElementById("barFuture");
+
+function formatINR(num){
+  return "₹" + num.toLocaleString("en-IN");
+}
+
+function recalcCalculator(){
+  const amt   = parseInt(calcAmtRange.value,10) || 0;
+  const years = parseInt(calcYearsRange.value,10) || 0;
+  const rate  = parseFloat(calcRateRange.value) || 0;
+
+  calcAmtLabel.textContent   = formatINR(amt) + " / month";
+  calcYearsLabel.textContent = years + (years === 1 ? " year" : " years");
+  calcRateLabel.textContent  = rate + "%";
+
+  const invested = amt * years * 12;
+  const fv       = calcSipFutureValue(amt, years, rate);
+  const gain     = Math.max(fv - invested, 0);
+
+  calcInvestedVal.textContent = formatINR(invested);
+  calcFutureVal.textContent   = formatINR(fv);
+  calcGainVal.textContent     = formatINR(gain);
+
+  // bar heights (min 20px)
+  let invHeight = 40;
+  let fvHeight  = 80;
+  if(fv > 0){
+    const ratio = invested / fv;
+    fvHeight = 80;
+    invHeight = Math.max(20, Math.min(80, 80 * ratio));
+  }
+  barInvested.style.height = invHeight + "px";
+  barFuture.style.height   = fvHeight + "px";
+}
+
+// attach listeners
+[calcAmtRange, calcYearsRange, calcRateRange].forEach(el=>{
+  el.addEventListener("input", recalcCalculator);
+});
+
+// initial calc
+recalcCalculator();
+</script>
+</body>
+</html>
